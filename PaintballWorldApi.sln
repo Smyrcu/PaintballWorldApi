@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.8.34330.188
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaintballWorld.API", "PaintballWorldApi\PaintballWorld.API.csproj", "{3C60E95D-5F58-4484-A9B8-90C3F865A5CE}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PaintballWorld.Infrastructure", "PaintballWorld.Infrastructure\PaintballWorld.Infrastructure.csproj", "{19259E92-6C25-4D3F-81A1-ACFC37331DAE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PaintballWorld.Core", "PaintballWorld.Core\PaintballWorld.Core.csproj", "{674F9BF3-E2CE-43BF-B038-A585C6E78559}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3C60E95D-5F58-4484-A9B8-90C3F865A5CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3C60E95D-5F58-4484-A9B8-90C3F865A5CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3C60E95D-5F58-4484-A9B8-90C3F865A5CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3C60E95D-5F58-4484-A9B8-90C3F865A5CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19259E92-6C25-4D3F-81A1-ACFC37331DAE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19259E92-6C25-4D3F-81A1-ACFC37331DAE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19259E92-6C25-4D3F-81A1-ACFC37331DAE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19259E92-6C25-4D3F-81A1-ACFC37331DAE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{674F9BF3-E2CE-43BF-B038-A585C6E78559}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{674F9BF3-E2CE-43BF-B038-A585C6E78559}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{674F9BF3-E2CE-43BF-B038-A585C6E78559}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{674F9BF3-E2CE-43BF-B038-A585C6E78559}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {CD2708DF-38CE-4B03-8D44-5556F006B79C}
+	EndGlobalSection
+EndGlobal
