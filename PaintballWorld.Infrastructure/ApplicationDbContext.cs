@@ -32,6 +32,8 @@ public partial class ApplicationDbContext : DbContext
 
     public virtual DbSet<Attachment> Attachments { get; set; }
 
+    public virtual DbSet<Company> Companies { get; set; }
+
     public virtual DbSet<EmailInbox> EmailInboxes { get; set; }
 
     public virtual DbSet<EmailOutbox> EmailOutboxes { get; set; }
@@ -47,6 +49,10 @@ public partial class ApplicationDbContext : DbContext
     public virtual DbSet<FieldSchedule> FieldSchedules { get; set; }
 
     public virtual DbSet<FieldType> FieldTypes { get; set; }
+
+    public virtual DbSet<Newsletter> Newsletters { get; set; }
+
+    public virtual DbSet<NewsletterSub> NewsletterSubs { get; set; }
 
     public virtual DbSet<OsmCity> OsmCities { get; set; }
 
@@ -156,6 +162,17 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.Path).HasMaxLength(255);
         });
 
+        modelBuilder.Entity<Company>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Company__3214EC07B2730D43");
+
+            entity.ToTable("Company");
+
+            entity.Property(e => e.CompanyName).HasMaxLength(400);
+            entity.Property(e => e.Email).HasMaxLength(200);
+            entity.Property(e => e.PhoneNo).HasMaxLength(20);
+        });
+
         modelBuilder.Entity<EmailInbox>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__EmailInb__3214EC07CB025E82");
@@ -260,6 +277,23 @@ public partial class ApplicationDbContext : DbContext
             entity.Property(e => e.FieldType1)
                 .HasMaxLength(50)
                 .HasColumnName("FieldType");
+        });
+
+        modelBuilder.Entity<Newsletter>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Newslett__3214EC071D8386E7");
+
+            entity.ToTable("Newsletter");
+
+            entity.Property(e => e.Name).HasMaxLength(400);
+            entity.Property(e => e.Title).HasMaxLength(255);
+        });
+
+        modelBuilder.Entity<NewsletterSub>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Newslett__3214EC07D5F303C4");
+
+            entity.Property(e => e.Email).HasMaxLength(255);
         });
 
         modelBuilder.Entity<OsmCity>(entity =>

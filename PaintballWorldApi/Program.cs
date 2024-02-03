@@ -3,11 +3,13 @@ using Microsoft.AspNetCore.Identity;
 using NLog.Extensions.Logging;
 using PaintballWorld.Infrastructure;
 using System.Globalization;
+using PaintballWorld.API;
 
 
 var builder = WebApplication.CreateBuilder(args);
 
-var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") 
+                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -18,18 +20,15 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
 builder.Services.AddIdentity<IdentityUser, IdentityRole>()
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
+//DI
+builder.Services.Inject();
 
 builder.Services.AddControllers();
 
 builder.Services.AddLogging(logger =>
 {
-    logger.ClearProviders();
-    logger.SetMinimumLevel(LogLevel.Trace);
-    logger.AddConsole();
-    logger.AddNLog();
+
 });
-
-
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
@@ -44,19 +43,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-/*if (app.Environment.IsDevelopment())
-{
-    using var scope = app.Services.CreateScope();
-    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    dbContext.Database.Migrate();
-}
-*/
-
 app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
-        name: "areas",
+        name: "area",
         pattern: "{area:exists}/{controller=Home}/{action=Index}/{id?}"
     );
 });

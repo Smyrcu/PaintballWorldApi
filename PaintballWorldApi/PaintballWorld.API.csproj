@@ -29,8 +29,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Administration\Controllers\" />
+    <Folder Include="Areas\Administration\Data\" />
+    <Folder Include="Areas\Administration\Models\" />
+    <Folder Include="Areas\Administration\Views\" />
     <Folder Include="Areas\Auth\Data\" />
-    <Folder Include="Areas\Auth\Models\" />
     <Folder Include="Areas\Auth\Views\" />
     <Folder Include="Areas\Event\Controllers\" />
     <Folder Include="Areas\Event\Data\" />
