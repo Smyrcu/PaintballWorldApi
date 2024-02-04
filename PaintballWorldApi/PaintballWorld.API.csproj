@@ -39,7 +39,6 @@
     <Folder Include="Areas\Event\Data\" />
     <Folder Include="Areas\Event\Models\" />
     <Folder Include="Areas\Event\Views\" />
-    <Folder Include="Controllers\" />
   </ItemGroup>
 
   <ItemGroup>
