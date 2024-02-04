@@ -11,6 +11,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 {
     [Route("api/[area]/[controller]")]
     [ApiController]
+    [Area("Auth")]
     public class LoginController : ControllerBase
     {
         #region Properties

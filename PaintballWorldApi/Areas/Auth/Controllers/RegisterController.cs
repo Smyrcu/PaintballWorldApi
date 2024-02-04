@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Infrastructure.Interfaces;
@@ -7,6 +8,8 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Area("Auth")]
+    [AllowAnonymous]
     public class RegisterController : ControllerBase
     {
 
@@ -67,7 +70,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
                 return Ok();
             }
-            return BadRequest();
+            return BadRequest(result);
         }
 
         #endregion
