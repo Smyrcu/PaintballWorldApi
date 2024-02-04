@@ -6,7 +6,7 @@ using PaintballWorld.Infrastructure.Interfaces;
 
 namespace PaintballWorld.API.Areas.Auth.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[area]/[controller]")]
     [ApiController]
     [Area("Auth")]
     [AllowAnonymous]
@@ -47,7 +47,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         #region Rejestracja
 
         [HttpPost]
-        [Route("Authentication/Register/Register")]
+        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] RegisterRequest request)
         {
             var user = new IdentityUser
@@ -77,7 +77,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         #region Potwierdzanie konta
 
-        [HttpPost("Authentication/Register/ConfirmAccount")]
+        [HttpPost("ConfirmAccount")]
         public async Task<IActionResult> ConfirmAccount([FromQuery] string userId, [FromQuery] string code)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))
