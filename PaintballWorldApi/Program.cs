@@ -71,15 +71,15 @@ builder.Services.AddSwaggerGen();
 var app = builder.Build();
 
 
-if (app.Environment.IsDevelopment())
-{
+//if (app.Environment.IsDevelopment())
+//{
     app.UseSwagger();
     app.UseSwaggerUI();
 
     //var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
     //context.Database.Migrate();
 
-}
+//}
 
 app.UseRouting();
 app.UseEndpoints(endpoints =>
