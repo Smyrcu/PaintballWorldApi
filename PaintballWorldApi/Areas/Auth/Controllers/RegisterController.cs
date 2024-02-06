@@ -2,7 +2,10 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.Auth.Models;
+using PaintballWorld.Core.Interfaces;
+using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Controllers
 {
@@ -21,6 +24,8 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         private readonly IEmailService _emailService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<LoginController> _logger;
+        private readonly ApplicationDbContext _context;
+        private readonly IProfileService _profileService;
 
         #endregion
 
@@ -32,7 +37,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             RoleManager<IdentityRole> roleManager, 
             IEmailService emailService, 
             IConfiguration configuration, 
-            ILogger<LoginController> logger)
+            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -40,6 +45,8 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             _emailService = emailService;
             _configuration = configuration;
             _logger = logger;
+            _context = context;
+            _profileService = profileService;
         }
 
         #endregion
@@ -68,6 +75,9 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                     protocol: HttpContext.Request.Scheme);
 
                 await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
+
+                _profileService.FinishRegistration(user, request.DateOfBirth);
+
                 return Ok();
             }
             return BadRequest(result);

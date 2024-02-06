@@ -9,7 +9,7 @@ public partial class Owner
 
     public Guid UserId { get; set; }
 
-    public string? CompanyName { get; set; }
+    public int CompanyId { get; set; }
 
     public int AddressId { get; set; }
 

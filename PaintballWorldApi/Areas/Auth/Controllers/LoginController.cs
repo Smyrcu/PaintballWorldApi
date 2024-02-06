@@ -5,6 +5,7 @@ using PaintballWorld.Infrastructure.Interfaces;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using Microsoft.AspNetCore.Authorization;
 using PaintballWorld.API.Areas.Auth.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Controllers
@@ -12,6 +13,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
     [Route("api/[area]/[controller]")]
     [ApiController]
     [Area("Auth")]
+    [AllowAnonymous]
     public class LoginController : ControllerBase
     {
         #region Properties

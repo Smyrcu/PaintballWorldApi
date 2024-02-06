@@ -14,7 +14,10 @@ var connectionString = builder.Configuration.GetConnectionString("ProdConnection
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
-    options.UseSqlServer(connectionString);
+    options.UseSqlServer(connectionString, provider =>
+    {
+        provider.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null);
+    });
     options.LogTo(Console.WriteLine, LogLevel.Information);
 });
 

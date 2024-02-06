@@ -69,10 +69,17 @@ public partial class ApplicationDbContext : IdentityDbContext
 
     public virtual DbSet<UsersToEvent> UsersToEvents { get; set; }
 
+    public virtual DbSet<ApiKey> ApiKeys { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
         //=> optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp;Integrated Security=true;");
-        => optionsBuilder.UseSqlServer("Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false");
+        => optionsBuilder.UseSqlServer("Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+            providerOptions => providerOptions.EnableRetryOnFailure(
+                maxRetryCount: 5, 
+                maxRetryDelay: TimeSpan.FromSeconds(30),
+                errorNumbersToAdd: null)
+            );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -90,6 +97,8 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.PostalNumber).HasMaxLength(50);
             entity.Property(e => e.Street).HasMaxLength(255);
         });
+
+        modelBuilder.Entity<ApiKey>().ToTable("ApiKeys");
 
         //modelBuilder.Entity<AspNetRole>(entity =>
         //{
@@ -315,7 +324,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Owners__3214EC07F0523BFF");
 
-            entity.Property(e => e.CompanyName).HasMaxLength(255);
+            entity.Property(e => e.CompanyId);
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");

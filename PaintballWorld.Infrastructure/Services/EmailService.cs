@@ -21,9 +21,6 @@ namespace PaintballWorld.Infrastructure.Services
 {
     public class EmailService : IEmailService
     {
-        //private readonly string[] _scopes = { GmailService.Scope.MailGoogleCom };
-        //private const string ApplicationName = "PaintBallWorldAutoMailer";
-        //private readonly GmailService _service;
         private readonly IFileService _fileService;
         private readonly ApplicationDbContext _context;
         private readonly ILogger<EmailService> _logger;
@@ -41,20 +38,6 @@ namespace PaintballWorld.Infrastructure.Services
             _fileService = fileService;
             _context = context;
             _logger = logger;
-            //GoogleCredential credential;
-            //using (var stream = new FileStream("D:\\Gmail\\paintballworldautomailer-fdb57625dbeb.json", FileMode.Open, FileAccess.Read))
-            //{
-            //    credential = GoogleCredential.FromStream(stream)
-            //        .CreateScoped(GmailService.Scope.GmailSend, GmailService.Scope.GmailReadonly,
-            //            GmailService.Scope.GmailModify)
-            //        .CreateWithUser("paintballworldpw@gmail.com");
-            //}
-
-            //_service = new GmailService(new BaseClientService.Initializer()
-            //{
-            //    HttpClientInitializer = credential,
-            //    ApplicationName = ApplicationName,
-            //});
             _smtpClient = new SmtpClient(SmtpServer, SmtpPort)
             {
                 Credentials = new NetworkCredential(SmtpUsername, SmtpPassword),
@@ -96,59 +79,10 @@ namespace PaintballWorld.Infrastructure.Services
                 _logger.LogError(ex, "Wystąpił błąd podczas wysyłania wiadomości.");
             }
         }
-        //public async Task SendEmailAsync(string to, string subject, string body, params int[] attachments)
-        //{
-        //    var mimeMessage = new MimeMessage();
-        //    mimeMessage.From.Add(new MailboxAddress("Paintball World", "paintballworldpw@gmail.com"));
-        //    mimeMessage.To.Add(MailboxAddress.Parse(to));
-        //    mimeMessage.Subject = subject;
-        //    mimeMessage.Body = new TextPart("plain") { Text = body };
-
-        //    if (attachments.Length > 0)
-        //    {
-        //        var multipart = new Multipart("mixed");
-        //        multipart.Add(mimeMessage.Body);
-
-        //        foreach (var attachmentId in attachments)
-        //        {
-        //            var attachment = GetAttachment(attachmentId);
-        //            multipart.Add(attachment);
-        //        }
-
-        //        mimeMessage.Body = multipart;
-        //    }
-
-        //    var rawMessage = Base64UrlEncode(mimeMessage.ToString());
-
-        //    var message = new Message { Raw = rawMessage };
-        //    var response = await _service.Users.Messages.Send(message, "paintballworldpw@gmail.com").ExecuteAsync();
-
-        //    var outboxMessage = new EmailOutbox
-        //    {
-        //        MessageId = response.Id,
-        //        Recipient = to,
-        //        Subject = subject,
-        //        Body = body,
-        //        SentTime = DateTime.UtcNow,
-        //        IsSent = true,
-        //        SendTries = 1 
-        //    };
-        //    await _context.EmailOutboxes.AddAsync(outboxMessage);
-        //}
 
         private Attachment GetAttachment(int attachmentId)
         {
             var filePath = _fileService.GetAttachmentPathById(attachmentId);
-            //var fileInfo = new FileInfo(filePath);
-
-            //var fileStream = File.OpenRead(filePath);
-            //var attachment = new MimePart(fileInfo.Extension)
-            //{
-            //    Content = new MimeContent(fileStream),
-            //    ContentDisposition = new ContentDisposition(ContentDisposition.Attachment),
-            //    ContentTransferEncoding = ContentEncoding.Base64,
-            //    FileName = fileInfo.Name
-            //};
 
             return new Attachment(filePath);
         }
@@ -174,7 +108,7 @@ namespace PaintballWorld.Infrastructure.Services
         //            Sender = emailMessage.Payload.Headers.FirstOrDefault(h => h.Name == "From")?.Value,
         //            Subject = emailMessage.Payload.Headers.FirstOrDefault(h => h.Name == "Subject")?.Value,
         //            Body = GetFullMessageBody(emailMessage.Payload),
-        //            ReceivedTime = date, 
+        //            ReceivedTime = date,
         //            IsRead = false
         //        };
 
