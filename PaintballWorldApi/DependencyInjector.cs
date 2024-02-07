@@ -9,9 +9,13 @@ namespace PaintballWorld.API
     {
         public static void Inject(this IServiceCollection services)
         {
+            // Infrastructure
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthTokenService, AuthTokenService>();
+
+
+            // Domain
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IApiKeyService, ApiKeyService>();
 

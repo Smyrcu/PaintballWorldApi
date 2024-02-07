@@ -70,14 +70,24 @@ builder.Services.AddAuthentication(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin()
+            .AllowAnyMethod()
+            .AllowAnyHeader();
+    });
+});
+
 
 var app = builder.Build();
 
-
+app.UseCors("AllowAll");
 //if (app.Environment.IsDevelopment())
 //{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+app.UseSwagger();
+app.UseSwaggerUI();
 
     //var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
     //context.Database.Migrate();
@@ -97,8 +107,7 @@ app.UseEndpoints(endpoints =>
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
-
-
+app.UseAuthentication();
 
 app.MapControllers();
 

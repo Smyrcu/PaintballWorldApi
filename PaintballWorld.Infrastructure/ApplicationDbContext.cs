@@ -98,7 +98,16 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.Street).HasMaxLength(255);
         });
 
-        modelBuilder.Entity<ApiKey>().ToTable("ApiKeys");
+        modelBuilder.Entity<ApiKey>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__ApiKey__20240206CE");
+
+            entity.ToTable("ApiKey");
+
+            entity.Property(e => e.Key).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Name).HasMaxLength(255).IsRequired();
+
+        });
 
         //modelBuilder.Entity<AspNetRole>(entity =>
         //{
