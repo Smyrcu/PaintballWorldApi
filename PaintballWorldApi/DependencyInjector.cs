@@ -18,6 +18,10 @@ namespace PaintballWorld.API
             // Domain
             services.AddScoped<IProfileService, ProfileService>();
             services.AddScoped<IApiKeyService, ApiKeyService>();
+            services.AddScoped<IOwnerService, OwnerService>();
+            services.AddScoped<IAutocompleteService, AutocompleteService>();
+
+
 
         }
     }

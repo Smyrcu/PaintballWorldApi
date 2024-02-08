@@ -5,6 +5,7 @@ using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API;
+using PaintballWorld.API.Middleware;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -83,7 +84,18 @@ builder.Services.AddCors(options =>
 
 var app = builder.Build();
 
+app.UseHttpsRedirection();
+
 app.UseCors("AllowAll");
+
+app.UseRouting();
+
+app.UseMiddleware<ApiKeyMiddleware>();
+
+
+app.UseAuthentication(); 
+app.UseAuthorization();
+
 //if (app.Environment.IsDevelopment())
 //{
 app.UseSwagger();
@@ -94,7 +106,6 @@ app.UseSwaggerUI();
 
 //}
 
-app.UseRouting();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllerRoute(
@@ -103,11 +114,6 @@ app.UseEndpoints(endpoints =>
     );
 });
 
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-app.UseAuthentication();
 
 app.MapControllers();
 

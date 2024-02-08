@@ -33,12 +33,17 @@
     <Folder Include="Areas\Administration\Data\" />
     <Folder Include="Areas\Administration\Models\" />
     <Folder Include="Areas\Administration\Views\" />
-    <Folder Include="Areas\Auth\Data\" />
     <Folder Include="Areas\Auth\Views\" />
+    <Folder Include="Areas\Default\Data\" />
+    <Folder Include="Areas\Default\Models\" />
+    <Folder Include="Areas\Default\Views\" />
     <Folder Include="Areas\Event\Controllers\" />
     <Folder Include="Areas\Event\Data\" />
     <Folder Include="Areas\Event\Models\" />
     <Folder Include="Areas\Event\Views\" />
+    <Folder Include="Areas\Field\Data\" />
+    <Folder Include="Areas\Field\Models\" />
+    <Folder Include="Areas\Field\Views\" />
   </ItemGroup>
 
   <ItemGroup>

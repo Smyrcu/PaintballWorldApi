@@ -10,6 +10,6 @@
     public record RegisterAddress(string? PhoneNo, string? Street, string? HouseNo, string? City, string? PostalNumber,
         string? Country, string? Coordinates);
 
-    public record RegisterOwnerRequest(string Email, string Username, string Password, RegisterOwner Owner);
+    public record RegisterOwnerRequest(string Email, string Username, string Password, string? PhoneNumber, RegisterOwner Owner);
 
 }

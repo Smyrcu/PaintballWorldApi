@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using PaintballWorld.API.Areas.Auth.Data;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure;
@@ -26,6 +27,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         private readonly ILogger<LoginController> _logger;
         private readonly ApplicationDbContext _context;
         private readonly IProfileService _profileService;
+        private readonly IOwnerService _ownerService;
 
         #endregion
 
@@ -37,7 +39,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             RoleManager<IdentityRole> roleManager, 
             IEmailService emailService, 
             IConfiguration configuration, 
-            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService)
+            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService, IOwnerService ownerService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -47,6 +49,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             _logger = logger;
             _context = context;
             _profileService = profileService;
+            _ownerService = ownerService;
         }
 
         #endregion
@@ -62,7 +65,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 UserName = request.Username,
                 Email = request.Email,
             };
-            _logger.LogInformation("Creating new account", user);
+            _logger.LogInformation("Creating new account");
 
             var result = await _userManager.CreateAsync(user, request.Password);
 
@@ -83,11 +86,49 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             return BadRequest(result);
         }
 
+        [HttpPost]
+        [Route("RegisterOwner")]
+        public async Task<IActionResult> RegisterOwner([FromBody] RegisterOwnerRequest request)
+        {
+            var user = new IdentityUser
+            {
+                UserName = request.Username,
+                Email = request.Email,
+            };
+            _logger.LogInformation("Creating new Owner account");
+
+            var result = await _userManager.CreateAsync(user, request.Password);
+
+            if (result.Succeeded)
+            {
+                var confirmationGuid = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var callbackUrl = Url.Action("ConfirmAccount", "Register",
+                    new { Area = "Auth", userId = user.Id, code = confirmationGuid },
+                    protocol: HttpContext.Request.Scheme);
+
+                await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
+
+                _profileService.FinishRegistration(user, request.Owner.DateOfBirth, request.Owner.FirstName, request.Owner.LastName, request.PhoneNumber ?? "111111111");
+
+                _ownerService.RegisterOwner(user, request.Owner.Map());
+
+                return Ok();
+            }
+
+            return BadRequest(result);
+
+        }
+
+
+
         #endregion
+
+
 
         #region Potwierdzanie konta
 
-        [HttpPost("ConfirmAccount")]
+        [HttpGet("ConfirmAccount")]
         public async Task<IActionResult> ConfirmAccount([FromQuery] string userId, [FromQuery] string code)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))

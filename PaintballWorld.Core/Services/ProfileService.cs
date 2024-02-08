@@ -37,5 +37,20 @@ namespace PaintballWorld.Core.Services
 
 
         }
+
+        public void FinishRegistration(IdentityUser user, DateTime dateOfBirth, string firstName, string lastName, string phoneNo)
+        {
+            var userInfo = new UserInfo
+            {
+                DateOfBirth = dateOfBirth,
+                UserId = Guid.Parse(user.Id),
+                LastName = lastName,
+                FirstName = firstName,
+                PhoneNo = phoneNo
+            };
+
+            _context.UserInfos.Add(userInfo);
+            _context.SaveChanges();
+        }
     }
 }

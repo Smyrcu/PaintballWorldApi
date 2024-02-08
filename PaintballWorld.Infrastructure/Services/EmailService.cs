@@ -125,16 +125,16 @@ namespace PaintballWorld.Infrastructure.Services
         public async Task SendResetPasswordEmailAsync(string email, string callbackUrl)
         {
             //TODO: Wyciągnąć to z bazy :)
-            var body = "";
-            var subject = $"{callbackUrl}";
+            var subject = "test";
+            var body = $"{callbackUrl}";
             await this.SendEmailAsync(email, subject, body);
         }
 
         public async Task SendConfirmationEmailAsync(string email, string? callbackUrl)
         {
             //TODO: Wyciągnąć to z bazy :)
-            var body = "";
-            var subject = $"{callbackUrl}";
+            var subject = "test";
+            var body = $"{callbackUrl}";
             await this.SendEmailAsync(email, subject, body);
         }
 
