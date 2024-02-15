@@ -29,7 +29,7 @@ namespace PaintballWorld.Core.Services
             var userInfo = new UserInfo
             {
                 DateOfBirth = dateOfBirth,
-                UserId = Guid.Parse(user.Id)
+                UserId = user.Id,
             };
 
             _context.UserInfos.Add(userInfo);
@@ -43,7 +43,7 @@ namespace PaintballWorld.Core.Services
             var userInfo = new UserInfo
             {
                 DateOfBirth = dateOfBirth,
-                UserId = Guid.Parse(user.Id),
+                UserId = user.Id,
                 LastName = lastName,
                 FirstName = firstName,
                 PhoneNo = phoneNo

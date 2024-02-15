@@ -1,19 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace PaintballWorld.Infrastructure.Models;
 
-public partial class UserRating
+public readonly record struct UserRatingId(Guid Value)
 {
-    public int Id { get; set; }
+    public static UserRatingId Empty => new(Guid.Empty);
+    public static UserRatingId NewEventId() => new(Guid.NewGuid());
+}
 
-    public Guid UserId { get; set; }
+
+public class UserRating
+{
+    public UserRatingId Id { get; private set; } = UserRatingId.Empty;
+
+    public string UserId { get; set; }
+    public virtual UserInfo User { get; set; }
 
     public double Rating { get; set; }
 
     public string? Content { get; set; }
 
-    public string? CreatedBy { get; set; }
+    public string? CreatorId { get; set; }
+
+    public virtual IdentityUser? Creator { get; set; }
 
     public DateTime? CreatedOnUtc { get; set; }
 }

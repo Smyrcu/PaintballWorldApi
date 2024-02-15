@@ -45,7 +45,7 @@ namespace PaintballWorld.Infrastructure.Services
             };
         }
 
-        public async Task SendEmailAsync(string to, string subject, string body, params int[] attachmentIds)
+        public async Task SendEmailAsync(string to, string subject, string body, params AttachmentId[] attachmentIds)
         {
             using var message = new MailMessage();
             message.From = new MailAddress(SmtpUsername);
@@ -80,7 +80,7 @@ namespace PaintballWorld.Infrastructure.Services
             }
         }
 
-        private Attachment GetAttachment(int attachmentId)
+        private Attachment GetAttachment(AttachmentId attachmentId)
         {
             var filePath = _fileService.GetAttachmentPathById(attachmentId);
 

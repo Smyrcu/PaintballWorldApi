@@ -222,11 +222,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Address", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("City")
                         .HasMaxLength(255)
@@ -264,11 +261,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.ApiKey", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
                         .IsRequired()
@@ -288,14 +282,14 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Attachment", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid?>("EmailInboxId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EmailId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("EmailOutboxId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("EmailType")
                         .HasColumnType("bit");
@@ -307,19 +301,23 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Attachme__3214EC077EC533FA");
 
-                    b.ToTable("Attachments");
+                    b.HasIndex("EmailInboxId");
+
+                    b.HasIndex("EmailOutboxId");
+
+                    b.ToTable("Attachments", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Attachment_EmailInboxId_EmailOutboxId", "([EmailInboxId] IS NOT NULL AND [EmailOutboxId] IS NULL) OR ([EmailInboxId] IS NULL AND [EmailOutboxId] IS NOT NULL)");
+                        });
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Company", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("CompanyName")
                         .IsRequired()
@@ -330,23 +328,23 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("nvarchar(200)");
 
-                    b.Property<string>("PhoneNo")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
+                    b.Property<string>("TaxId")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id")
                         .HasName("PK__Company__3214EC07B2730D43");
+
+                    b.HasIndex("AddressId")
+                        .IsUnique();
 
                     b.ToTable("Company", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EmailInbox", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
@@ -379,11 +377,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EmailOutbox", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .HasColumnType("nvarchar(max)");
@@ -419,11 +414,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EntityType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Name")
                         .HasMaxLength(255)
@@ -437,14 +429,14 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Event", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<Guid?>("CreatedBy")
+                    b.Property<Guid>("Id")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("CreatedByUserId")
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<DateTime?>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
@@ -458,8 +450,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 
-                    b.Property<int>("FieldTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FieldTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdatedUtc")
                         .ValueGeneratedOnAdd()
@@ -472,19 +464,22 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Events__3214EC0735E05FB8");
 
+                    b.HasIndex("CreatedBy");
+
+                    b.HasIndex("CreatedByUserId");
+
+                    b.HasIndex("FieldTypeId");
+
                     b.ToTable("Events");
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Field", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("AddressId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Area")
                         .HasColumnType("float");
@@ -498,8 +493,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(4000)
                         .HasColumnType("nvarchar(4000)");
 
-                    b.Property<int>("FieldTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FieldTypeId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("LastUpdatedUtc")
                         .ValueGeneratedOnAdd()
@@ -529,16 +524,20 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Field__3214EC07274DB93D");
 
+                    b.HasIndex("AddressId")
+                        .IsUnique();
+
+                    b.HasIndex("FieldTypeId");
+
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("Field", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldRating", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .HasMaxLength(400)
@@ -553,8 +552,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<int>("FieldId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<double>("Rating")
                         .HasColumnType("float");
@@ -562,16 +561,15 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__FieldRat__3214EC079B566052");
 
+                    b.HasIndex("FieldId");
+
                     b.ToTable("FieldRating", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldSchedule", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedUtc")
                         .ValueGeneratedOnAdd()
@@ -584,8 +582,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.Property<int?>("DayOfWeek")
                         .HasColumnType("int");
 
-                    b.Property<int>("FieldId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int?>("HowManyWeeksActive")
                         .HasColumnType("int");
@@ -604,41 +602,37 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__FieldSch__3214EC07A2B31AFC");
 
+                    b.HasIndex("FieldId");
+
                     b.ToTable("FieldSchedule", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldType", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<string>("FieldType1")
+                    b.Property<string>("FieldTypeName")
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)")
-                        .HasColumnName("FieldType");
+                        .HasColumnName("FieldTypeName");
 
                     b.HasKey("Id")
                         .HasName("PK__FieldTyp__3214EC0794D0A617");
 
-                    b.ToTable("FieldType", (string)null);
+                    b.ToTable("FieldTypeName", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Newsletter", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Body")
                         .IsRequired()
@@ -665,11 +659,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.NewsletterSub", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -687,11 +678,8 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.OsmCity", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("County")
                         .HasMaxLength(255)
@@ -730,17 +718,11 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Owner", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("AddressId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("CompanyId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("CompanyId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
@@ -755,51 +737,55 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<string>("TaxId")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id")
                         .HasName("PK__Owners__3214EC07F0523BFF");
 
+                    b.HasIndex("CompanyId");
+
                     b.ToTable("Owners");
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Photo", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<int>("EntityId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EntityTypeId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.Property<int>("EntityTypeId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("EventId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("FieldId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id")
                         .HasName("PK__Photo__3214EC078A632B4C");
 
-                    b.ToTable("Photo", (string)null);
+                    b.HasIndex("EntityTypeId");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("FieldId");
+
+                    b.ToTable("Photo", null, t =>
+                        {
+                            t.HasCheckConstraint("CK_Photo_FieldId_EventId", "([FieldId] IS NOT NULL AND [EventId] IS NULL) OR ([FieldId] IS NULL AND [EventId] IS NOT NULL)");
+                        });
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Set", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<int>("Ammo")
                         .HasColumnType("int");
@@ -808,8 +794,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int>("FieldId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("FieldId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal?>("Price")
                         .HasColumnType("money");
@@ -817,11 +803,16 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__Sets__3214EC07C4C3B70D");
 
+                    b.HasIndex("FieldId");
+
                     b.ToTable("Sets");
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserInfo", b =>
                 {
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime");
 
@@ -841,66 +832,74 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.HasKey("UserId")
+                        .HasName("PK__UserInfo__JFREW67FI4F3E4RW");
 
                     b.ToTable("UserInfo", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserRating", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Content")
                         .HasMaxLength(400)
                         .HasColumnType("nvarchar(400)");
-
-                    b.Property<string>("CreatedBy")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
 
                     b.Property<DateTime?>("CreatedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
+                    b.Property<string>("CreatorId")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<double>("Rating")
                         .HasColumnType("float");
 
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK__UserRati__3214EC071D3FF75F");
+
+                    b.HasIndex("CreatorId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UserRating", (string)null);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UsersToEvent", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<int>("EventId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("EventId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime?>("JoinedOnUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<int?>("SetId")
-                        .HasColumnType("int");
+                    b.Property<Guid?>("SetId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id")
                         .HasName("PK__UsersToE__3214EC07A6DB8A30");
+
+                    b.HasIndex("EventId");
+
+                    b.HasIndex("SetId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("UsersToEvents");
                 });
@@ -954,6 +953,245 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Attachment", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.EmailInbox", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("EmailInboxId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.EmailOutbox", null)
+                        .WithMany("Attachments")
+                        .HasForeignKey("EmailOutboxId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Company", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Address", "Address")
+                        .WithOne()
+                        .HasForeignKey("PaintballWorld.Infrastructure.Models.Company", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Event", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", null)
+                        .WithMany()
+                        .HasForeignKey("CreatedBy")
+                        .OnDelete(DeleteBehavior.SetNull);
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "CreatedByUser")
+                        .WithMany()
+                        .HasForeignKey("CreatedByUserId");
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.FieldType", "FieldType")
+                        .WithMany()
+                        .HasForeignKey("FieldTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("CreatedByUser");
+
+                    b.Navigation("FieldType");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Field", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Address", "Address")
+                        .WithOne()
+                        .HasForeignKey("PaintballWorld.Infrastructure.Models.Field", "AddressId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.FieldType", "FieldType")
+                        .WithMany("Fields")
+                        .HasForeignKey("FieldTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Owner", "Owner")
+                        .WithMany("Fields")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Address");
+
+                    b.Navigation("FieldType");
+
+                    b.Navigation("Owner");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldRating", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Field", "Field")
+                        .WithMany("FieldRatings")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldSchedule", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Field", "Field")
+                        .WithMany("FieldSchedules")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Owner", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Company", "Company")
+                        .WithMany()
+                        .HasForeignKey("CompanyId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Photo", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.EntityType", "EntityType")
+                        .WithMany()
+                        .HasForeignKey("EntityTypeId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Event", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Field", null)
+                        .WithMany("Photos")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("EntityType");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Set", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Field", "Field")
+                        .WithMany("Sets")
+                        .HasForeignKey("FieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Field");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserInfo", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithOne()
+                        .HasForeignKey("PaintballWorld.Infrastructure.Models.UserInfo", "UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserRating", b =>
+                {
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "Creator")
+                        .WithMany()
+                        .HasForeignKey("CreatorId");
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.UserInfo", "User")
+                        .WithMany("Ratings")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Creator");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UsersToEvent", b =>
+                {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Event", "Event")
+                        .WithMany("UsersToEvents")
+                        .HasForeignKey("EventId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Set", "set")
+                        .WithMany("UsersToEvents")
+                        .HasForeignKey("SetId");
+
+                    b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Event");
+
+                    b.Navigation("User");
+
+                    b.Navigation("set");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EmailInbox", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EmailOutbox", b =>
+                {
+                    b.Navigation("Attachments");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Event", b =>
+                {
+                    b.Navigation("Photos");
+
+                    b.Navigation("UsersToEvents");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Field", b =>
+                {
+                    b.Navigation("FieldRatings");
+
+                    b.Navigation("FieldSchedules");
+
+                    b.Navigation("Photos");
+
+                    b.Navigation("Sets");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.FieldType", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Owner", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Set", b =>
+                {
+                    b.Navigation("UsersToEvents");
+                });
+
+            modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserInfo", b =>
+                {
+                    b.Navigation("Ratings");
                 });
 #pragma warning restore 612, 618
         }

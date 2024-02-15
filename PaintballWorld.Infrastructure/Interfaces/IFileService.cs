@@ -1,6 +1,8 @@
-﻿namespace PaintballWorld.Infrastructure.Interfaces;
+﻿using PaintballWorld.Infrastructure.Models;
+
+namespace PaintballWorld.Infrastructure.Interfaces;
 
 public interface IFileService
 {
-    string GetAttachmentPathById(int attachmentId);
+    string GetAttachmentPathById(AttachmentId attachmentId);
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Google.Apis.Logging;
 using Microsoft.Extensions.Logging;
 using PaintballWorld.Infrastructure.Interfaces;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Infrastructure.Services
 {
@@ -21,7 +22,7 @@ namespace PaintballWorld.Infrastructure.Services
         }
 
 
-        public string GetAttachmentPathById(int attachmentId)
+        public string GetAttachmentPathById(AttachmentId attachmentId)
         {
             var attachmentPath = _context.Attachments.Single(x => x.Id == attachmentId).Path;
             if (attachmentPath is not null) 

@@ -21,7 +21,7 @@ namespace PaintballWorld.API.Areas.Default.Controllers
         }
 
         [HttpGet]
-        [Route("/{city}")]
+        [Route("{city}")]
         public IActionResult CityAutocomplete([FromRoute] string city)
         {
             var result = _autocompleteService.GetCityAutocomplete(city);

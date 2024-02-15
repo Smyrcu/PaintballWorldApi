@@ -3,12 +3,17 @@ using System.Collections.Generic;
 
 namespace PaintballWorld.Infrastructure.Models;
 
+public readonly record struct FieldRatingId(Guid Value)
+{
+    public static FieldRatingId Empty = new (Guid.Empty);
+    public static FieldRatingId NewFieldRatingId() => new (Guid.NewGuid());
+}
+
 public partial class FieldRating
 {
-    public int Id { get; set; }
-
-    public int FieldId { get; set; }
-
+    public FieldRatingId Id { get; private set; } = FieldRatingId.Empty;
+    public FieldId FieldId { get; set; }
+    public virtual Field Field { get; set; }
     public double Rating { get; set; }
 
     public string? Content { get; set; }

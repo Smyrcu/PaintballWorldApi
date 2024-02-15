@@ -3,10 +3,16 @@ using System.Collections.Generic;
 
 namespace PaintballWorld.Infrastructure.Models;
 
+public readonly record struct OsmCityId(Guid Value)
+{
+    public static OsmCityId Empty => new(Guid.Empty);
+    public static OsmCityId NewEventId() => new(Guid.NewGuid());
+}
+
+
 public partial class OsmCity
 {
-    public int Id { get; set; }
-
+    public OsmCityId Id { get; private set; } = OsmCityId.Empty;
     public long? OsmId { get; set; }
 
     public decimal? Latitude { get; set; }

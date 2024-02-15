@@ -3,10 +3,15 @@ using System.Collections.Generic;
 
 namespace PaintballWorld.Infrastructure.Models;
 
+public readonly record struct AddressId(Guid Value)
+{
+    public static AddressId Empty => new(Guid.Empty);
+    public static AddressId NewFieldId() => new(Guid.NewGuid());
+}
+
 public partial class Address
 {
-    public int Id { get; set; }
-
+    public AddressId Id { get; private set; } = AddressId.Empty;
     public string? PhoneNo { get; set; }
 
     public string? Street { get; set; }

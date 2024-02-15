@@ -2,13 +2,18 @@
 using System.Collections.Generic;
 
 namespace PaintballWorld.Infrastructure.Models;
+public readonly record struct FieldScheduleId(Guid Value)
+{
+    public static FieldScheduleId Empty => new(Guid.Empty);
+    public static FieldScheduleId NewEventId() => new(Guid.NewGuid());
+}
+
 
 public partial class FieldSchedule
 {
-    public int Id { get; set; }
-
-    public int FieldId { get; set; }
-
+    public FieldScheduleId Id { get; private set; } = FieldScheduleId.Empty;
+    public FieldId FieldId { get; set; }
+    public virtual Field Field { get; set; }
     public DateOnly Date { get; set; }
 
     public TimeOnly? Time { get; set; }

@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity;
 
 namespace PaintballWorld.Infrastructure.Models;
 
 public partial class UserInfo
 {
-    public Guid UserId { get; set; }
+    public string UserId { get; set; }
+    public virtual IdentityUser User { get; set; }
 
     public string? FirstName { get; set; } = null!;
 
@@ -16,4 +18,6 @@ public partial class UserInfo
     public string? Image { get; set; }
 
     public string? PhoneNo { get; set; }
+
+    public virtual ICollection<UserRating> Ratings { get; set; }
 }
