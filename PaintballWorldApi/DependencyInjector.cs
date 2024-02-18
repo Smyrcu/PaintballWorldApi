@@ -21,6 +21,8 @@ namespace PaintballWorld.API
             services.AddScoped<IOwnerService, OwnerService>();
             services.AddScoped<IOwnerRegistrationService, OwnerRegistrationService>();
             services.AddScoped<IAutocompleteService, AutocompleteService>();
+            services.AddScoped<IFieldManagementService, FieldManagementService>();
+
 
 
 

@@ -3,7 +3,7 @@
 public readonly record struct OwnerId(Guid Value)
 {
     public static OwnerId Empty => new(Guid.Empty);
-    public static OwnerId NewEventId() => new(Guid.NewGuid());
+    public static OwnerId NewOwnerId() => new(Guid.NewGuid());
 }
 
 

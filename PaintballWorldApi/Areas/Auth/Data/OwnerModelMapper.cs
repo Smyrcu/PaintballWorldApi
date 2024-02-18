@@ -11,18 +11,18 @@ namespace PaintballWorld.API.Areas.Auth.Data
         {
             return new Owner
             {
-                Id = OwnerId.NewEventId(),
+                Id = OwnerId.NewOwnerId(),
                 UserId = Guid.Parse(user.Id),
                 IsApproved = false,
                 Company = new Company
                 {
-                    Id = CompanyId.NewFieldId(),
+                    Id = CompanyId.NewCompanyId(),
                     TaxId = ownerDto.Company.TaxId,
                     CompanyName = ownerDto.Company.CompanyName,
                     Email = ownerDto.Company.Email,
                     Address = new Address
                     {
-                        Id = AddressId.NewFieldId(),
+                        Id = AddressId.NewAddressId(),
                         PhoneNo = ownerDto.Company.Address.PhoneNo,
                         Street = ownerDto.Company.Address.Street,
                         HouseNo = ownerDto.Company.Address.HouseNo,

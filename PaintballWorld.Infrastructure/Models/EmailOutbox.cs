@@ -14,7 +14,7 @@ public partial class EmailOutbox
     // {
     // }
 
-    // public static EmailOutbox CreateNew() => new EmailOutbox() { Id = EmailOutboxId.NewEventId() };
+    // public static EmailOutbox CreateNew() => new EmailOutbox() { Id = EmailOutboxId.NewSetId() };
 
 
 

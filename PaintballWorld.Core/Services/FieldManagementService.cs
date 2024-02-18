@@ -9,29 +9,23 @@ using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Core.Services
 {
-    public class OwnerRegistrationService : IOwnerRegistrationService
+    public class FieldManagementService : IFieldManagementService
     {
         private readonly ApplicationDbContext _context;
 
-        public OwnerRegistrationService(ApplicationDbContext context)
+        public FieldManagementService(ApplicationDbContext context)
         {
             _context = context;
         }
 
-        public void RegisterOwner(Owner owner)
+        public void CreateField(Field field)
         {
-            _context.Owners.Add(owner);
-            _context.SaveChanges();
-        }
-
-        public void RegisterOwnerWithField(Owner owner, Field field)
-        {
-
-
-
-            _context.Owners.Add(owner);
             _context.Fields.Add(field);
             _context.SaveChanges();
         }
+
+        public FieldTypeId GetFieldTypeIdByStringName(string fieldType) =>
+            _context.FieldTypes.Single(x => x.FieldTypeName.Equals(fieldType)).Id;
+        
     }
 }

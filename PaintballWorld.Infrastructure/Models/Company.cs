@@ -3,7 +3,7 @@
 public readonly record struct CompanyId(Guid Value)
 {
     public static CompanyId Empty => new(Guid.Empty);
-    public static CompanyId NewFieldId() => new(Guid.NewGuid());
+    public static CompanyId NewCompanyId() => new(Guid.NewGuid());
 }
 public partial class Company
 {

@@ -3,7 +3,7 @@
 public readonly record struct AddressId(Guid Value)
 {
     public static AddressId Empty => new(Guid.Empty);
-    public static AddressId NewFieldId() => new(Guid.NewGuid());
+    public static AddressId NewAddressId() => new(Guid.NewGuid());
 }
 
 public partial class Address
@@ -12,7 +12,7 @@ public partial class Address
     // {
     // }
     //
-    // public Address CreateNew() => new(){Id = AddressId.NewFieldId()};
+    // public Address CreateNew() => new(){Id = AddressId.NewCompanyId()};
 
     public AddressId Id { get; init; } = AddressId.Empty;
     public string? PhoneNo { get; set; }

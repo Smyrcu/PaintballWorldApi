@@ -1,11 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using PaintballWorld.API.Areas.Auth.Data;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Controllers
 {
@@ -28,6 +31,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         private readonly IProfileService _profileService;
         private readonly IOwnerService _ownerService;
         private readonly IOwnerRegistrationService _ownerRegistrationService;
+        private readonly IFieldManagementService _fieldManagementService;
 
         #endregion
 
@@ -39,7 +43,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             RoleManager<IdentityRole> roleManager, 
             IEmailService emailService, 
             IConfiguration configuration, 
-            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService, IOwnerService ownerService, IOwnerRegistrationService ownerRegistrationService)
+            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService, IOwnerService ownerService, IOwnerRegistrationService ownerRegistrationService, IFieldManagementService fieldManagementService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -51,6 +55,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             _profileService = profileService;
             _ownerService = ownerService;
             _ownerRegistrationService = ownerRegistrationService;
+            _fieldManagementService = fieldManagementService;
         }
 
         #endregion
@@ -82,7 +87,9 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 _profileService.FinishRegistration(user, userDto.DateOfBirth);
 
-                return Ok();
+                await _userManager.AddToRoleAsync(user, "User");
+
+                return Ok("User was created successfully");
             }
             return BadRequest(result);
         }
@@ -114,14 +121,64 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 _ownerRegistrationService.RegisterOwner(dto.Map(user));
 
-                return Ok();
+                await _userManager.AddToRoleAsync(user, "Owner");
+
+                return Ok("User was created successfully");
             }
 
             return BadRequest(result);
 
         }
 
+        [HttpPost]
+        [Route("RegisterOwnerWithField")]
+        public async Task<IActionResult> RegisterOwnerWithField([FromBody] OwnerWithFieldDto dto)
+        {
+            var user = new IdentityUser
+            {
+                UserName = dto.Username,
+                Email = dto.Email,
+            };
+            _logger.LogInformation("Creating new OwnerDto account");
 
+            var result = await _userManager.CreateAsync(user, dto.Password);
+            
+            if (result.Succeeded)
+            {
+                var confirmationGuid = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+                var callbackUrl = Url.Action("ConfirmAccount", "Register",
+                    new { Area = "Auth", userId = user.Id, code = confirmationGuid },
+                    protocol: HttpContext.Request.Scheme);
+
+                await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
+
+                _profileService.FinishRegistration(user, dto.DateOfBirth, dto.FirstName, dto.LastName);
+
+                var fieldTypeId = _fieldManagementService.GetFieldTypeIdByStringName(dto.Field.FieldType);
+
+                var map = dto.Map(user, fieldTypeId);
+                _ownerRegistrationService.RegisterOwnerWithField(map.Item1, map.Item2);
+
+                await _userManager.AddToRoleAsync(user, "Owner");
+
+                return Ok("User with field was created successfully");
+            }
+
+            return BadRequest(result);
+
+        }
+
+        [HttpGet]
+        [Route("Test")]
+        public IActionResult Test()
+        {
+            return Ok(JsonConvert.SerializeObject(new OwnerWithFieldDto("test", "test", "test", "test", "test",
+                DateTime.Now,
+                new CompanyDto("test", "test", "test",
+                    new AddressDto("test", "test", "test", "test", "test", "test", "test")), 
+                new FieldDto(new AddressDto("test", "test", "test", "test", "test", "test", "test"), null, 5000, "test", "test", "test",10, 100, 10, "paintball"))));
+        }
 
         #endregion
 
