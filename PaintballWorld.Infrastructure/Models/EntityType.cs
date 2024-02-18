@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct EntityTypeId(Guid Value)
 {
@@ -12,6 +9,6 @@ public readonly record struct EntityTypeId(Guid Value)
 
 public partial class EntityType
 {
-    public EntityTypeId Id { get; private set; } = EntityTypeId.Empty;
+    public EntityTypeId Id { get; init; } = EntityTypeId.Empty;
     public string? Name { get; set; }
 }

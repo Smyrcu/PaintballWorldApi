@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct FieldId(Guid Value)
 {
@@ -11,7 +8,7 @@ public readonly record struct FieldId(Guid Value)
 
 public partial class Field
 {
-    public FieldId Id { get; private set; } = FieldId.Empty;
+    public FieldId Id { get; init; } = FieldId.Empty;
     public FieldTypeId FieldTypeId { get; set; }
     public virtual FieldType FieldType { get; set; }
     public  AddressId AddressId { get; set; }

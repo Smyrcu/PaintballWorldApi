@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct CompanyId(Guid Value)
 {
@@ -10,10 +7,10 @@ public readonly record struct CompanyId(Guid Value)
 }
 public partial class Company
 {
-    public CompanyId Id { get; private set; } = CompanyId.Empty;
+    public CompanyId Id { get; init; } = CompanyId.Empty;
     public AddressId AddressId { get; set; }
     public virtual Address Address { get; set; }
-    public string CompanyName { get; set; } = null!;
+    public string? CompanyName { get; set; } = null!;
     public string? TaxId { get; set; }
 
     public string? Email { get; set; }

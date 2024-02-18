@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using PaintballWorld.Core.Models;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Core.Interfaces;
 
 public interface IOwnerService
 {
-    void RegisterOwner(IdentityUser user, OwnerModel request);
+    public void Approve();
 }

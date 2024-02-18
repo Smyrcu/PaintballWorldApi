@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 public readonly record struct FieldScheduleId(Guid Value)
 {
     public static FieldScheduleId Empty => new(Guid.Empty);
@@ -11,7 +8,7 @@ public readonly record struct FieldScheduleId(Guid Value)
 
 public partial class FieldSchedule
 {
-    public FieldScheduleId Id { get; private set; } = FieldScheduleId.Empty;
+    public FieldScheduleId Id { get; init; } = FieldScheduleId.Empty;
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
     public DateOnly Date { get; set; }

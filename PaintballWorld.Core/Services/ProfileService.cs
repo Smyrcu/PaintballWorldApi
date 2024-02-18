@@ -38,7 +38,7 @@ namespace PaintballWorld.Core.Services
 
         }
 
-        public void FinishRegistration(IdentityUser user, DateTime dateOfBirth, string firstName, string lastName, string phoneNo)
+        public void FinishRegistration(IdentityUser user, DateTime dateOfBirth, string firstName, string lastName)
         {
             var userInfo = new UserInfo
             {
@@ -46,7 +46,6 @@ namespace PaintballWorld.Core.Services
                 UserId = user.Id,
                 LastName = lastName,
                 FirstName = firstName,
-                PhoneNo = phoneNo
             };
 
             _context.UserInfos.Add(userInfo);

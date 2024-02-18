@@ -52,23 +52,23 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         [HttpPost]
         [Route("Login")]
-        public async Task<IActionResult> Login([FromBody] LoginRequest request)
+        public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(request.Username);
+            var user = await _userManager.FindByNameAsync(dto.Username);
 
             if (user == null)
-                return Unauthorized();
+                return NotFound("User not found");
 
-            var result = await _signInManager.PasswordSignInAsync(user, request.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(user, dto.Password, false, false);
 
             if (!result.Succeeded)
-                return Unauthorized();
+                return Unauthorized(result);
 
             var jwtToken = _tokenService.GenerateToken(user);
 
             return jwtToken == string.Empty
-                ? Ok(new { Token = jwtToken })
-                : Unauthorized();
+                ? Unauthorized(result)
+                : Ok(new { Token = jwtToken });
 
         }
 
@@ -140,19 +140,19 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         /// <summary>
         /// Resetowanie hasła
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPost]
         [Route("ResetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordModel model)
+        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(model.Email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
             if (user is null)
             {
                 return NotFound();
             }
 
-            var result = await _userManager.ResetPasswordAsync(user, model.Token, model.NewPassword);
+            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
             if (!result.Succeeded)
             {
                 return BadRequest(result.Errors);

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct NewsletterSubId(Guid Value)
 {
@@ -12,7 +9,7 @@ public readonly record struct NewsletterSubId(Guid Value)
 
 public partial class NewsletterSub
 {
-    public NewsletterSubId Id { get; private set; } = NewsletterSubId.Empty;
+    public NewsletterSubId Id { get; init; } = NewsletterSubId.Empty;
 
     public int NewsletterTypeId { get; set; }
 

@@ -6,7 +6,6 @@ using Google.Apis.Util.Store;
 using System.Net.Mail;
 using MimeKit;
 using PaintballWorld.Infrastructure.Interfaces;
-using PaintballWorld.Infrastructure.Models;
 using Azure;
 using Microsoft.EntityFrameworkCore;
 using System.Text;
@@ -15,6 +14,7 @@ using System.Net.Http;
 using System.Net;
 using Google.Apis.Logging;
 using Microsoft.Extensions.Logging;
+using PaintballWorld.Infrastructure.Models;
 using Attachment = System.Net.Mail.Attachment;
 
 namespace PaintballWorld.Infrastructure.Services
@@ -62,8 +62,10 @@ namespace PaintballWorld.Infrastructure.Services
             try
             {
                 await _smtpClient.SendMailAsync(message);
+
                 var outboxMessage = new EmailOutbox
                 {
+                    Id = EmailOutboxId.NewEventId(),
                     Recipient = to,
                     Subject = subject,
                     Body = body,
@@ -71,7 +73,9 @@ namespace PaintballWorld.Infrastructure.Services
                     IsSent = true,
                     SendTries = 1
                 };
+
                 await _context.EmailOutboxes.AddAsync(outboxMessage);
+                await _context.SaveChangesAsync();
                 _logger.LogInformation("Wiadomość została wysłana pomyślnie.");
             }
             catch (Exception ex)

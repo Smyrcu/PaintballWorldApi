@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct OwnerId(Guid Value)
 {
@@ -12,7 +9,7 @@ public readonly record struct OwnerId(Guid Value)
 
 public partial class Owner
 {
-    public OwnerId Id { get; private set; } = OwnerId.Empty;
+    public OwnerId Id { get; init; } = OwnerId.Empty;
     public Guid UserId { get; set; }
 
     public CompanyId CompanyId { get; set; }

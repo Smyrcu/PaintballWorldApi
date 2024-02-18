@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace PaintballWorld.Infrastructure.Models;
 
@@ -13,7 +11,7 @@ public readonly record struct UserRatingId(Guid Value)
 
 public class UserRating
 {
-    public UserRatingId Id { get; private set; } = UserRatingId.Empty;
+    public UserRatingId Id { get; init; } = UserRatingId.Empty;
 
     public string UserId { get; set; }
     public virtual UserInfo User { get; set; }

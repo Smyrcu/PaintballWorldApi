@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct AttachmentId(Guid Value)
 {
@@ -11,7 +8,7 @@ public readonly record struct AttachmentId(Guid Value)
 
 public partial class Attachment
 {
-    public AttachmentId Id { get; private set; } = AttachmentId.Empty;
+    public AttachmentId Id { get; init; } = AttachmentId.Empty;
     public EmailInboxId? EmailInboxId { get; set; }
     // public virtual EmailInbox? EmailInbox { get; set; }
     public EmailOutboxId? EmailOutboxId { get; set; }

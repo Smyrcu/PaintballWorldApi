@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct AddressId(Guid Value)
 {
@@ -11,7 +8,13 @@ public readonly record struct AddressId(Guid Value)
 
 public partial class Address
 {
-    public AddressId Id { get; private set; } = AddressId.Empty;
+    // private Address()
+    // {
+    // }
+    //
+    // public Address CreateNew() => new(){Id = AddressId.NewFieldId()};
+
+    public AddressId Id { get; init; } = AddressId.Empty;
     public string? PhoneNo { get; set; }
 
     public string? Street { get; set; }

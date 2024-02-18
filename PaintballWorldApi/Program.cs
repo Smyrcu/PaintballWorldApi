@@ -39,7 +39,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddLogging(logger =>
 {
-
+    logger.ClearProviders();
+    logger.SetMinimumLevel(LogLevel.Trace);
+    logger.AddConsole();
 });
 
 builder.Services.AddAuthentication(options =>
@@ -101,8 +103,8 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-    //var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    //context.Database.Migrate();
+    // var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    // context.Database.Migrate();
 
 //}
 

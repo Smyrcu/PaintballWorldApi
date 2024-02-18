@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct EmailInboxId(Guid Value)
 {
@@ -11,7 +8,11 @@ public readonly record struct EmailInboxId(Guid Value)
 
 public partial class EmailInbox
 {
-    public EmailInboxId Id { get; private set; } = EmailInboxId.Empty;
+//     private EmailInbox(){}
+//
+//     public EmailInbox CreateNew() => new EmailInbox(){Id = new EmailInboxId()};
+
+    public EmailInboxId Id { get; init; } = EmailInboxId.Empty;
     public string? MessageId { get; set; }
 
     public string? Sender { get; set; }

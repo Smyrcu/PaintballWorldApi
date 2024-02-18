@@ -1,39 +1,38 @@
-﻿using PaintballWorld.API.Areas.Auth.Models;
+﻿using Microsoft.AspNetCore.Identity;
+using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Models;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Data
 {
     public static class OwnerModelMapper
     {
-        public static OwnerModel Map(this RegisterOwner registerOwner)
+        public static Owner Map(this OwnerDto ownerDto, IdentityUser user)
         {
-            return new OwnerModel
+            return new Owner
             {
-                FirstName = registerOwner.FirstName,
-                LastName = registerOwner.LastName,
-                DateOfBirth = registerOwner.DateOfBirth,
-                Company = new CompanyModel
+                Id = OwnerId.NewEventId(),
+                UserId = Guid.Parse(user.Id),
+                IsApproved = false,
+                Company = new Company
                 {
-                    TaxId = registerOwner.Company.TaxId,
-                    CompanyName = registerOwner.Company.CompanyName,
-                    PhoneNo = registerOwner.Company.PhoneNo,
-                    Email = registerOwner.Company.Email,
-                    Address = new AddressModel
+                    Id = CompanyId.NewFieldId(),
+                    TaxId = ownerDto.Company.TaxId,
+                    CompanyName = ownerDto.Company.CompanyName,
+                    Email = ownerDto.Company.Email,
+                    Address = new Address
                     {
-                        PhoneNo = registerOwner.Company.Address.PhoneNo,
-                        Street = registerOwner.Company.Address.Street,
-                        HouseNo = registerOwner.Company.Address.HouseNo,
-                        City = registerOwner.Company.Address.City,
-                        PostalNumber = registerOwner.Company.Address.PostalNumber,
-                        Country = registerOwner.Company.Address.Country,
-                        Coordinates = registerOwner.Company.Address.Coordinates
+                        Id = AddressId.NewFieldId(),
+                        PhoneNo = ownerDto.Company.Address.PhoneNo,
+                        Street = ownerDto.Company.Address.Street,
+                        HouseNo = ownerDto.Company.Address.HouseNo,
+                        City = ownerDto.Company.Address.City,
+                        PostalNumber = ownerDto.Company.Address.PostalNumber,
+                        Country = ownerDto.Company.Address.Country,
+                        Coordinates = ownerDto.Company.Address.Coordinates
                     }
                 }
             };
-
-
-
-
         }
 
 

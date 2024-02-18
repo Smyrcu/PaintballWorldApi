@@ -6,7 +6,6 @@ using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
-using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Controllers
 {
@@ -28,6 +27,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         private readonly ApplicationDbContext _context;
         private readonly IProfileService _profileService;
         private readonly IOwnerService _ownerService;
+        private readonly IOwnerRegistrationService _ownerRegistrationService;
 
         #endregion
 
@@ -39,7 +39,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             RoleManager<IdentityRole> roleManager, 
             IEmailService emailService, 
             IConfiguration configuration, 
-            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService, IOwnerService ownerService)
+            ILogger<LoginController> logger, ApplicationDbContext context, IProfileService profileService, IOwnerService ownerService, IOwnerRegistrationService ownerRegistrationService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
@@ -50,24 +50,25 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             _context = context;
             _profileService = profileService;
             _ownerService = ownerService;
+            _ownerRegistrationService = ownerRegistrationService;
         }
 
         #endregion
 
         #region Rejestracja
-
+        
         [HttpPost]
         [Route("Register")]
-        public async Task<IActionResult> Register([FromBody] RegisterRequest request)
+        public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
             var user = new IdentityUser
             {
-                UserName = request.Username,
-                Email = request.Email,
+                UserName = userDto.Username,
+                Email = userDto.Email,
             };
             _logger.LogInformation("Creating new account");
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _userManager.CreateAsync(user, userDto.Password);
 
             if (result.Succeeded)
             {
@@ -79,7 +80,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
 
-                _profileService.FinishRegistration(user, request.DateOfBirth);
+                _profileService.FinishRegistration(user, userDto.DateOfBirth);
 
                 return Ok();
             }
@@ -88,16 +89,16 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         [HttpPost]
         [Route("RegisterOwner")]
-        public async Task<IActionResult> RegisterOwner([FromBody] RegisterOwnerRequest request)
+        public async Task<IActionResult> RegisterOwner([FromBody] OwnerDto dto)
         {
             var user = new IdentityUser
             {
-                UserName = request.Username,
-                Email = request.Email,
+                UserName = dto.Username,
+                Email = dto.Email,
             };
-            _logger.LogInformation("Creating new Owner account");
+            _logger.LogInformation("Creating new OwnerDto account");
 
-            var result = await _userManager.CreateAsync(user, request.Password);
+            var result = await _userManager.CreateAsync(user, dto.Password);
 
             if (result.Succeeded)
             {
@@ -109,9 +110,9 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
 
-                _profileService.FinishRegistration(user, request.Owner.DateOfBirth, request.Owner.FirstName, request.Owner.LastName, request.PhoneNumber ?? "111111111");
+                _profileService.FinishRegistration(user, dto.DateOfBirth, dto.FirstName, dto.LastName);
 
-                _ownerService.RegisterOwner(user, request.Owner.Map());
+                _ownerRegistrationService.RegisterOwner(dto.Map(user));
 
                 return Ok();
             }

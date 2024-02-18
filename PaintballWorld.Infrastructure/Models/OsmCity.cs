@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace PaintballWorld.Infrastructure.Models;
+﻿namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct OsmCityId(Guid Value)
 {
@@ -12,7 +9,7 @@ public readonly record struct OsmCityId(Guid Value)
 
 public partial class OsmCity
 {
-    public OsmCityId Id { get; private set; } = OsmCityId.Empty;
+    public OsmCityId Id { get; init; } = OsmCityId.Empty;
     public long? OsmId { get; set; }
 
     public decimal? Latitude { get; set; }
