@@ -64,7 +64,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             if (!result.Succeeded)
                 return Unauthorized(result);
 
-            var jwtToken = _tokenService.GenerateToken(user);
+            var jwtToken = await _tokenService.GenerateToken(user);
 
             return jwtToken == string.Empty
                 ? Unauthorized(result)

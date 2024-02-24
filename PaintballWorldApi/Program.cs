@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using PaintballWorld.Infrastructure;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Features;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API;
 using PaintballWorld.API.Middleware;
@@ -11,7 +12,7 @@ using PaintballWorld.API.Middleware;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ProdConnection") 
-                       ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+                       ?? throw new InvalidOperationException("Connection string 'ProdConnection' not found.");
 
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
 {
@@ -36,6 +37,14 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 builder.Services.Inject();
 
 builder.Services.AddControllers();
+
+builder.Services.Configure<FormOptions>(x =>
+{
+    x.ValueCountLimit = int.MaxValue;
+    x.MultipartBodyLengthLimit = int.MaxValue;
+    x.MultipartHeadersLengthLimit = int.MaxValue;
+});
+
 
 builder.Services.AddLogging(logger =>
 {

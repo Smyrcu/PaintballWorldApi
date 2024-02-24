@@ -32,6 +32,12 @@ namespace PaintballWorld.Infrastructure.Services
             throw new Exception(errorMessage);
         }
 
+        public string SaveFile(string path, Stream fileStream)
+        {
+            using var file = File.Create(path);
+            fileStream.CopyTo(file);
+            return path; 
+        }
 
     }
 }

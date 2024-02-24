@@ -16,7 +16,13 @@ namespace PaintballWorld.API.Middleware
 
         public async Task Invoke(HttpContext context, IApiKeyService apiKeyService)
         {
-            if (context.Request.Path.StartsWithSegments(new PathString("/swagger")))
+            var excludedPaths = new List<PathString>() 
+            {
+                new("/swagger"),
+                new("/api/Auth/Register/ConfirmAccount"),
+            };
+
+            if (excludedPaths.Any(path => context.Request.Path.StartsWithSegments(new PathString(path))))
             {
                 await _next(context);
                 return;

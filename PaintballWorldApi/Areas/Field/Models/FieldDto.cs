@@ -9,7 +9,7 @@ public class FieldDto
     public OwnerId? OwnerId { get; set; }
     public double Area { get; set; }
     public string Name { get; set; }
-    public string? Regulations { get; set; }
+    public IFormFile? Regulations { get; set; }
     public string? Description { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }
@@ -22,7 +22,7 @@ public class FieldDto
     {
         
     }
-    public FieldDto(AddressDto address, OwnerId? ownerId, double area, string name, string? regulations, string? description, int? minPlayers, int? maxPlayers, int? maxSimultaneousEvents, string fieldType)
+    public FieldDto(AddressDto address, OwnerId? ownerId, double area, string name, IFormFile? regulations, string? description, int? minPlayers, int? maxPlayers, int? maxSimultaneousEvents, string fieldType)
     {
         Address = address;
         OwnerId = ownerId;
@@ -35,4 +35,4 @@ public class FieldDto
         MaxSimultaneousEvents = maxSimultaneousEvents ?? 1;
         FieldType = fieldType;
     }
-}
+}   

@@ -15,6 +15,7 @@ namespace PaintballWorld.API.Areas.Auth.Models
             this.Company = company;
         }
 
+
         public string FirstName { get; init; }
         public string LastName { get; init; }
         public CompanyDto Company { get; init; }

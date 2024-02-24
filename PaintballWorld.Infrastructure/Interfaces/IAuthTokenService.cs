@@ -4,5 +4,5 @@ namespace PaintballWorld.Infrastructure.Interfaces;
 
 public interface IAuthTokenService
 {
-    string GenerateToken(IdentityUser user);
+    Task<string> GenerateToken(IdentityUser user);
 }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Org.BouncyCastle.Crypto.Utilities;
 using PaintballWorld.API.Areas.Auth.Data;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Interfaces;
@@ -89,8 +90,13 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 await _userManager.AddToRoleAsync(user, "User");
 
+#if DEBUG
+                return Ok(callbackUrl);
+#endif
+
                 return Ok("User was created successfully");
             }
+
             return BadRequest(result);
         }
 
@@ -123,7 +129,12 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
                 await _userManager.AddToRoleAsync(user, "Owner");
 
+#if DEBUG
+                return Ok(callbackUrl);
+#endif
+
                 return Ok("User was created successfully");
+
             }
 
             return BadRequest(result);
@@ -173,11 +184,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         [Route("Test")]
         public IActionResult Test()
         {
-            return Ok(JsonConvert.SerializeObject(new OwnerWithFieldDto("test", "test", "test", "test", "test",
-                DateTime.Now,
-                new CompanyDto("test", "test", "test",
-                    new AddressDto("test", "test", "test", "test", "test", "test", "test")), 
-                new FieldDto(new AddressDto("test", "test", "test", "test", "test", "test", "test"), null, 5000, "test", "test", "test",10, 100, 10, "paintball"))));
+            return default;
         }
 
         #endregion

@@ -14,6 +14,11 @@
             this.Coordinates = Coordinates;
         }
 
+        public AddressDto()
+        {
+            
+        }
+
         public string? PhoneNo { get; init; }
         public string? Street { get; init; }
         public string? HouseNo { get; init; }

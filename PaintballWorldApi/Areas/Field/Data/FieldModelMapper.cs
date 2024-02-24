@@ -7,7 +7,7 @@ namespace PaintballWorld.API.Areas.Field.Data
 {
     public static class FieldModelMapper
     {
-        public static Infrastructure.Models.Field Map(this FieldDto fieldDto, FieldTypeId FieldTypeId)
+        public static Infrastructure.Models.Field Map(this FieldDto fieldDto, FieldTypeId fieldTypeId)
         {
             var field = new Infrastructure.Models.Field
             {
@@ -26,12 +26,12 @@ namespace PaintballWorld.API.Areas.Field.Data
                 OwnerId = fieldDto.OwnerId.Value,
                 Area = fieldDto.Area,
                 Name = fieldDto.Name,
-                Regulations = fieldDto.Regulations,
+                // Regulations = regPath,
                 Description = fieldDto.Description,
                 MinPlayers = fieldDto.MinPlayers,
                 MaxPlayers = fieldDto.MaxPlayers,
                 MaxSimultaneousEvents = fieldDto.MaxSimultaneousEvents,
-                FieldTypeId = FieldTypeId
+                FieldTypeId = fieldTypeId
             };
             if (fieldDto.Sets.Any())
             {
