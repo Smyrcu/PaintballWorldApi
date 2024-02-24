@@ -37,7 +37,28 @@ namespace PaintballWorld.Core.Services
             return _fileService.SaveFile(Path.Combine(Constants.RegulationsPath, filename), stream);
         }
 
+        public string SavePhoto(Stream stream, FieldId fieldId)
+        {
+            var filename = GetPhotoFileName(fieldId);
+            var directory = Path.Combine(Constants.FieldPhotosPath, fieldId.Value.ToString());
+            Directory.CreateDirectory(directory);
+            return _fileService.SaveFile(Path.Combine(directory, filename), stream);
+        }
+
         private static string GetRegulationsFileName(FieldId fieldId) => $"Reg_{fieldId.Value}_{DateTime.Now:yyyy_MM_dd}.pdf";
+
+        private string GetPhotoFileName(FieldId fieldId)
+        {
+            var photos = _context.Fields.First(x => x.Id == fieldId).Photos;
+
+            if (photos == null || !photos.Any())
+                return $"Photo_{fieldId.Value}_1.png";
+
+            var maxNumber = photos.Select(photo => int.TryParse(photo.Path.Split('_').LastOrDefault(), out var number) ? number : 0).Max();
+
+            return $"Photo_{fieldId.Value}_{maxNumber++}.png";
+
+        }
 
     }
 }

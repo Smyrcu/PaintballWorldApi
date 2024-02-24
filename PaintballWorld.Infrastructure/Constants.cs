@@ -12,5 +12,6 @@ namespace PaintballWorld.Infrastructure
         private static readonly string BasePath = "C:\\Files";
 
         public static string RegulationsPath = Path.Combine(BasePath, "Regulations");
+        public static string FieldPhotosPath = Path.Combine(BasePath, "FieldPhotos");
     }
 }

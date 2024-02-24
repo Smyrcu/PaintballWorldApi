@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PaintballWorld.API.Areas.Field.Models;
 
 namespace PaintballWorld.API.Areas.Field.Controllers
 {
@@ -11,8 +12,12 @@ namespace PaintballWorld.API.Areas.Field.Controllers
     {
         private readonly ILogger<FieldsInfo> logger;
 
-
-
+        // [HttpGet]
+        // [Route("GetField/{fieldId}")]
+        // public async Task<IActionResult<FieldInfoDto>> GetFieldInfo(Guid fieldId)
+        // {
+        //     return default;
+        // }
 
 
 

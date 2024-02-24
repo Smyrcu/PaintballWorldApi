@@ -61,19 +61,19 @@ public partial class ApplicationDbContext : IdentityDbContext
     public virtual DbSet<ApiKey> ApiKeys { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;");
-        // => optionsBuilder.UseSqlServer(
+        // => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;");
+        => optionsBuilder.UseSqlServer(
 
-// #if DEBUG
-            // "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
-// #else
-                        // "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
-// #endif
-            // providerOptions => providerOptions.EnableRetryOnFailure(
-                // maxRetryCount: 5, 
-            // maxRetryDelay: TimeSpan.FromSeconds(30),
-            // errorNumbersToAdd: null)
-            // );
+#if DEBUG
+            "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+#else
+                        "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+#endif
+            providerOptions => providerOptions.EnableRetryOnFailure(
+                maxRetryCount: 5, 
+            maxRetryDelay: TimeSpan.FromSeconds(30),
+            errorNumbersToAdd: null)
+            );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -371,18 +371,20 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
+            entity.Property(e => e.Path).HasMaxLength(255);
+
             entity.Property(p => p.FieldId).IsRequired(false);
             entity.Property(p => p.EventId).IsRequired(false);
+            //
+            // entity.Property(e => e.EntityTypeId)
+            //     .HasConversion(
+            //         id => id.Value,
+            //         value => new EntityTypeId(value));
 
-            entity.Property(e => e.EntityTypeId)
-                .HasConversion(
-                    id => id.Value,
-                    value => new EntityTypeId(value));
-
-            entity.ToTable(tb => tb.HasCheckConstraint(
-                "CK_Photo_FieldId_EventId",
-                "([FieldId] IS NOT NULL AND [EventId] IS NULL) OR ([FieldId] IS NULL AND [EventId] IS NOT NULL)"
-            ));
+            // entity.ToTable(tb => tb.HasCheckConstraint(
+            //     "CK_Photo_FieldId_EventId",
+            //     "([FieldId] IS NOT NULL AND [EventId] IS NULL) OR ([FieldId] IS NULL AND [EventId] IS NOT NULL)"
+            // ));
         });
 
         modelBuilder.Entity<Set>(entity =>

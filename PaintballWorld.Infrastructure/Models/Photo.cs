@@ -10,8 +10,11 @@ public readonly record struct PhotoId(Guid Value)
 public partial class Photo
 {
     public PhotoId Id { get; init; } = PhotoId.Empty;
-    public EntityTypeId EntityTypeId { get; set; }
-    public virtual EntityType EntityType { get; set; }
+
+    public string Path { get; set; }
+
+    // public EntityTypeId EntityTypeId { get; set; }
+    // public virtual EntityType EntityType { get; set; }
     public FieldId? FieldId { get; set; }
     public EventId? EventId { get; set; }
     public DateTime? CreatedOnUtc { get; set; }

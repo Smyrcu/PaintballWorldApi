@@ -45,6 +45,11 @@ builder.Services.Configure<FormOptions>(x =>
     x.MultipartHeadersLengthLimit = int.MaxValue;
 });
 
+builder.WebHost.ConfigureKestrel(serverOptions =>
+{
+    serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
+});
+
 
 builder.Services.AddLogging(logger =>
 {
