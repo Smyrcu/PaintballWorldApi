@@ -17,6 +17,8 @@ public partial class Event
     public string? CreatedBy { get; set; }
     public virtual IdentityUser? CreatedByUser { get; set; }
 
+    public bool IsPublic { get; set; }
+
     public DateOnly Date { get; set; }
 
     public TimeOnly? Time { get; set; }

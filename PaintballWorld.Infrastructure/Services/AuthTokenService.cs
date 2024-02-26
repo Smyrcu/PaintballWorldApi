@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.X9;
 using PaintballWorld.Infrastructure.Interfaces;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Infrastructure.Services
 {
@@ -16,11 +20,13 @@ namespace PaintballWorld.Infrastructure.Services
     {
         private readonly IConfiguration _configuration;
         private readonly UserManager<IdentityUser> _userManager;
+        private readonly ApplicationDbContext _context;
 
-        public AuthTokenService(IConfiguration configuration, UserManager<IdentityUser> userManager)
+        public AuthTokenService(IConfiguration configuration, UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             _configuration = configuration;
             _userManager = userManager;
+            _context = context;
         }
 
         public async Task<string> GenerateToken(IdentityUser user)
@@ -47,5 +53,41 @@ namespace PaintballWorld.Infrastructure.Services
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
+
+        public (bool, string) IsUserOwnerOfField(IEnumerable<Claim> userClaims, FieldId id)
+        {
+            var error = "";
+            var username = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+
+            if (username == null)
+            {
+                error = "Wrong JWT";
+                return (false, error);
+            }
+
+            var user = _userManager.FindByNameAsync(username).GetAwaiter().GetResult();
+            if (user == null)
+            {
+                error = "User not found";
+                return (false, error);
+            }
+
+            var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
+
+            if (owner == null)
+            {
+                error = "This account is not Owner - Jak tu trafiłeś daj znać bo nie powinno tego hitować nigdy";
+                return (false, error);
+            }
+
+            var fieldIds = _context.Fields.FirstOrDefault(x => x.OwnerId == owner.Id && x.Id == id);
+
+            if (fieldIds != null) return (true, error);
+            error = "This user is not the Owner of this field.";
+            return (false, error);
+
+        }
+
+
     }
 }

@@ -5,7 +5,11 @@ using Microsoft.EntityFrameworkCore;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure.Models;
 using System.Security.Claims;
+using Microsoft.IdentityModel.Tokens;
+using PaintballWorld.API.Areas.Field.Data;
+using PaintballWorld.API.Areas.Field.Models;
 using PaintballWorld.Infrastructure;
+using PaintballWorld.Infrastructure.Interfaces;
 
 namespace PaintballWorld.API.Areas.Field.Controllers
 {
@@ -18,12 +22,17 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IFieldManagementService _fieldManagementService;
+        private readonly IAuthTokenService _authTokenService;
+        private readonly ILogger<FieldManagement> _logger;
 
-        public FieldManagement(IFieldManagementService fieldManagementService, UserManager<IdentityUser> userManager, ApplicationDbContext context)
+
+        public FieldManagement(IFieldManagementService fieldManagementService, UserManager<IdentityUser> userManager, ApplicationDbContext context, IAuthTokenService authTokenService, ILogger<FieldManagement> logger)
         {
             this._fieldManagementService = fieldManagementService;
             _userManager = userManager;
             _context = context;
+            _authTokenService = authTokenService;
+            _logger = logger;
         }
 
 
@@ -49,18 +58,9 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             var parsedFieldId = new FieldId(fieldId);
 
             var fieldIds = _context.Fields.FirstOrDefault(x => x.OwnerId == owner.Id && x.Id == parsedFieldId);
-
-            // var fieldsIds = owner.Fields.Select(x => x.Id);
-
-            // var guids = fieldsIds.Select(x => x.Value);
-
-            // if (!fieldIds.Contains(fieldId))
+            
             if(fieldIds == null)
                 return BadRequest("This user is not the Owner of this field.");
-
-            //
-            // if (!owner.Fields.Select(x => x.Id.Value).Contains(fieldId))
-            //     return BadRequest("This user is not the Owner of this field.");
 
             var errors = new List<string>();
 
@@ -100,6 +100,50 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
             return Ok(new { Message = message, Errors = errors});
         }
+
+
+        [HttpGet]
+        [Authorize(Roles = "Owner")]
+        public async Task<IActionResult> ManageField([FromQuery]Guid fieldId)
+        {
+            var id = new FieldId(fieldId);
+
+            var field = _context.Fields.FirstOrDefault(x => x.Id == id);
+
+            if (field == null)
+                return BadRequest("Field not found");
+
+            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, id);
+            if (!isOwner.Item1 || !isOwner.Item2.IsNullOrEmpty())
+                return BadRequest(isOwner.Item2);
+
+            var result = field.Map();
+
+            return Ok(result);
+        }
+
+        [HttpPost]
+        [Authorize(Roles = "Owner")]
+        public async Task<IActionResult> ManageField([FromForm]FieldManagementDto dto)
+        {
+
+            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, dto.FieldId);
+            if (!isOwner.Item1 || !isOwner.Item2.IsNullOrEmpty())
+                return BadRequest(isOwner.Item2);
+            try
+            {
+                _fieldManagementService.SaveChanges(dto.Map());
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, "Nie udało się zapisać zmian");
+                return BadRequest("Updating data failed");
+            }
+
+            return Ok("Data saved successfully");
+
+        }
+
 
 
     }

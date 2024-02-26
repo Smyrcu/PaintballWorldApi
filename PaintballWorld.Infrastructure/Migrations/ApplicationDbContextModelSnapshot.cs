@@ -452,6 +452,9 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.Property<Guid>("FieldTypeId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsPublic")
+                        .HasColumnType("bit");
+
                     b.Property<DateTime>("LastUpdatedUtc")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime")
@@ -500,6 +503,9 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasColumnType("datetime")
                         .HasDefaultValueSql("(getutcdate())");
 
+                    b.Property<Guid?>("MainPhotoId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<int>("MaxPlayers")
                         .HasColumnType("int");
 
@@ -527,6 +533,10 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .IsUnique();
 
                     b.HasIndex("FieldTypeId");
+
+                    b.HasIndex("MainPhotoId")
+                        .IsUnique()
+                        .HasFilter("[MainPhotoId] IS NOT NULL");
 
                     b.HasIndex("OwnerId");
 
@@ -812,11 +822,11 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.Property<DateTime>("DateOfBirth")
                         .HasColumnType("datetime");
 
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                    b.Property<string>("Description")
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
-                    b.Property<string>("Image")
+                    b.Property<string>("FirstName")
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
@@ -828,8 +838,15 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<Guid?>("ProfileImageId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.HasKey("UserId")
                         .HasName("PK__UserInfo__JFREW67FI4F3E4RW");
+
+                    b.HasIndex("ProfileImageId")
+                        .IsUnique()
+                        .HasFilter("[ProfileImageId] IS NOT NULL");
 
                     b.ToTable("UserInfo", (string)null);
                 });
@@ -1011,6 +1028,11 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Photo", "MainPhoto")
+                        .WithOne()
+                        .HasForeignKey("PaintballWorld.Infrastructure.Models.Field", "MainPhotoId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
                     b.HasOne("PaintballWorld.Infrastructure.Models.Owner", "Owner")
                         .WithMany("Fields")
                         .HasForeignKey("OwnerId")
@@ -1020,6 +1042,8 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.Navigation("Address");
 
                     b.Navigation("FieldType");
+
+                    b.Navigation("MainPhoto");
 
                     b.Navigation("Owner");
                 });
@@ -1067,7 +1091,7 @@ namespace PaintballWorld.Infrastructure.Migrations
                     b.HasOne("PaintballWorld.Infrastructure.Models.Field", null)
                         .WithMany("Photos")
                         .HasForeignKey("FieldId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.NoAction);
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.Set", b =>
@@ -1083,11 +1107,17 @@ namespace PaintballWorld.Infrastructure.Migrations
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.UserInfo", b =>
                 {
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Photo", "ProfileImage")
+                        .WithOne()
+                        .HasForeignKey("PaintballWorld.Infrastructure.Models.UserInfo", "ProfileImageId");
+
                     b.HasOne("Microsoft.AspNetCore.Identity.IdentityUser", "User")
                         .WithOne()
                         .HasForeignKey("PaintballWorld.Infrastructure.Models.UserInfo", "UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("ProfileImage");
 
                     b.Navigation("User");
                 });

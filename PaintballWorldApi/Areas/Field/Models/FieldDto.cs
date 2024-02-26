@@ -10,6 +10,7 @@ public class FieldDto
     public double Area { get; set; }
     public string Name { get; set; }
     public IFormFile? Regulations { get; set; }
+    public string RegulationsPath { get; set; }
     public string? Description { get; set; }
     public int MinPlayers { get; set; }
     public int MaxPlayers { get; set; }

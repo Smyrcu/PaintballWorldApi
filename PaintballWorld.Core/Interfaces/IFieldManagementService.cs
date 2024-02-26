@@ -8,4 +8,5 @@ public interface IFieldManagementService
     FieldTypeId GetFieldTypeIdByStringName(string fieldType);
     string SaveRegulationsFile(Stream stream, FieldId fieldId);
     string SavePhoto(Stream stream, FieldId fieldId);
+    void SaveChanges(Field updRecord);
 }

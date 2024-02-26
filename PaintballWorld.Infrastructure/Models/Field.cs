@@ -27,6 +27,9 @@ public partial class Field
 
     public int MaxPlayers { get; set; }
 
+    public virtual PhotoId? MainPhotoId { get; set; }
+    public virtual Photo? MainPhoto { get; set; }
+
     public virtual ICollection<Set> Sets { get; set; }
 
     public int MaxSimultaneousEvents { get; set; }
