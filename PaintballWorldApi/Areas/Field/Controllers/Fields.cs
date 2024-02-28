@@ -53,17 +53,16 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
             var fieldTypeId = _fieldManagementService.GetFieldTypeIdByStringName(fieldDto.FieldType);
 
-            if(fieldDto.Regulations is not null)
+            var mapped = fieldDto.Map(fieldTypeId);
+
+            if (fieldDto.Regulations is not null)
             {
                 using var stream = new MemoryStream();
                 await fieldDto.Regulations.CopyToAsync(stream);
-
-                var mapped = fieldDto.Map(fieldTypeId);
-
                 mapped.Regulations = _fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
-                
-                _fieldManagementService.CreateField(mapped);
             }
+
+            _fieldManagementService.CreateField(mapped);
 
             var additionalText = owner.IsApproved ? "" : " - Owner is not approved!";
 
