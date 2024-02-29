@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.Field.Data;
 using PaintballWorld.Core.Interfaces;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using PaintballWorld.Infrastructure;
 
@@ -33,40 +34,51 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> CreateField([FromForm] FieldDto fieldDto)
         {
-            var username = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
-
-            if (username == null)
-                return BadRequest("Wrong JWT");
-
-            var user = await _userManager.FindByNameAsync(username);
-
-            if (user == null)
-                return BadRequest("User not found");
-
-            var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
-
-            // W zasadzie Authorize powinno to filtrować 
-            if (owner == null)
-                return BadRequest("This account is not Owner - Jak tu trafiłeś daj znać bo nie powinno tego hitować nigdy");
-
-            fieldDto.OwnerId = owner?.Id;
-
-            var fieldTypeId = _fieldManagementService.GetFieldTypeIdByStringName(fieldDto.FieldType);
-
-            var mapped = fieldDto.Map(fieldTypeId);
-
-            if (fieldDto.Regulations is not null)
+            try
             {
-                using var stream = new MemoryStream();
-                await fieldDto.Regulations.CopyToAsync(stream);
-                mapped.Regulations = _fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
+                var username = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)
+                    ?.Value;
+
+                if (username == null)
+                    return BadRequest("Wrong JWT");
+
+                var user = await _userManager.FindByNameAsync(username);
+
+                if (user == null)
+                    return BadRequest("User not found");
+
+                var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
+
+                // W zasadzie Authorize powinno to filtrować 
+                if (owner == null)
+                    return BadRequest(
+                        "This account is not Owner - Jak tu trafiłeś daj znać bo nie powinno tego hitować nigdy");
+
+                fieldDto.OwnerId = owner?.Id;
+
+                var fieldTypeId = _fieldManagementService.GetFieldTypeIdByStringName(fieldDto.FieldType);
+
+                var mapped = fieldDto.Map(fieldTypeId);
+
+                if (fieldDto.Regulations is not null)
+                {
+                    using var stream = new MemoryStream();
+                    await fieldDto.Regulations.CopyToAsync(stream);
+                    mapped.Regulations = _fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
+                }
+
+                _fieldManagementService.CreateField(mapped);
+
+                var additionalText = owner.IsApproved ? "" : " - Owner is not approved!";
+
+                return Ok($"Field was created successfully{additionalText}");
             }
+            catch (Exception ex)
+            {
+                // return Forbid();
+                return BadRequest(ex.Message);
 
-            _fieldManagementService.CreateField(mapped);
-
-            var additionalText = owner.IsApproved ? "" : " - Owner is not approved!";
-
-            return Ok($"Field was created successfully{additionalText}");
+            }
         }
     }
 }

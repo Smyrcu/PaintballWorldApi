@@ -117,8 +117,8 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-    // var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    // context.Database.Migrate();
+    var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    context.Database.Migrate();
 
 //}
 
