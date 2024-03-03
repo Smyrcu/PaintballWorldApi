@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure.Models;
 using System.Security.Claims;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API.Areas.Field.Data;
 using PaintballWorld.API.Areas.Field.Models;
@@ -35,11 +36,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             _logger = logger;
         }
 
-
-        [HttpPost("AddFieldPhotos")]
-        [Authorize(Roles = "Owner")]
+        #region Photo
+        
+        [HttpPost("photos/{fieldId:guid}")]
         [RequestFormLimits(MultipartBodyLengthLimit = 104857600)]
-        public async Task<IActionResult> AddPhotos([FromForm]IFormFileCollection photos, [FromForm]Guid fieldId)
+        public async Task<IActionResult> AddPhotos([FromForm]IFormFileCollection photos, [FromRoute]Guid fieldId)
         {
             var username = HttpContext.User.Claims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
 
@@ -54,7 +55,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
 
             if(owner == null)
-                return BadRequest("This account is not Owner - Jak tu trafiłeś daj znać bo nie powinno tego hitować nigdy");
+                return BadRequest("This account is not Owner");
             var parsedFieldId = new FieldId(fieldId);
 
             var fieldIds = _context.Fields.FirstOrDefault(x => x.OwnerId == owner.Id && x.Id == parsedFieldId);
@@ -101,48 +102,55 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             return Ok(new { Message = message, Errors = errors});
         }
 
+        [HttpDelete("photos/{photoId:guid}")]
+        public async Task<IActionResult> DeletePhoto([FromRoute] Guid photoId)
+        {
+            var photo = await _context.Photos.FirstOrDefaultAsync(x => x.Id.Value == photoId);
+            if (photo?.FieldId == null)
+            {
+                return BadRequest("Photo does not exist or it is not field photo.");
+            }
+            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims,photo.FieldId.Value);
+            
+            if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
+            {
+                return BadRequest(new DeletePhotosResponse()
+                {
+                    Errors = [ isOwner.errors ],
+                    IsSuccess = false,
+                    Message = "Owner not found or this user is not the owner"
+                });
+            }
+            _context.Photos.Remove(photo);
+            await _context.SaveChangesAsync();
+            return Ok("Photo deleted successfully");
+        }
 
-        [HttpGet]
-        [Authorize(Roles = "Owner")]
-        public async Task<IActionResult> ManageField([FromQuery]Guid fieldId)
+        [HttpGet("photos/{fieldId:guid}")]
+        public async Task<IActionResult> GetPhotos([FromRoute] Guid fieldId)
         {
             var id = new FieldId(fieldId);
+            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims,id);
+            
+            if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
+            {
+                return BadRequest(new DeletePhotosResponse()
+                {
+                    Errors = [ isOwner.errors ],
+                    IsSuccess = false,
+                    Message = "Owner not found or this user is not the owner"
+                });
+            }
 
-            var field = _context.Fields.FirstOrDefault(x => x.Id == id);
+            var photos = _context.Photos.Where(x => x.FieldId == id).Take(20);
 
-            if (field == null)
-                return BadRequest("Field not found");
-
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, id);
-            if (!isOwner.Item1 || !isOwner.Item2.IsNullOrEmpty())
-                return BadRequest(isOwner.Item2);
-
-            var result = field.Map();
-
+            var result = await photos.Select(x => new { url = $"{Request.Scheme}://{Request.Host}/img/{x.Path}", Id = x.Id }).ToListAsync();
+            
             return Ok(result);
         }
-
-        [HttpPost]
-        [Authorize(Roles = "Owner")]
-        public async Task<IActionResult> ManageField([FromForm]FieldManagementDto dto)
-        {
-
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, dto.FieldId);
-            if (!isOwner.Item1 || !isOwner.Item2.IsNullOrEmpty())
-                return BadRequest(isOwner.Item2);
-            try
-            {
-                _fieldManagementService.SaveChanges(dto.Map());
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "Nie udało się zapisać zmian");
-                return BadRequest("Updating data failed");
-            }
-
-            return Ok("Data saved successfully");
-
-        }
+        
+        #endregion
+        
 
 
 

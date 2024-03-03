@@ -4,6 +4,7 @@ using PaintballWorld.Infrastructure;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API;
 using PaintballWorld.API.Middleware;
@@ -101,7 +102,11 @@ builder.Services.AddCors(options =>
 var app = builder.Build();
 
 app.UseHttpsRedirection();
-
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Constants.BasePath),
+    RequestPath = "/img"
+});
 app.UseCors("AllowAll");
 
 app.UseRouting();
@@ -117,8 +122,8 @@ app.UseAuthorization();
 app.UseSwagger();
 app.UseSwaggerUI();
 
-    var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
-    context.Database.Migrate();
+    // var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    // context.Database.Migrate();
 
 //}
 

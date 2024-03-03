@@ -7,5 +7,6 @@ namespace PaintballWorld.Infrastructure.Interfaces;
 public interface IAuthTokenService
 {
     Task<string> GenerateToken(IdentityUser user);
-    (bool, string) IsUserOwnerOfField(IEnumerable<Claim> userClaims, FieldId id);
+    (bool success, string errors) IsUserOwnerOfField(IEnumerable<Claim> userClaims, FieldId id);
+    string GetUserId(IEnumerable<Claim> userClaims);
 }

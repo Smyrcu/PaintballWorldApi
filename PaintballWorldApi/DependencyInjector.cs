@@ -1,4 +1,5 @@
-﻿using PaintballWorld.Core.Interfaces;
+﻿using Microsoft.Identity.Client;
+using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Services;
 using PaintballWorld.Infrastructure.Interfaces;
 using PaintballWorld.Infrastructure.Services;
@@ -22,7 +23,7 @@ namespace PaintballWorld.API
             services.AddScoped<IOwnerRegistrationService, OwnerRegistrationService>();
             services.AddScoped<IAutocompleteService, AutocompleteService>();
             services.AddScoped<IFieldManagementService, FieldManagementService>();
-
+            services.AddScoped<IUserService, UserService>();
 
 
 

@@ -19,4 +19,6 @@ public partial class Set
     public FieldId FieldId { get; set; } 
     public virtual Field Field { get; set; }
     public ICollection<UsersToEvent>? UsersToEvents { get; set; }
+
+  
 }

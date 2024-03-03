@@ -17,13 +17,13 @@ public class FieldDto
     public int MaxSimultaneousEvents { get; set; }
     public string FieldType { get; set; }
 
-    public IList<SetDto> Sets { get; set; } = new List<SetDto>();
+    public IList<SetDto> Sets { get; set; }// = new List<SetDto>();
 
     public FieldDto()
     {
         
     }
-    public FieldDto(AddressDto address, OwnerId? ownerId, double area, string name, IFormFile? regulations, string? description, int? minPlayers, int? maxPlayers, int? maxSimultaneousEvents, string fieldType)
+    public FieldDto(AddressDto address, OwnerId? ownerId, double area, string name, IFormFile? regulations, string? description, int? minPlayers, int? maxPlayers, int? maxSimultaneousEvents, string fieldType, IList<SetDto>? sets)
     {
         Address = address;
         OwnerId = ownerId;
@@ -35,5 +35,6 @@ public class FieldDto
         MaxPlayers = maxPlayers ?? 100;
         MaxSimultaneousEvents = maxSimultaneousEvents ?? 1;
         FieldType = fieldType;
+        Sets = sets ?? new List<SetDto>();
     }
 }   

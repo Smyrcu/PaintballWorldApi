@@ -39,7 +39,7 @@ namespace PaintballWorld.API.Areas.Field.Data
             };
             if (fieldDto.Sets.Any())
             {
-                field.Sets = fieldDto.Sets.Map(field.Id);
+                field.Sets = fieldDto.Sets.Map(field.Id).ToList();
             }
             
 
@@ -68,7 +68,7 @@ namespace PaintballWorld.API.Areas.Field.Data
         }
 
         public static IList<SetDto> Map(this ICollection<Set> sets) =>  
-            sets.Select(set => new SetDto(set.Ammo, set.Price, set.Description)).ToList();
+            sets.Select(set => new SetDto(set.Ammo, set.Price, set.Description, set.Id)).ToList();
         
 
         public static AddressDto Map(this Address address)
@@ -113,7 +113,7 @@ namespace PaintballWorld.API.Areas.Field.Data
                 Description = dto.Description,
                 MinPlayers = dto.MinPlayers,
                 MaxPlayers = dto.MaxPlayers,
-                Sets = dto.Sets.Map(dto.FieldId),
+                Sets = dto.Sets.Map(dto.FieldId).ToList(),
                 MaxSimultaneousEvents = dto.MaxSimultaneousEvents
             };
             return result;

@@ -54,7 +54,25 @@ namespace PaintballWorld.Infrastructure.Services
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
-        public (bool, string) IsUserOwnerOfField(IEnumerable<Claim> userClaims, FieldId id)
+        public string GetUserId(IEnumerable<Claim> userClaims)
+        {
+            var username = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
+            if (username == null)
+            {
+                throw new Exception("Wrong JWT");
+            }
+
+            var user = _userManager.FindByNameAsync(username).GetAwaiter().GetResult();
+            if (user == null)
+            {
+                throw new Exception("User not found");
+            }
+
+            return user.Id;
+
+        } 
+
+        public (bool success, string errors) IsUserOwnerOfField(IEnumerable<Claim> userClaims, FieldId id)
         {
             var error = "";
             var username = userClaims.FirstOrDefault(claim => claim.Type == ClaimTypes.NameIdentifier)?.Value;
