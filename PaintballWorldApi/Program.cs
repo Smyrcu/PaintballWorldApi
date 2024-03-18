@@ -10,6 +10,8 @@ using PaintballWorld.API;
 using PaintballWorld.API.Middleware;
 
 
+Directory.CreateDirectory("C:0\\Files");
+
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("ProdConnection") 
