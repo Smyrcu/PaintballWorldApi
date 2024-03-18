@@ -1,4 +1,5 @@
 ﻿using Microsoft.Identity.Client;
+using PaintballWorld.API.Areas.Schedule.Controllers;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Services;
 using PaintballWorld.Infrastructure.Interfaces;
@@ -24,7 +25,7 @@ namespace PaintballWorld.API
             services.AddScoped<IAutocompleteService, AutocompleteService>();
             services.AddScoped<IFieldManagementService, FieldManagementService>();
             services.AddScoped<IUserService, UserService>();
-
+            services.AddScoped<IScheduleService, ScheduleService>();
 
 
         }

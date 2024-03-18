@@ -18,16 +18,16 @@ namespace PaintballWorld.API.Areas.Field.Controllers
     [ApiController]
     [Area("Field")]
     [AllowAnonymous]
-    public class FieldManagement : Controller
+    public class FieldManagementController : Controller
     {
         private readonly ApplicationDbContext _context;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IFieldManagementService _fieldManagementService;
         private readonly IAuthTokenService _authTokenService;
-        private readonly ILogger<FieldManagement> _logger;
+        private readonly ILogger<FieldManagementController> _logger;
 
 
-        public FieldManagement(IFieldManagementService fieldManagementService, UserManager<IdentityUser> userManager, ApplicationDbContext context, IAuthTokenService authTokenService, ILogger<FieldManagement> logger)
+        public FieldManagementController(IFieldManagementService fieldManagementService, UserManager<IdentityUser> userManager, ApplicationDbContext context, IAuthTokenService authTokenService, ILogger<FieldManagementController> logger)
         {
             this._fieldManagementService = fieldManagementService;
             _userManager = userManager;

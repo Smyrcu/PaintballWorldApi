@@ -10,6 +10,10 @@ using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Field.Controllers;
 
+[Route("api/[area]/[controller]")]
+[ApiController]
+[Area("Field")]
+[AllowAnonymous]
 public class SetsController : Controller
 {
     private readonly IAuthTokenService _authTokenService;

@@ -2,6 +2,10 @@
 
 public class UserDto
 {
+    public UserDto()
+    {
+        
+    }
     public UserDto(string email, string username, string password, DateTime dateOfBirth)
     {
         this.Email = email;

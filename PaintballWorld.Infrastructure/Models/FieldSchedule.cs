@@ -11,9 +11,12 @@ public partial class FieldSchedule
     public FieldScheduleId Id { get; init; } = FieldScheduleId.Empty;
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
-    public DateOnly Date { get; set; }
+    
+    public DateTime Date { get; set; }
+    
+    // public DateOnly Date { get; set; }
 
-    public TimeOnly? Time { get; set; }
+    // public TimeOnly? Time { get; set; }
 
     public bool IsRecurrent { get; set; }
 
