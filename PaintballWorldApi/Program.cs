@@ -10,7 +10,7 @@ using PaintballWorld.API;
 using PaintballWorld.API.Middleware;
 
 
-Directory.CreateDirectory("C:0\\Files");
+Directory.CreateDirectory("C:\\Files");
 
 var builder = WebApplication.CreateBuilder(args);
 
