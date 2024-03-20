@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using Org.BouncyCastle.Bcpg.OpenPgp;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
@@ -50,6 +51,17 @@ namespace PaintballWorld.Core.Services
 
             using var thumbnail = ResizeImage(image, 300);
             thumbnail.Save(thumbnailFilePath, ImageFormat.Jpeg);
+
+            var photo = new Photo
+            {
+                Path = originalFilePath,
+                FieldId = fieldId,
+                EventId = null,
+                CreatedOnUtc = DateTime.Now
+            };
+
+            _context.Photos.Add(photo);
+            _context.SaveChanges();
 
             return originalFilePath;
         }
