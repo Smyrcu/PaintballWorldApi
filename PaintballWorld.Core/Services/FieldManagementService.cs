@@ -87,7 +87,7 @@ namespace PaintballWorld.Core.Services
             var photos = _context.Fields.First(x => x.Id == fieldId).Photos;
 
             if (photos == null || !photos.Any())
-                return $"Photo_{fieldId.Value}_1.png";
+                return $"Photo_{fieldId.Value}_0.png";
 
             var maxNumber = photos.Select(photo => int.TryParse(photo.Path.Split('_').LastOrDefault(), out var number) ? number : 0).Max();
 

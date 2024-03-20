@@ -98,7 +98,7 @@ public class SetsController : Controller
 
         foreach (var setDto in sets)
         {
-            var set = fieldSets.FirstOrDefault(s => s.Id == setDto.Id);
+            var set = fieldSets.FirstOrDefault(s => s.Id.Value == setDto.Id);
             set?.UpdateFromDto(setDto);
         }
 

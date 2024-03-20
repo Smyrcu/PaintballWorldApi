@@ -4,7 +4,7 @@ namespace PaintballWorld.API.Areas.Field.Models
 {
     public class SetDto
     {
-        public SetDto(int ammo, decimal? price, string? description, SetId setId)
+        public SetDto(int ammo, decimal? price, string? description, Guid? setId)
         {
             Id = setId;
             Ammo = ammo;
@@ -12,7 +12,7 @@ namespace PaintballWorld.API.Areas.Field.Models
             Description = description;
         }
 
-        public SetId Id { get; set; }
+        public Guid? Id { get; set; }
         public int Ammo { get; set; }
 
         public decimal? Price { get; set; }

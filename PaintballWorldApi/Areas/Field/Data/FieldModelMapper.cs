@@ -68,7 +68,7 @@ namespace PaintballWorld.API.Areas.Field.Data
         }
 
         public static IList<SetDto> Map(this ICollection<Set> sets) =>  
-            sets.Select(set => new SetDto(set.Ammo, set.Price, set.Description, set.Id)).ToList();
+            sets.Select(set => new SetDto(set.Ammo, set.Price, set.Description, set.Id.Value)).ToList();
         
 
         public static AddressDto Map(this Address address)
