@@ -130,17 +130,17 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         public async Task<IActionResult> GetPhotos([FromRoute] Guid fieldId)
         {
             var id = new FieldId(fieldId);
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims,id);
-            
-            if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
-            {
-                return BadRequest(new DeletePhotosResponse()
-                {
-                    Errors = [ isOwner.errors ],
-                    IsSuccess = false,
-                    Message = "Owner not found or this user is not the owner"
-                });
-            }
+            // var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims,id);
+            //
+            // if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
+            // {
+            //     return BadRequest(new DeletePhotosResponse()
+            //     {
+            //         Errors = [ isOwner.errors ],
+            //         IsSuccess = false,
+            //         Message = "Owner not found or this user is not the owner"
+            //     });
+            // }
 
             var photos = _context.Photos.Where(x => x.FieldId == id).Take(20);
 
