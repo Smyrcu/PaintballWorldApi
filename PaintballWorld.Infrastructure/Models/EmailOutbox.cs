@@ -18,7 +18,7 @@ public partial class EmailOutbox
 
 
 
-    public EmailOutboxId Id { get; set; } = EmailOutboxId.Empty;
+    public EmailOutboxId Id { get; set; } // = EmailOutboxId.Empty;
     public string? MessageId { get; set; }
 
     public string? Recipient { get; set; }

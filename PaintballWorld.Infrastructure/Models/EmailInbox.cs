@@ -12,7 +12,7 @@ public partial class EmailInbox
 //
 //     public EmailInbox CreateNew() => new EmailInbox(){Id = new EmailInboxId()};
 
-    public EmailInboxId Id { get; init; } = EmailInboxId.Empty;
+    public EmailInboxId Id { get; init; }// = EmailInboxId.Empty;
     public string? MessageId { get; set; }
 
     public string? Sender { get; set; }

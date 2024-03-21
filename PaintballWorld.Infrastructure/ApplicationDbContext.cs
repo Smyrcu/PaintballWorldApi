@@ -60,9 +60,9 @@ public partial class ApplicationDbContext : IdentityDbContext
 
     public virtual DbSet<ApiKey> ApiKeys { get; set; }
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        // => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;");
-        => optionsBuilder.UseSqlServer(
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
+        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;");
+       /* => optionsBuilder.UseSqlServer(
 
 #if DEBUG
             "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
@@ -73,7 +73,7 @@ public partial class ApplicationDbContext : IdentityDbContext
                 maxRetryCount: 5, 
             maxRetryDelay: TimeSpan.FromSeconds(30),
             errorNumbersToAdd: null)
-            );
+            );*/
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -81,7 +81,8 @@ public partial class ApplicationDbContext : IdentityDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Address__3214EC0730CE6642");
 
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new AddressId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new AddressId(value))
+                .ValueGeneratedOnAdd();
 
             entity.ToTable("Address");
 
@@ -98,7 +99,8 @@ public partial class ApplicationDbContext : IdentityDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__ApiKey__20240206CE");
 
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new ApiKeyId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new ApiKeyId(value))
+                .ValueGeneratedOnAdd();
 
             entity.ToTable("ApiKey");
 
@@ -111,7 +113,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Attachme__3214EC077EC533FA");
 
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new AttachmentId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new AttachmentId(value)).ValueGeneratedOnAdd();
 
             entity.Property(e => e.Path).HasMaxLength(255);
 
@@ -138,7 +140,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Company>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Company__3214EC07B2730D43");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new CompanyId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new CompanyId(value)).ValueGeneratedOnAdd();
 
             entity.ToTable("Company");
 
@@ -156,7 +158,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__EmailInb__3214EC07CB025E82");
 
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EmailInboxId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EmailInboxId(value)).ValueGeneratedOnAdd();
             entity.ToTable("EmailInbox");
 
             entity.Property(e => e.IsRead).HasDefaultValue(false);
@@ -172,7 +174,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<EmailOutbox>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__EmailOut__3214EC070557AC54");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EmailOutboxId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EmailOutboxId(value)).ValueGeneratedOnAdd();
             entity.ToTable("EmailOutbox");
 
             entity.Property(e => e.IsSent).HasDefaultValue(false);
@@ -188,7 +190,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<EntityType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__EntityTy__3214EC071CCCEF86");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EntityTypeId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EntityTypeId(value)).ValueGeneratedOnAdd();
             entity.ToTable("EntityType");
 
             entity.Property(e => e.Name).HasMaxLength(255);
@@ -197,7 +199,8 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Event>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Events__3214EC0735E05FB8");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EventId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new EventId(value))
+                .ValueGeneratedOnAdd();
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
@@ -227,7 +230,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Field>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Field__3214EC07274DB93D");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldId(value)).ValueGeneratedOnAdd();
             entity.ToTable("Field");
 
             entity.Property(e => e.CreatedOnUtc)
@@ -275,7 +278,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<FieldRating>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__FieldRat__3214EC079B566052");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldRatingId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldRatingId(value)).ValueGeneratedOnAdd();
             entity.ToTable("FieldRating");
 
             entity.Property(e => e.Content).HasMaxLength(400);
@@ -292,7 +295,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<FieldSchedule>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__FieldSch__3214EC07A2B31AFC");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldScheduleId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldScheduleId(value)).ValueGeneratedOnAdd();
             entity.ToTable("FieldSchedule");
 
             entity.Property(e => e.CreatedUtc)
@@ -310,7 +313,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<FieldType>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__FieldTyp__3214EC0794D0A617");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldTypeId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new FieldTypeId(value)).ValueGeneratedOnAdd();
             entity.ToTable("FieldTypeName");
 
             entity.Property(e => e.CreatedOnUtc)
@@ -329,7 +332,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Newsletter>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Newslett__3214EC071D8386E7");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new NewsletterId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new NewsletterId(value)).ValueGeneratedOnAdd();
             entity.ToTable("Newsletter");
 
             entity.Property(e => e.Name).HasMaxLength(400);
@@ -339,14 +342,14 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<NewsletterSub>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Newslett__3214EC07D5F303C4");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new NewsletterSubId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new NewsletterSubId(value)).ValueGeneratedOnAdd();
             entity.Property(e => e.Email).HasMaxLength(255);
         });
 
         modelBuilder.Entity<OsmCity>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__OsmCitie__3214EC07F146088D");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new OsmCityId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new OsmCityId(value)).ValueGeneratedOnAdd();
             entity.Property(e => e.County).HasMaxLength(255);
             entity.Property(e => e.Latitude).HasColumnType("decimal(9, 7)");
             entity.Property(e => e.Longitude).HasColumnType("decimal(9, 7)");
@@ -359,7 +362,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Owner>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Owners__3214EC07F0523BFF");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new OwnerId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new OwnerId(value)).ValueGeneratedOnAdd();
             entity.Property(e => e.CompanyId);
             entity.Property(e => e.CreatedOnUtc)
                 .HasDefaultValueSql("(getutcdate())")
@@ -372,7 +375,9 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Photo>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Photo__3214EC078A632B4C");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new PhotoId(value));
+            entity.Property(x => x.Id)
+                .HasConversion(id => id.Value, value => new PhotoId(value))
+                .ValueGeneratedOnAdd();
             entity.ToTable("Photo");
 
             entity.Property(e => e.CreatedOnUtc)
@@ -397,7 +402,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<Set>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Sets__3214EC07C4C3B70D");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new SetId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new SetId(value)).ValueGeneratedOnAdd();
             entity.Property(e => e.Description).HasMaxLength(255);
             entity.Property(e => e.Price).HasColumnType("money");
             entity.HasOne(e => e.Field)
@@ -432,7 +437,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<UserRating>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__UserRati__3214EC071D3FF75F");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new UserRatingId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new UserRatingId(value)).ValueGeneratedOnAdd();
             entity.ToTable("UserRating");
 
             entity.Property(e => e.Content).HasMaxLength(400);
@@ -452,7 +457,7 @@ public partial class ApplicationDbContext : IdentityDbContext
         modelBuilder.Entity<UsersToEvent>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__UsersToE__3214EC07A6DB8A30");
-            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new UsersToEventId(value));
+            entity.Property(x => x.Id).HasConversion(id => id.Value, value => new UsersToEventId(value)).ValueGeneratedOnAdd();
             entity.Property(e => e.JoinedOnUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");

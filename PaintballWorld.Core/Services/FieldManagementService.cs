@@ -52,9 +52,11 @@ namespace PaintballWorld.Core.Services
             using var thumbnail = ResizeImage(image, 300);
             thumbnail.Save(thumbnailFilePath, ImageFormat.Jpeg);
 
+            var savePath = string.Join("/",Constants.FieldPhotosPath.Replace(Constants.BasePath + "\\", ""), fieldId.Value.ToString(), $"{filenameWithoutExtension}.jpg");
+
             var photo = new Photo
             {
-                Path = originalFilePath,
+                Path = savePath,
                 FieldId = fieldId,
                 EventId = null,
                 CreatedOnUtc = DateTime.Now
@@ -96,14 +98,12 @@ namespace PaintballWorld.Core.Services
 
         private string GetPhotoFileName(FieldId fieldId)
         {
-            var photos = _context.Fields.First(x => x.Id == fieldId).Photos;
+            var count = _context.Photos.Count(x => x.FieldId == fieldId);
+            return $"Photo_{fieldId.Value}_{count}.png";
 
-            if (photos == null || !photos.Any())
-                return $"Photo_{fieldId.Value}_0.png";
+            /*var maxNumber = photos.Select(photo => int.TryParse(photo.Path.Split('_').LastOrDefault(), out var number) ? number : 0).Max();
 
-            var maxNumber = photos.Select(photo => int.TryParse(photo.Path.Split('_').LastOrDefault(), out var number) ? number : 0).Max();
-
-            return $"Photo_{fieldId.Value}_{maxNumber++}.png";
+            return $"Photo_{fieldId.Value}_{maxNumber++}.png";*/
 
         }
 

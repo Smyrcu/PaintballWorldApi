@@ -14,7 +14,7 @@ public partial class Address
     //
     // public Address CreateNew() => new(){Id = AddressId.NewCompanyId()};
 
-    public AddressId Id { get; init; } = AddressId.Empty;
+    public AddressId Id { get; init; }// = AddressId.Empty;
     public string? PhoneNo { get; set; }
 
     public string? Street { get; set; }

@@ -9,7 +9,7 @@ public readonly record struct SetId(Guid Value)
 
 public partial class Set
 {
-    public SetId Id { get; init; } = SetId.Empty;
+    public SetId Id { get; init; }// = SetId.Empty;
 
     public int Ammo { get; set; }
 

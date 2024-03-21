@@ -9,7 +9,7 @@ public readonly record struct PhotoId(Guid Value)
 
 public partial class Photo
 {
-    public PhotoId Id { get; init; } = PhotoId.Empty;
+    public PhotoId Id { get; init; }// = PhotoId.Empty;
 
     public string Path { get; set; }
 

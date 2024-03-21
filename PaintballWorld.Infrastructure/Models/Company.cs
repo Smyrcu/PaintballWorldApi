@@ -7,7 +7,7 @@ public readonly record struct CompanyId(Guid Value)
 }
 public partial class Company
 {
-    public CompanyId Id { get; init; } = CompanyId.Empty;
+    public CompanyId Id { get; init; }// = CompanyId.Empty;
     public AddressId AddressId { get; set; }
     public virtual Address Address { get; set; }
     public string? CompanyName { get; set; } = null!;

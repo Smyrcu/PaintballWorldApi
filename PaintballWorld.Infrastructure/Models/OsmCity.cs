@@ -9,7 +9,7 @@ public readonly record struct OsmCityId(Guid Value)
 
 public partial class OsmCity
 {
-    public OsmCityId Id { get; init; } = OsmCityId.Empty;
+    public OsmCityId Id { get; init; }// = OsmCityId.Empty;
     public long? OsmId { get; set; }
 
     public decimal? Latitude { get; set; }

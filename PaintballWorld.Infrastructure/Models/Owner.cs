@@ -9,7 +9,7 @@ public readonly record struct OwnerId(Guid Value)
 
 public partial class Owner
 {
-    public OwnerId Id { get; init; } = OwnerId.Empty;
+    public OwnerId Id { get; init; }// = OwnerId.Empty;
     public Guid UserId { get; set; }
 
     public CompanyId CompanyId { get; set; }

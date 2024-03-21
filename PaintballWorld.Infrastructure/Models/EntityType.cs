@@ -9,6 +9,6 @@ public readonly record struct EntityTypeId(Guid Value)
 
 public partial class EntityType
 {
-    public EntityTypeId Id { get; init; } = EntityTypeId.Empty;
+    public EntityTypeId Id { get; init; }// = EntityTypeId.Empty;
     public string? Name { get; set; }
 }

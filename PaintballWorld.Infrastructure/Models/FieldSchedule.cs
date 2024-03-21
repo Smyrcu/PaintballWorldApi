@@ -8,7 +8,7 @@ public readonly record struct FieldScheduleId(Guid Value)
 
 public partial class FieldSchedule
 {
-    public FieldScheduleId Id { get; init; } = FieldScheduleId.Empty;
+    public FieldScheduleId Id { get; init; }// = FieldScheduleId.Empty;
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
     

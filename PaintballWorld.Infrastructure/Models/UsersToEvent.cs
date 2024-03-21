@@ -11,7 +11,7 @@ public readonly record struct UsersToEventId(Guid Value)
 
 public partial class UsersToEvent
 {
-    public UsersToEventId Id { get; init; } = UsersToEventId.Empty;
+    public UsersToEventId Id { get; init; }// = UsersToEventId.Empty;
     public EventId EventId { get; set; }
     public virtual Event Event { get; set; }
 

@@ -9,7 +9,7 @@ public readonly record struct FieldTypeId(Guid Value)
 
 public partial class FieldType
 {
-    public FieldTypeId Id { get; init; } = FieldTypeId.Empty;
+    public FieldTypeId Id { get; init; }// = FieldTypeId.Empty;
     public string FieldTypeName { get; set; } = null!;
     public virtual ICollection<Field> Fields { get; set; }
 

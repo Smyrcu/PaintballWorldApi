@@ -8,7 +8,7 @@ public readonly record struct FieldRatingId(Guid Value)
 
 public partial class FieldRating
 {
-    public FieldRatingId Id { get; init; } = FieldRatingId.Empty;
+    public FieldRatingId Id { get; init; }// = FieldRatingId.Empty;
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
     public double Rating { get; set; }

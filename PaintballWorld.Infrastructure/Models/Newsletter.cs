@@ -9,7 +9,7 @@ public readonly record struct NewsletterId(Guid Value)
 
 public partial class Newsletter
 {
-    public NewsletterId Id { get; init; } = NewsletterId.Empty;
+    public NewsletterId Id { get; init; } //= NewsletterId.Empty;
     public string Name { get; set; } = null!;
 
     public string Title { get; set; } = null!;

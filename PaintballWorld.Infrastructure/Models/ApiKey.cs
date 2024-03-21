@@ -8,7 +8,7 @@
     }
     public class ApiKey
     {
-        public ApiKeyId Id { get;  init; } = ApiKeyId.Empty;
+        public ApiKeyId Id { get;  init; }// = ApiKeyId.Empty;
         public string Key { get; set; }
 
         public string Name { get; set; }

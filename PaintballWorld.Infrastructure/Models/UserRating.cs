@@ -11,7 +11,7 @@ public readonly record struct UserRatingId(Guid Value)
 
 public class UserRating
 {
-    public UserRatingId Id { get; init; } = UserRatingId.Empty;
+    public UserRatingId Id { get; init; }// = UserRatingId.Empty;
 
     public string UserId { get; set; }
     public virtual UserInfo User { get; set; }
