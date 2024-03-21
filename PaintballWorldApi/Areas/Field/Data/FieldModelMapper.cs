@@ -14,10 +14,8 @@ namespace PaintballWorld.API.Areas.Field.Data
         {
             var field = new Infrastructure.Models.Field
             {
-                Id = FieldId.NewFieldId(),
                 Address = new Address
                 {
-                    Id = AddressId.NewAddressId(),
                     PhoneNo = fieldDto.Address.PhoneNo,
                     Street = fieldDto.Address.Street,
                     HouseNo = fieldDto.Address.HouseNo,
