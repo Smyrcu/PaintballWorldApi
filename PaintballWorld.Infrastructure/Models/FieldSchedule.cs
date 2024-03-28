@@ -22,6 +22,10 @@ public partial class FieldSchedule
 
     public int? DayOfWeek { get; set; }
 
+    public int MaxPlayers { get; set; }
+
+    public TimeSpan MaxPlaytime { get; set; }
+
     public int? HowManyWeeksActive { get; set; }
 
     public DateTime LastUpdatedUtc { get; set; }

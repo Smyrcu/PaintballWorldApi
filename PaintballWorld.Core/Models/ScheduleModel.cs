@@ -13,4 +13,6 @@ public class ScheduleItem
 {
     public DateTime DateTime { get; set; }
     public FieldScheduleId? FieldScheduleId { get; set; }
+    public int MaxPlayers { get; set; }
+    public TimeSpan MaxPlayTime { get; set; }
 }

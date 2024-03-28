@@ -14,8 +14,11 @@ public static class ScheduleModelMapper
             FieldId = fieldId,
             Schedules = dto.ScheduleDates.Select(x => new ScheduleItem
             {
-                DateTime = x.Date,
+                DateTime = x.ScheduleDate,
+                MaxPlayTime = x.MaxPlayTime,
+                MaxPlayers = x.MaxPlayers,
                 FieldScheduleId = null
+
             }).ToList()
         };
         

@@ -1,7 +1,12 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using Google.Apis.Gmail.v1.Data;
+using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.Geometries;
+using NetTopologySuite;
 using Org.BouncyCastle.Bcpg.OpenPgp;
 using PaintballWorld.Core.Interfaces;
+using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
 using PaintballWorld.Infrastructure.Models;
@@ -13,6 +18,8 @@ namespace PaintballWorld.Core.Services
     {
         private readonly ApplicationDbContext _context;
         private readonly IFileService _fileService;
+
+        private const int SRID = 4326;
 
         public FieldManagementService(ApplicationDbContext context, IFileService fileService)
         {
@@ -76,7 +83,7 @@ namespace PaintballWorld.Core.Services
             
             field.Address.City = updRecord.Address.City;
             field.Address.Country = updRecord.Address.Country;
-            field.Address.Coordinates = updRecord.Address.Coordinates;
+            field.Address.Location = updRecord.Address.Location;
             field.Address.HouseNo = updRecord.Address.HouseNo;
             field.Address.Street = updRecord.Address.Street;
             field.Address.PhoneNo = updRecord.Address.PhoneNo;
@@ -92,6 +99,39 @@ namespace PaintballWorld.Core.Services
             _context.Fields.Update(field);
             _context.SaveChanges();
 
+        }
+
+        public async Task<List<FilteredField>> GetFieldsFiltered(OsmCityId osmCityId, decimal filterRadius)
+        {
+            var city = await _context.OsmCities
+                .Where(c => c.Id == osmCityId)
+                .Select(c => new { c.Latitude, c.Longitude })
+                .FirstOrDefaultAsync();
+
+            if (city == null)
+            {
+                return new ();
+            }
+
+            // Utwórz punkt reprezentujący lokalizację miasta
+            var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
+            var cityLocation = geometryFactory.CreatePoint(new Coordinate((double)city.Longitude, (double)city.Latitude));
+
+            // Konwertuj promień z kilometrów na metry (EF używa metrów)
+            var radiusInMeters = (double)filterRadius * 1000d;
+
+            // Znajdź pola w zasięgu
+            var fieldsInRadius = await _context.Fields
+                .Where(f => f.Address.Location.IsWithinDistance(cityLocation, radiusInMeters))
+                .Select(f => new FilteredField()
+                {
+                    FieldId = f.Id,
+                    FieldName = f.Name,
+                    CityName = f.Address.City
+                })
+                .ToListAsync();
+
+            return fieldsInRadius;
         }
 
         private static string GetRegulationsFileName(FieldId fieldId) => $"Reg_{fieldId.Value}_{DateTime.Now:yyyy_MM_dd}.pdf";

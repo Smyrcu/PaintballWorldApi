@@ -2,6 +2,7 @@
 using System.Transactions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using NetTopologySuite.Geometries;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.API.Areas.Field.Models;
 using PaintballWorld.Infrastructure.Models;
@@ -22,7 +23,7 @@ namespace PaintballWorld.API.Areas.Field.Data
                     City = fieldDto.Address.City,
                     PostalNumber = fieldDto.Address.PostalNumber,
                     Country = fieldDto.Address.Country,
-                    Coordinates = fieldDto.Address.Coordinates
+                    Location = new Point(fieldDto.Address.Location.Longitude, fieldDto.Address.Location.Latitude) { SRID = 4326 }
                 },
                 OwnerId = fieldDto.OwnerId.Value,
                 Area = fieldDto.Area,
@@ -79,7 +80,8 @@ namespace PaintballWorld.API.Areas.Field.Data
                 City = address.City,
                 PostalNumber = address.PostalNumber,
                 Country = address.Country,
-                Coordinates = address.Coordinates
+                Location = new GeoPoint { Latitude = address.Location.Y, Longitude = address.Location.X }
+
             };
             return result;
         }
@@ -94,8 +96,8 @@ namespace PaintballWorld.API.Areas.Field.Data
                 City = address.City,
                 PostalNumber = address.PostalNumber,
                 Country = address.Country,
-                Coordinates = address.Coordinates
-            };
+                Location = new Point(address.Location.Longitude, address.Location.Latitude) { SRID = 4326 }
+        };
             return result;
         }
 

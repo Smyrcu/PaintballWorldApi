@@ -2,6 +2,13 @@
 
 public class CreateSchedulesDto
 {
-    public List<DateTime> ScheduleDates { get; set; } = [];
+    public List<ScheduleTime> ScheduleDates { get; set; } = [];
+}
 
+
+public class ScheduleTime
+{
+    public DateTime ScheduleDate { get; set; }
+    public TimeSpan MaxPlayTime { get; set; }
+    public int MaxPlayers { get; set; }
 }

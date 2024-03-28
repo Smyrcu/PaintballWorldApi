@@ -91,13 +91,5 @@ public class ScheduleController : Controller
 
       return Ok();
    }
-
-   [HttpPut]
-   public async Task<IActionResult> UpdateSchedule()
-   {
-      throw new NotImplementedException();
-   }
-   
-   
    
 }

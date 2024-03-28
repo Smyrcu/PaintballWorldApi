@@ -61,19 +61,27 @@ public partial class ApplicationDbContext : IdentityDbContext
     public virtual DbSet<ApiKey> ApiKeys { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder) 
-        => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;");
-       /* => optionsBuilder.UseSqlServer(
+       /* => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;",
+            provider =>
+            {
+                provider.UseNetTopologySuite();
+            });*/
+        => optionsBuilder.UseSqlServer(
 
 #if DEBUG
             "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
 #else
                         "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
 #endif
-            providerOptions => providerOptions.EnableRetryOnFailure(
-                maxRetryCount: 5, 
-            maxRetryDelay: TimeSpan.FromSeconds(30),
-            errorNumbersToAdd: null)
-            );*/
+            providerOptions =>
+            {
+                providerOptions.EnableRetryOnFailure(
+                    maxRetryCount: 5,
+                    maxRetryDelay: TimeSpan.FromSeconds(30),
+                    errorNumbersToAdd: null);
+                providerOptions.UseNetTopologySuite();
+            }
+            );
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -87,12 +95,14 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.ToTable("Address");
 
             entity.Property(e => e.City).HasMaxLength(255);
-            entity.Property(e => e.Coordinates).HasMaxLength(100);
+            //entity.Property(e => e.Latitude).HasMaxLength(100);
+            //entity.Property(e => e.Longtitude).HasMaxLength(100);
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.HouseNo).HasMaxLength(30);
             entity.Property(e => e.PhoneNo).HasMaxLength(50);
             entity.Property(e => e.PostalNumber).HasMaxLength(50);
             entity.Property(e => e.Street).HasMaxLength(255);
+            entity.Property(e => e.Location).HasColumnType("geography");
         });
 
         modelBuilder.Entity<ApiKey>(entity =>
@@ -304,6 +314,9 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.LastUpdatedUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
+
+            entity.Property(x => x.MaxPlayers);
+            entity.Property(x => x.MaxPlaytime);
 
             entity.HasOne(fs => fs.Field) 
                 .WithMany(f => f.FieldSchedules)

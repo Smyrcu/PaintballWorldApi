@@ -1,4 +1,5 @@
-﻿using PaintballWorld.Infrastructure.Models;
+﻿using PaintballWorld.Core.Models;
+using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Core.Interfaces;
 
@@ -9,4 +10,5 @@ public interface IFieldManagementService
     string SaveRegulationsFile(Stream stream, FieldId fieldId);
     string SavePhoto(Stream stream, FieldId fieldId);
     void SaveChanges(Field updRecord);
+    Task<List<FilteredField>> GetFieldsFiltered(OsmCityId osmCityId, decimal filterRadius);
 }

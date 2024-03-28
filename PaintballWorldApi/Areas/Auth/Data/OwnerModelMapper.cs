@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using NetTopologySuite.Geometries;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure.Models;
@@ -29,7 +30,7 @@ namespace PaintballWorld.API.Areas.Auth.Data
                         City = ownerDto.Company.Address.City,
                         PostalNumber = ownerDto.Company.Address.PostalNumber,
                         Country = ownerDto.Company.Address.Country,
-                        Coordinates = ownerDto.Company.Address.Coordinates
+                        Location = new Point(ownerDto.Company.Address.Location.Longitude, ownerDto.Company.Address.Location.Latitude) { SRID = 4326 }
                     }
                 }
             };

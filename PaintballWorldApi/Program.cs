@@ -6,7 +6,10 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Org.BouncyCastle.Asn1.X509;
 using PaintballWorld.API;
+using PaintballWorld.API.Filters;
 using PaintballWorld.API.Middleware;
 
 
@@ -22,6 +25,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString, provider =>
     {
         provider.EnableRetryOnFailure(5, TimeSpan.FromSeconds(5), null);
+        provider.UseNetTopologySuite();
     });
     options.LogTo(Console.WriteLine, LogLevel.Information);
 });
@@ -88,7 +92,12 @@ builder.Services.AddAuthentication(options =>
     });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo {Title = "PaintballWorldApi", Version = "v1" });
+
+    c.SchemaFilter<GeoPointSchemaFilter>();
+});
 
 builder.Services.AddCors(options =>
 {

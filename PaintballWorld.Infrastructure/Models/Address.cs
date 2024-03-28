@@ -1,4 +1,6 @@
-﻿namespace PaintballWorld.Infrastructure.Models;
+﻿using NetTopologySuite.Geometries;
+
+namespace PaintballWorld.Infrastructure.Models;
 
 public readonly record struct AddressId(Guid Value)
 {
@@ -8,13 +10,7 @@ public readonly record struct AddressId(Guid Value)
 
 public partial class Address
 {
-    // private Address()
-    // {
-    // }
-    //
-    // public Address CreateNew() => new(){Id = AddressId.NewCompanyId()};
-
-    public AddressId Id { get; init; }// = AddressId.Empty;
+    public AddressId Id { get; init; }
     public string? PhoneNo { get; set; }
 
     public string? Street { get; set; }
@@ -27,5 +23,6 @@ public partial class Address
 
     public string? Country { get; set; }
 
-    public string? Coordinates { get; set; }
+    public Point? Location { get; set; }
+
 }

@@ -66,9 +66,13 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
             var jwtToken = await _tokenService.GenerateToken(user);
 
+            var roles = await _userManager.GetRolesAsync(user);
+
+            var role = roles.Contains("Owner") ? "Owner" : "User";
+
             return jwtToken == string.Empty
                 ? Unauthorized(result)
-                : Ok(new { Token = jwtToken });
+                : Ok(new { Token = jwtToken, Role = role  });
 
         }
 
@@ -134,7 +138,8 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 await _emailService.SendResetPasswordEmailAsync(email, callbackUrl);
                 return Ok();
             }
-            throw new NotImplementedException();
+
+            return BadRequest();
         }
 
         /// <summary>

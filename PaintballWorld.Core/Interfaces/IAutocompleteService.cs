@@ -2,5 +2,5 @@
 
 public interface IAutocompleteService
 {
-    IEnumerable<string?> GetCityAutocomplete(string cityName);
+    IEnumerable<object?> GetCityAutocomplete(string cityName);
 }

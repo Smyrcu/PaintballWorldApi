@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PaintballWorld.API.Areas.Default.Models;
 using PaintballWorld.Core.Interfaces;
 
 namespace PaintballWorld.API.Areas.Default.Controllers
@@ -26,7 +27,13 @@ namespace PaintballWorld.API.Areas.Default.Controllers
         {
             var result = _autocompleteService.GetCityAutocomplete(city);
 
-            return Ok(result);
+            return Ok(new AutocompleteResponse
+            {
+                IsSuccess = true,
+                Errors = [],
+                Message = "",
+                Data = result
+            });
 
         }
 

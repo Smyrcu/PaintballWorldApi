@@ -26,6 +26,8 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         private readonly UserManager<IdentityUser> _userManager;
         private readonly IAuthTokenService _authTokenService;
         private readonly ILogger<FieldsController> _logger;
+
+        private const int SRID = 4326;
         public FieldsController(IFieldManagementService fieldManagementService, ApplicationDbContext context, UserManager<IdentityUser> userManager, IAuthTokenService authTokenService, ILogger<FieldsController> logger)
         {
             _fieldManagementService = fieldManagementService;
@@ -99,11 +101,19 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             if (field == null)
                 return BadRequest("Field not found");
 
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, id);
+            /*var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, id);
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
-                return BadRequest(isOwner.errors);
+                return BadRequest(isOwner.errors);*/
 
             var result = field.Map();
+
+            return Ok(result);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetFieldsFiltered([FromQuery] FieldFilters filter)
+        {
+            var result = await _fieldManagementService.GetFieldsFiltered(new OsmCityId(filter.Id), filter.Radius);
 
             return Ok(result);
         }
