@@ -38,7 +38,6 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         }
 
         [HttpPost]
-        [Route("Create")]
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> CreateField([FromForm] FieldDto fieldDto)
         {

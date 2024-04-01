@@ -119,9 +119,9 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         /// <exception cref="NotImplementedException"></exception>
         [HttpPost]
         [Route("ResetPasswordRequest")]
-        public async Task<IActionResult> ResetPasswordRequest([FromBody] string email)
+        public async Task<IActionResult> ResetPasswordRequest([FromBody] ResetPasswordRequestDto dto)
         {
-            var user = await _userManager.FindByEmailAsync(email);
+            var user = await _userManager.FindByEmailAsync(dto.Email);
 
             if (user is null)
             {
@@ -135,7 +135,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 protocol: HttpContext.Request.Scheme);
             if (callbackUrl is not null)
             {
-                await _emailService.SendResetPasswordEmailAsync(email, callbackUrl);
+                await _emailService.SendResetPasswordEmailAsync(dto.Email, callbackUrl);
                 return Ok();
             }
 
