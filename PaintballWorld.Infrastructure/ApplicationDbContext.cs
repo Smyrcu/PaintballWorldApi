@@ -60,19 +60,18 @@ public partial class ApplicationDbContext : IdentityDbContext
 
     public virtual DbSet<ApiKey> ApiKeys { get; set; }
 
+#if DEBUG
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;",
             provider =>
             {
                 provider.UseNetTopologySuite();
             });
-    /* => optionsBuilder.UseSqlServer(
-
-#if DEBUG
-         "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
 #else
-                     "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
-#endif
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+     => optionsBuilder.UseSqlServer(
+         "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+                     //"Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
          providerOptions =>
          {
              providerOptions.EnableRetryOnFailure(
@@ -81,7 +80,8 @@ public partial class ApplicationDbContext : IdentityDbContext
                  errorNumbersToAdd: null);
              providerOptions.UseNetTopologySuite();
          }
-         );*/
+         );
+#endif
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

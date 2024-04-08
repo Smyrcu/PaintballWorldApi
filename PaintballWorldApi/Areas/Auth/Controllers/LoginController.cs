@@ -84,24 +84,25 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         }
 
         [Route("DeleteAccount")]
-        [HttpPost]
-        public async Task<IActionResult> DeleteAccount([FromBody] string username)
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccount([FromBody] DeleteUserDto dto)
         {
-            _logger.Log(LogLevel.Information, $"Szukam usera do usunięcia usename: {username}");
-            var user = await _userManager.FindByNameAsync(username);
+            _logger.Log(LogLevel.Information, $"Szukam usera do usunięcia usename: {dto.Username}");
+            var user = await _userManager.FindByNameAsync(dto.Username);
+             
             if (user is null)
             {
-                _logger.Log(LogLevel.Warning, $"Nie znalazłem usera: {username}");
+                _logger.Log(LogLevel.Warning, $"Nie znalazłem usera: {dto.Username}");
                 return NotFound();
             }
-            _logger.Log(LogLevel.Information, $"Użytkownik {username} znaleziony - usuwam");
+            _logger.Log(LogLevel.Information, $"Użytkownik {dto.Username} znaleziony - usuwam");
             try
             {
                 await _userManager.DeleteAsync(user);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Usuwanie usera {username} spadło z rowerka");
+                _logger.LogError(e, $"Usuwanie usera {dto.Username} spadło z rowerka");
                 throw;
             }
             return Ok();

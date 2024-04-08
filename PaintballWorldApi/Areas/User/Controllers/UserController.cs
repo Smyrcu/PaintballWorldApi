@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.User.Data;
 using PaintballWorld.API.Areas.User.Models;
