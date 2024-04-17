@@ -41,10 +41,10 @@ namespace PaintballWorld.API.Areas.Auth.Data
 
             // var field = new Infrastructure.Models.Field
             // {
-            //     Id = FieldId.NewCompanyId(),
+            //     FieldId = FieldId.NewCompanyId(),
             //     Address = new Address
             //     {
-            //         Id = AddressId.NewCompanyId(),
+            //         FieldId = AddressId.NewCompanyId(),
             //         PhoneNo = ownerWithFieldDto.Field.Address.PhoneNo,
             //         Street = ownerWithFieldDto.Field.Address.Street,
             //         HouseNo = ownerWithFieldDto.Field.Address.HouseNo,
@@ -53,7 +53,7 @@ namespace PaintballWorld.API.Areas.Auth.Data
             //         Country = ownerWithFieldDto.Field.Address.Country,
             //         Coordinates = ownerWithFieldDto.Field.Address.Coordinates
             //     },
-            //     OwnerId = owner.Id,
+            //     OwnerId = owner.FieldId,
             //     Area = ownerWithFieldDto.Field.Area,
             //     Name = ownerWithFieldDto.Field.Name,
             //     Regulations = ownerWithFieldDto.Field.Regulations,

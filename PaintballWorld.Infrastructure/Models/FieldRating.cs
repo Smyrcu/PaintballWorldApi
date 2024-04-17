@@ -18,4 +18,5 @@ public partial class FieldRating
     public string? CreatedBy { get; set; }
 
     public DateTime? CreatedOnUtc { get; set; }
+
 }

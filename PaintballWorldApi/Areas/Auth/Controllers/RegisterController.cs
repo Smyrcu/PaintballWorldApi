@@ -64,7 +64,6 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         #region Rejestracja
         
         [HttpPost]
-        [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
             var user = new IdentityUser
@@ -100,47 +99,8 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             return BadRequest(result);
         }
 
-        [HttpPost]
-        [Route("RegisterOwner")]
-        public async Task<IActionResult> RegisterOwner([FromBody] OwnerDto dto)
-        {
-            var user = new IdentityUser
-            {
-                UserName = dto.Username,
-                Email = dto.Email,
-            };
-            _logger.LogInformation("Creating new OwnerDto account");
-
-            var result = await _userManager.CreateAsync(user, dto.Password);
-
-            if (result.Succeeded)
-            {
-                var confirmationGuid = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-                var callbackUrl = Url.Action("ConfirmAccount", "Register",
-                    new { Area = "Auth", userId = user.Id, code = confirmationGuid },
-                    protocol: HttpContext.Request.Scheme);
-
-                await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
-
-                _profileService.FinishRegistration(user, dto.DateOfBirth, dto.FirstName, dto.LastName);
-
-                _ownerRegistrationService.RegisterOwner(dto.Map(user));
-
-                await _userManager.AddToRoleAsync(user, "Owner");
-
-#if DEBUG
-                return Ok(callbackUrl);
-#endif
-
-                return Ok("User was created successfully");
-
-            }
-
-            return BadRequest(result);
-
-        }
-
+        
+/*
         [HttpPost]
         [Route("RegisterOwnerWithField")]
         public async Task<IActionResult> RegisterOwnerWithField([FromBody] OwnerWithFieldDto dto)
@@ -159,7 +119,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 var confirmationGuid = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
                 var callbackUrl = Url.Action("ConfirmAccount", "Register",
-                    new { Area = "Auth", userId = user.Id, code = confirmationGuid },
+                    new { Area = "Auth", userId = user.FieldId, code = confirmationGuid },
                     protocol: HttpContext.Request.Scheme);
 
                 await _emailService.SendConfirmationEmailAsync(user.Email, callbackUrl);
@@ -178,7 +138,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
             return BadRequest(result);
 
-        }
+        }*/
 
         [HttpGet]
         [Route("Test")]
@@ -193,7 +153,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         #region Potwierdzanie konta
 
-        [HttpGet("ConfirmAccount")]
+        [HttpGet]
         public async Task<IActionResult> ConfirmAccount([FromQuery] string userId, [FromQuery] string code)
         {
             if (string.IsNullOrEmpty(userId) || string.IsNullOrEmpty(code))

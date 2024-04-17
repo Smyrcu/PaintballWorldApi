@@ -37,11 +37,11 @@
     <Folder Include="Areas\Auth\Views\" />
     <Folder Include="Areas\Default\Data\" />
     <Folder Include="Areas\Default\Views\" />
-    <Folder Include="Areas\Event\Controllers\" />
     <Folder Include="Areas\Event\Data\" />
     <Folder Include="Areas\Event\Models\" />
     <Folder Include="Areas\Event\Views\" />
     <Folder Include="Areas\Field\Views\" />
+    <Folder Include="Areas\Rating\Views\" />
     <Folder Include="Areas\Schedule\Views\" />
     <Folder Include="Areas\User\Views\" />
   </ItemGroup>

@@ -128,15 +128,13 @@ app.UseMiddleware<ApiKeyMiddleware>();
 app.UseAuthentication(); 
 app.UseAuthorization();
 
-//if (app.Environment.IsDevelopment())
-//{
 app.UseSwagger();
 app.UseSwaggerUI();
 
+// Migracje
 var context = app.Services.CreateScope().ServiceProvider.GetRequiredService<ApplicationDbContext>();
 context.Database.Migrate();
 
-//}
 
 app.UseEndpoints(endpoints =>
 {

@@ -1,10 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.Infrastructure.Interfaces;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using System.Text;
 using Microsoft.AspNetCore.Authorization;
 using PaintballWorld.API.Areas.Auth.Models;
 
@@ -51,7 +47,6 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         #region Account
 
         [HttpPost]
-        [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
             var user = await _userManager.FindByNameAsync(dto.Username);
@@ -76,14 +71,13 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         }
 
-        [HttpGet("Logout")]
+        [HttpPatch]
         public async Task<IActionResult> Logout()
         {
             await _signInManager.SignOutAsync();
             return Ok();
         }
 
-        [Route("DeleteAccount")]
         [HttpDelete]
         public async Task<IActionResult> DeleteAccount([FromBody] DeleteUserDto dto)
         {
@@ -105,65 +99,6 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
                 _logger.LogError(e, $"Usuwanie usera {dto.Username} spadło z rowerka");
                 throw;
             }
-            return Ok();
-        }
-
-        #endregion
-
-        #region Password
-
-        /// <summary>
-        /// Wysyła email i linkiem do zmiany hasła
-        /// </summary>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        [HttpPost]
-        [Route("ResetPasswordRequest")]
-        public async Task<IActionResult> ResetPasswordRequest([FromBody] ResetPasswordRequestDto dto)
-        {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
-
-            var callbackUrl = Url.Action("ResetPassword", "Login",
-                new { Area = "Auth", userId = user.Id, token = token },
-                protocol: HttpContext.Request.Scheme);
-            if (callbackUrl is not null)
-            {
-                await _emailService.SendResetPasswordEmailAsync(dto.Email, callbackUrl);
-                return Ok();
-            }
-
-            return BadRequest();
-        }
-
-        /// <summary>
-        /// Resetowanie hasła
-        /// </summary>
-        /// <param name="dto"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("ResetPassword")]
-        public async Task<IActionResult> ResetPassword([FromBody] ResetPasswordDto dto)
-        {
-            var user = await _userManager.FindByEmailAsync(dto.Email);
-            if (user is null)
-            {
-                return NotFound();
-            }
-
-            var result = await _userManager.ResetPasswordAsync(user, dto.Token, dto.NewPassword);
-            if (!result.Succeeded)
-            {
-                return BadRequest(result.Errors);
-            }
-
             return Ok();
         }
 

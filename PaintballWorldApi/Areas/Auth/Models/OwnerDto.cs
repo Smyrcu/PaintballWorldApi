@@ -4,7 +4,7 @@ namespace PaintballWorld.API.Areas.Auth.Models
 {
     public class OwnerDto : UserDto
     {
-        public OwnerDto(string email, string username, string password, string firstName, string lastName, DateTime dateOfBirth, CompanyDto company) : base(email, username, password, dateOfBirth)
+        public OwnerDto(string? email, string username, string? password, string firstName, string lastName, DateTime dateOfBirth, CompanyDto company) : base(email, username, password, dateOfBirth)
         {
             this.Email = email;
             this.Username = username;

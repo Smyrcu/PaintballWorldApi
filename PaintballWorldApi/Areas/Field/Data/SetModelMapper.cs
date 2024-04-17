@@ -9,7 +9,7 @@ namespace PaintballWorld.API.Areas.Field.Data
         // {
         //     return new Set
         //     {
-        //         Id = set.Id,
+        //         FieldId = set.FieldId,
         //         Ammo = set.Ammo,
         //         Price = set.Price,
         //         Description = set.Description,
@@ -20,7 +20,7 @@ namespace PaintballWorld.API.Areas.Field.Data
         // public static IEnumerable<Set> Map(this IList<SetDto> set, FieldId fieldId) => 
         //     set.Select(setDto => new Set
         //         {
-        //             Id = setDto.Id,
+        //             FieldId = setDto.FieldId,
         //             Ammo = setDto.Ammo,
         //             Price = setDto.Price,
         //             Description = setDto.Description,
