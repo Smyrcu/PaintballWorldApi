@@ -1,10 +1,8 @@
-﻿using Humanizer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.Field.Data;
 using PaintballWorld.Core.Interfaces;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API.Areas.Field.Models;
@@ -19,23 +17,15 @@ namespace PaintballWorld.API.Areas.Field.Controllers
     [ApiController]
     [Area("Field")]
     [AllowAnonymous]
-    public class FieldsController : ControllerBase
+    public class FieldsController(
+        IFieldManagementService fieldManagementService,
+        ApplicationDbContext context,
+        UserManager<IdentityUser> userManager,
+        IAuthTokenService authTokenService,
+        ILogger<FieldsController> logger)
+        : ControllerBase
     {
-        private readonly IFieldManagementService _fieldManagementService;
-        private readonly ApplicationDbContext _context;
-        private readonly UserManager<IdentityUser> _userManager;
-        private readonly IAuthTokenService _authTokenService;
-        private readonly ILogger<FieldsController> _logger;
-
         private const int SRID = 4326;
-        public FieldsController(IFieldManagementService fieldManagementService, ApplicationDbContext context, UserManager<IdentityUser> userManager, IAuthTokenService authTokenService, ILogger<FieldsController> logger)
-        {
-            _fieldManagementService = fieldManagementService;
-            _context = context;
-            _userManager = userManager;
-            _authTokenService = authTokenService;
-            _logger = logger;
-        }
 
         [HttpPost]
         [Authorize(Roles = "Owner")]
@@ -49,12 +39,12 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 if (username == null)
                     return BadRequest("Wrong JWT");
 
-                var user = await _userManager.FindByNameAsync(username);
+                var user = await userManager.FindByNameAsync(username);
 
                 if (user == null)
                     return BadRequest("User not found");
 
-                var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
+                var owner = context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(user.Id));
 
                 // W zasadzie Authorize powinno to filtrować
                 // Ale nie filtruje HMMM
@@ -64,7 +54,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
                 fieldDto.OwnerId = owner?.Id;
 
-                var fieldTypeId = _fieldManagementService.GetFieldTypeIdByStringName(fieldDto.FieldType);
+                var fieldTypeId = fieldManagementService.GetFieldTypeIdByStringName(fieldDto.FieldType);
 
                 var mapped = fieldDto.Map(fieldTypeId);
 
@@ -72,10 +62,10 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 {
                     using var stream = new MemoryStream();
                     await fieldDto.Regulations.CopyToAsync(stream);
-                    mapped.Regulations = _fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
+                    mapped.Regulations = fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
                 }
 
-                _fieldManagementService.CreateField(mapped);
+                fieldManagementService.CreateField(mapped);
 
                 var additionalText = owner.IsApproved ? "" : " - Owner is not approved!";
 
@@ -95,7 +85,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         {
             var id = new FieldId(fieldId);
 
-            var field = _context.Fields.FirstOrDefault(x => x.Id == id);
+            var field = context.Fields.FirstOrDefault(x => x.Id == id);
 
             if (field == null)
                 return BadRequest("Field not found");
@@ -112,7 +102,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         [HttpGet]
         public async Task<IActionResult> GetFieldsFiltered([FromQuery] FieldFilters filter)
         {
-            var result = await _fieldManagementService.GetFieldsFiltered(new OsmCityId(filter.Id), filter.Radius);
+            var result = await fieldManagementService.GetFieldsFiltered(new OsmCityId(filter.Id), filter.Radius);
 
             return Ok(result);
         }
@@ -122,16 +112,16 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         public async Task<IActionResult> ManageField([FromForm]FieldManagementDto dto, [FromRoute]Guid fieldId)
         {
 
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, new FieldId(fieldId));
+            var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, new FieldId(fieldId));
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
                 return BadRequest(isOwner.errors);
             try
             {
-                _fieldManagementService.SaveChanges(dto.Map());
+                fieldManagementService.SaveChanges(dto.Map());
             }
             catch (Exception e)
             {
-                _logger.LogError(e, "Nie udało się zapisać zmian");
+                logger.LogError(e, "Nie udało się zapisać zmian");
                 return BadRequest("Updating data failed");
             }
 
@@ -144,7 +134,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         public async Task<IActionResult> DeleteField([FromRoute] Guid fieldId)
         {
             var fieldIdModel = new FieldId(fieldId);
-            var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, fieldIdModel);
+            var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdModel);
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
             {
                 return BadRequest(new AddSetsResponse
@@ -155,7 +145,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 });
             }
 
-            var field = await _context.Fields.FindAsync(fieldIdModel);
+            var field = await context.Fields.FindAsync(fieldIdModel);
             if (field == null)
             {
                 return BadRequest(new ResponseBase
@@ -165,8 +155,8 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 });
             }
 
-            _context.Fields.Remove(field);
-            await _context.SaveChangesAsync();
+            context.Fields.Remove(field);
+            await context.SaveChangesAsync();
             return Ok(new ResponseBase
             {
                 IsSuccess = true,

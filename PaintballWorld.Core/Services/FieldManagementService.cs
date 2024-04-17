@@ -113,21 +113,19 @@ namespace PaintballWorld.Core.Services
                 return new ();
             }
 
-            // Utwórz punkt reprezentujący lokalizację miasta
             var geometryFactory = NtsGeometryServices.Instance.CreateGeometryFactory(SRID);
             var cityLocation = geometryFactory.CreatePoint(new Coordinate((double)city.Longitude, (double)city.Latitude));
 
-            // Konwertuj promień z kilometrów na metry (EF używa metrów)
             var radiusInMeters = (double)filterRadius * 1000d;
 
-            // Znajdź pola w zasięgu
             var fieldsInRadius = await _context.Fields
                 .Where(f => f.Address.Location.IsWithinDistance(cityLocation, radiusInMeters))
-                .Select(f => new FilteredField()
+                .Select(f => new FilteredField
                 {
                     FieldId = f.Id,
                     FieldName = f.Name,
-                    CityName = f.Address.City
+                    CityName = f.Address.City,
+                    GeoPoint = f.Address.Location
                 })
                 .ToListAsync();
 

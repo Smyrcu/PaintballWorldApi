@@ -6,7 +6,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
     [Route("api/[Area]/[controller]")]
     [Area("Event")]
     [ApiController]
-    public class EventController : ControllerBase
+    public class PublicEventController : ControllerBase
     {
         [HttpGet]
         public async Task<IActionResult> GetPublicEvents()

@@ -15,25 +15,20 @@ namespace PaintballWorld.API.Areas.Schedule.Controllers;
 [ApiController]
 [Area("Schedule")]
 [AllowAnonymous]
-public class ScheduleController : Controller
+public class ScheduleController(
+    ILogger<ScheduleController> logger,
+    IAuthTokenService authTokenService,
+    IScheduleService scheduleService)
+    : Controller
 {
-   private readonly ILogger<ScheduleController> _logger;
-   private readonly IAuthTokenService _authTokenService;
-   private readonly IScheduleService _scheduleService;
-
-   public ScheduleController(ILogger<ScheduleController> logger, IAuthTokenService authTokenService, IScheduleService scheduleService)
-   {
-      _logger = logger;
-      _authTokenService = authTokenService;
-      _scheduleService = scheduleService;
-   }
+   private readonly ILogger<ScheduleController> _logger = logger;
 
    [HttpPost("{fieldId}")]
    public IActionResult CreateSchedules([FromBody] CreateSchedulesDto dto, [FromRoute]Guid fieldId)
    {
       var fieldIdObj = new FieldId(fieldId);
 
-      var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
+      var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
       if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
       {
          return BadRequest(new ResponseBase()
@@ -44,7 +39,7 @@ public class ScheduleController : Controller
          });
       }
 
-      _scheduleService.AddSchedules(fieldIdObj, dto.Map(fieldIdObj)).GetAwaiter().GetResult();
+      scheduleService.AddSchedules(fieldIdObj, dto.Map(fieldIdObj)).GetAwaiter().GetResult();
 
       return Ok();
    }
@@ -54,7 +49,7 @@ public class ScheduleController : Controller
    {
       var fieldIdObj = new FieldId(fieldId);
       
-      var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
+      var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
       if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
       {
          return BadRequest(new ResponseBase()
@@ -65,7 +60,7 @@ public class ScheduleController : Controller
          });
       }
 
-      var result = await _scheduleService.GetSchedulesByField(fieldIdObj);
+      var result = await scheduleService.GetSchedulesByField(fieldIdObj);
 
       return Ok(result);
    }
@@ -75,7 +70,7 @@ public class ScheduleController : Controller
    {
       var fieldIdObj = new FieldId(fieldId);
       
-      var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
+      var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
       if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
       {
          return BadRequest(new ResponseBase()
@@ -86,7 +81,7 @@ public class ScheduleController : Controller
          });
       }
 
-      await _scheduleService.DeleteSchedule(fieldIdObj, new FieldScheduleId(scheduleId));
+      await scheduleService.DeleteSchedule(fieldIdObj, new FieldScheduleId(scheduleId));
       
 
       return Ok();

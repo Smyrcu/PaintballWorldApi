@@ -12,25 +12,17 @@ namespace PaintballWorld.API.Areas.User.Controllers;
 [ApiController]
 [Area("User")]
 [AllowAnonymous]
-public class UserController : Controller
+public class UserController(IUserService userService, IAuthTokenService authTokenService)
+    : Controller
 {
-    private readonly IUserService _userService;
-    private readonly IAuthTokenService _authTokenService;
-
-    public UserController(IUserService userService, IAuthTokenService authTokenService)
-    {
-        _userService = userService;
-        _authTokenService = authTokenService;
-    }
-    
     [HttpGet("profile")]
     public IActionResult ShowProfile()
     {
         try
         {
-            var userId = _authTokenService.GetUserId(User.Claims);
+            var userId = authTokenService.GetUserId(User.Claims);
 
-            var result = _userService.GetUserInfo(userId);
+            var result = userService.GetUserInfo(userId);
 
             var model = result.Map();
             
@@ -52,9 +44,9 @@ public class UserController : Controller
     {
         try
         {
-            var userId = _authTokenService.GetUserId(User.Claims);
+            var userId = authTokenService.GetUserId(User.Claims);
 
-            _userService.UpdateProfile(dto.Map(userId));
+            userService.UpdateProfile(dto.Map(userId));
             return Ok(new ResponseBase
             {
                 IsSuccess = true

@@ -33,9 +33,9 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
             var token = await userManager.GeneratePasswordResetTokenAsync(user);
 
-            return Ok(new { userId = user.Id, token = token});
+            return Ok(new { /*userId = user.Id,*/ token = token});
         }
-
+        // https://www.TwojaStara.com/Reset/Password?token=XXX&?UserId-123876129
         /// <summary>
         /// Resetowanie hasła
         /// </summary>

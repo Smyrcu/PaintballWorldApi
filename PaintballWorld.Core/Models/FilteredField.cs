@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using NetTopologySuite.Geometries;
 using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Core.Models
@@ -12,5 +13,6 @@ namespace PaintballWorld.Core.Models
         public FieldId FieldId { get; set; }
         public string? FieldName { get; set; }
         public string? CityName { get; set; }
+        public Point GeoPoint { get; set; }
     }
 }

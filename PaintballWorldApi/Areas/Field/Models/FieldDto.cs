@@ -17,7 +17,7 @@ public class FieldDto
     public int MaxSimultaneousEvents { get; set; }
     public string FieldType { get; set; }
 
-    public IList<SetDto> Sets { get; set; }// = new List<SetDto>();
+    public IList<SetDto>? Sets { get; set; } = [];// = new List<SetDto>();
 
     public FieldDto()
     {
