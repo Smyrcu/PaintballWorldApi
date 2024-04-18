@@ -2,5 +2,5 @@
 
 public interface IContactService
 {
-    void SaveContactMessage(string email, string content, string topic);
+    Task SaveContactMessage(string email, string content, string topic);
 }

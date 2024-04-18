@@ -35,7 +35,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
             return Ok(new { /*userId = user.Id,*/ token = token});
         }
-        // https://www.TwojaStara.com/Reset/Password?token=XXX&?UserId-123876129
+        // https://www.TwojaStara.com/Reset/Password?token=XXX&?Email-123876129
         /// <summary>
         /// Resetowanie hasła
         /// </summary>

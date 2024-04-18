@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Identity;
 using PaintballWorld.Infrastructure;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http.Connections;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
@@ -57,12 +58,17 @@ builder.WebHost.ConfigureKestrel(serverOptions =>
     serverOptions.Limits.MaxRequestBodySize = int.MaxValue;
 });
 
-
 builder.Services.AddLogging(logger =>
 {
     logger.ClearProviders();
     logger.SetMinimumLevel(LogLevel.Trace);
     logger.AddConsole();
+    logger.AddAzureWebAppDiagnostics();
+});
+
+builder.Services.AddApplicationInsightsTelemetry((x) =>
+{
+    x.ConnectionString = @"InstrumentationKey=2bcf185a-eee3-44a6-b202-e8da8da2bddb;IngestionEndpoint=https://westeurope-5.in.applicationinsights.azure.com/;LiveEndpoint=https://westeurope.livediagnostics.monitor.azure.com/;ApplicationId=c8d98768-43a7-4ca3-8fd6-a340ccc0c53f";
 });
 
 builder.Services.AddAuthentication(options =>

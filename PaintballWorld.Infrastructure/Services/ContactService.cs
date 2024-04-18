@@ -17,7 +17,7 @@ namespace PaintballWorld.Infrastructure.Services
             _context = context;
         }
 
-        public void SaveContactMessage(string email, string content, string topic)
+        public async Task SaveContactMessage(string email, string content, string topic)
         {
             _context.Contacts.Add(new Contact
             {
@@ -25,6 +25,7 @@ namespace PaintballWorld.Infrastructure.Services
                 Content = content,
                 Topic = topic
             });
+            await _context.SaveChangesAsync();
         } 
 
 

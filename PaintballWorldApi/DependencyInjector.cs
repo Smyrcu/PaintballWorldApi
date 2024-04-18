@@ -15,6 +15,8 @@ namespace PaintballWorld.API
             services.AddScoped<IFileService, FileService>();
             services.AddScoped<IEmailService, EmailService>();
             services.AddScoped<IAuthTokenService, AuthTokenService>();
+            services.AddScoped<IContactService, ContactService>();
+
 
 
             // Domain
