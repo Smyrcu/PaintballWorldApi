@@ -9,10 +9,13 @@ namespace PaintballWorld.API.Areas.Default.Controllers
     [ApiController]
     public class ContactController : ControllerBase
     {
+
+
         [HttpPost]
-        public async Task<IActionResult> SentMessage([FromBody] ContactDto dto)
+        public async Task<IActionResult> Contact([FromBody] ContactDto dto)
         {
-            throw new NotImplementedException();
+            
+
         }
     }
 }

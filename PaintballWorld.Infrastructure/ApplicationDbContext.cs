@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using NetTopologySuite.IO;
 using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Infrastructure;
@@ -60,6 +61,8 @@ public partial class ApplicationDbContext : IdentityDbContext
 
     public virtual DbSet<ApiKey> ApiKeys { get; set; }
 
+    public virtual DbSet<Contact> Contacts { get; set; }
+
 #if DEBUG
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseSqlServer("Server=(localdb)\\MSSQLLocalDB;Database=PaintballWorldApp2;Integrated Security=true;",
@@ -70,8 +73,8 @@ public partial class ApplicationDbContext : IdentityDbContext
 #else
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
      => optionsBuilder.UseSqlServer(
-         "Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
-                     //"Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+         //"Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+                     "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
          providerOptions =>
          {
              providerOptions.EnableRetryOnFailure(
@@ -145,6 +148,18 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.ToTable("Attachments");
 
             entity.HasCheckConstraint("CK_Attachment_EmailInboxId_EmailOutboxId", "([EmailInboxId] IS NOT NULL AND [EmailOutboxId] IS NULL) OR ([EmailInboxId] IS NULL AND [EmailOutboxId] IS NOT NULL)");
+        });
+
+        modelBuilder.Entity<Contact>(entity =>
+        {
+            entity.HasKey(e => e.Id).HasName("PK__Contact__3214EC0B1234DA2");
+            entity.Property(e => e.Id).HasConversion(id => id.Value, value => new ContactId(value))
+                .ValueGeneratedOnAdd();
+            entity.ToTable("Contact");
+            entity.Property(e => e.Email).HasMaxLength(255);
+            entity.Property(e => e.Topic).HasMaxLength(255);
+            entity.Property(e => e.Content).HasMaxLength(4000);
+
         });
 
         modelBuilder.Entity<Company>(entity =>
