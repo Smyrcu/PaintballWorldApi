@@ -5,7 +5,7 @@ namespace PaintballWorld.Core.Interfaces;
 
 public interface IScheduleService
 {
-    Task AddSchedules(FieldId idField, ScheduleModel dto);
+    Task AddSchedules(ScheduleModel dto);
     Task<ScheduleModel> GetSchedulesByField(FieldId fieldIdObj);
     Task DeleteSchedule(FieldId fieldId, FieldScheduleId fieldScheduleId);
 }

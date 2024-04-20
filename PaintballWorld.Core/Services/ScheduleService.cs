@@ -19,24 +19,28 @@ public class ScheduleService : IScheduleService
         _context = context;
     }
 
-    public async Task AddSchedules(FieldId fieldId, ScheduleModel dto)
+    public async Task AddSchedules(ScheduleModel dto)
     {
-        List<FieldSchedule> schedulesList = [];
         
-        dto.Schedules.ForEach(x =>
+
+
+        var fieldSchedule = new FieldSchedule
         {
-            schedulesList.Add(new FieldSchedule
-            {
-                FieldId = fieldId,
-                Date = x.DateTime,
-                IsRecurrent = false,
-                LastUpdatedUtc = default,
-                CreatedUtc = default
-            });
-        });
-        
-        await _context.FieldSchedules.AddRangeAsync(schedulesList);
-        await _context.SaveChangesAsync();
+            FieldId = dto.FieldId,
+            Date = dto.,
+            IsRecurrent = false,
+            DayOfWeek = null,
+            MaxPlayers = 0,
+            MaxPlaytime = default,
+            HowManyWeeksActive = null,
+            LastUpdatedUtc = default,
+            CreatedUtc = default
+        }
+
+
+
+
+
     }
 
     public async Task<ScheduleModel> GetSchedulesByField(FieldId fieldIdObj)

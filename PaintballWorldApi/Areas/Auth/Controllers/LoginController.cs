@@ -46,6 +46,11 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         #region Account
 
+        /// <summary>
+        /// Logowanie użytkownika
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Login([FromBody] LoginDto dto)
         {
@@ -71,6 +76,10 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         }
 
+        /// <summary>
+        /// Wylogowywanie użytkownika / Ubijanie tokena
+        /// </summary>
+        /// <returns></returns>
         [HttpPatch]
         public async Task<IActionResult> Logout()
         {
@@ -78,6 +87,12 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             return Ok();
         }
 
+
+        /// <summary>
+        /// Usuwanie konta
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteAccount([FromBody] DeleteUserDto dto)
         {

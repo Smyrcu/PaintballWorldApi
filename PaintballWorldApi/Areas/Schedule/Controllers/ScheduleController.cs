@@ -24,7 +24,7 @@ public class ScheduleController(
    private readonly ILogger<ScheduleController> _logger = logger;
 
    [HttpPost("{fieldId}")]
-   public IActionResult CreateSchedules([FromBody] CreateSchedulesDto dto, [FromRoute]Guid fieldId)
+   public async Task<IActionResult> CreateSchedules([FromBody] CreateSchedulesDto dto, [FromRoute]Guid fieldId)
    {
       var fieldIdObj = new FieldId(fieldId);
 
@@ -39,7 +39,7 @@ public class ScheduleController(
          });
       }
 
-      scheduleService.AddSchedules(fieldIdObj, dto.Map(fieldIdObj)).GetAwaiter().GetResult();
+      await scheduleService.AddSchedules(dto.Map(fieldIdObj));
 
       return Ok();
    }

@@ -65,6 +65,11 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             });
         }
 
+        /// <summary>
+        /// Zmiana hasła
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> ChangePassword([FromBody] ChangePasswordDto dto)
         {
@@ -99,31 +104,5 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         #endregion
 
-        private string GenerateSecurePassword()
-        {
-            var length = 16;
-            var specialCharCount = 2;
-
-            var lowerCase = "abcdefghijklmnopqrstuvwxyz";
-            var upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-            var digits = "0123456789";
-            var specialCharacters = "!@#$%^&*?_-";
-            Random random = new();
-
-            List<char> chars = [];
-            for (var i = 0; i < specialCharCount; i++)
-            {
-                chars.Add(specialCharacters[random.Next(specialCharacters.Length)]);
-            }
-
-            var remainingLength = length - specialCharCount;
-            var remainingChars = lowerCase + upperCase + digits + specialCharacters;
-            for (var i = 0; i < remainingLength; i++)
-            {
-                chars.Add(remainingChars[random.Next(remainingChars.Length)]);
-            }
-
-            return new string(chars.OrderBy(x => random.Next()).ToArray());
-        }
     }
 }

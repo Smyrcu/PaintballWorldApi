@@ -12,14 +12,19 @@ public static class ScheduleModelMapper
         var result = new ScheduleModel
         {
             FieldId = fieldId,
-            Schedules = dto.ScheduleDates.Select(x => new ScheduleItem
-            {
-                DateTime = x.ScheduleDate,
-                MaxPlayTime = x.MaxPlayTime,
-                MaxPlayers = x.MaxPlayers,
-                FieldScheduleId = null
-
-            }).ToList()
+            EventType = dto.EventType,
+            SelectedDays = dto.SelectedDays,
+            IsRecurrent = dto.IsRecurrent,
+            FinalDate = dto.FinalDate,
+            Name = dto.Name,
+            Date = dto.Date,
+            StartTime = dto.StartTime,
+            EndTime = dto.EndTime,
+            Description = dto.Description,
+            TimeValue = dto.TimeValue,
+            IsMultiple = dto.IsMultiple,
+            IsWeekly = dto.IsWeekly,
+            IsAutomatic = dto.IsAutomatic,
         };
         
         return result;
