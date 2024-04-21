@@ -14,7 +14,6 @@ public static class ScheduleModelMapper
             FieldId = fieldId,
             EventType = dto.EventType,
             SelectedDays = dto.SelectedDays,
-            IsRecurrent = dto.IsRecurrent,
             FinalDate = dto.FinalDate,
             Name = dto.Name,
             Date = dto.Date,

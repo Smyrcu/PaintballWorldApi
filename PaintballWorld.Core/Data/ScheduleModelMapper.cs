@@ -5,17 +5,16 @@ namespace PaintballWorld.Core.Data;
 
 public static class ScheduleModelMapper
 {
-    public static ScheduleModel Map(this IEnumerable<FieldSchedule> fs)
+    public static IEnumerable<ScheduleModel> Map(this IEnumerable<FieldSchedule> fs)
     {
-        var result = new ScheduleModel
+        var result = fs.Select(x => new ScheduleModel
         {
-            FieldId = fs.First().FieldId,
-            Schedules = fs.Select(x => new ScheduleItem
-            {
-                DateTime = x.Date,
-                FieldScheduleId = x.Id
-            }).ToList()
-        };
+            FieldId = x.FieldId,
+            ScheduleId = x.Id,
+            Date = x.Date,
+            StartTime = x.Date,
+            EndTime = x.Date.Add(x.MaxPlaytime),
+        });
         return result;
     }
     
