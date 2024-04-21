@@ -27,6 +27,7 @@ namespace PaintballWorld.API
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IScheduleService, ScheduleService>();
             services.AddScoped<IRatingService, RatingService>();
+            services.AddScoped<IReservationService, ReservationService>();
 
 
         }
