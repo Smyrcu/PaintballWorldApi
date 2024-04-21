@@ -40,6 +40,7 @@ public partial class Field
     public virtual ICollection<FieldRating> FieldRatings { get; set; }
     public virtual ICollection<FieldSchedule> FieldSchedules { get; set; }
     public virtual ICollection<Photo> Photos { get; set; }
+    public virtual ICollection<Event> Events { get; set; }
 }
 
 

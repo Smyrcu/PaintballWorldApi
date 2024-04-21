@@ -1,14 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using PaintballWorld.Core.Models;
+﻿using PaintballWorld.Core.Models;
 
 namespace PaintballWorld.Core.Interfaces
 {
     public interface IReservationService
     {
         Task Create(EventModel model);
+        IEnumerable<EventModel> GetFieldReservations(Guid? fieldId, string? userId);
+        Task DeleteReservation(Guid eventId, string? userId);
+        Task EditReservation(EventModel model, string userId);
     }
 }

@@ -13,6 +13,8 @@ public partial class Event
     public EventId Id { get; init; }// = EventId.Empty;
     public FieldTypeId FieldTypeId { get; set; }
     public virtual FieldType FieldType { get; set; }
+    public FieldId FieldId { get; set; }
+    public virtual Field Field { get; set; }
     public string? Description { get; set; }
     public string? CreatedBy { get; set; }
     public virtual IdentityUser? CreatedByUser { get; set; }

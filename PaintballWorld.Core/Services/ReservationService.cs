@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
+using PaintballWorld.Core.Data;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure;
@@ -49,6 +45,77 @@ namespace PaintballWorld.Core.Services
 
             context.Events.Add(ev);
             await context.SaveChangesAsync();
+        }
+
+        public IEnumerable<EventModel> GetFieldReservations(Guid? fieldId, string? userId)
+        {
+            if(fieldId is null && userId is null)
+                throw new Exception("No data provided");
+
+            IQueryable<Event> result;
+
+            if (fieldId is not null && userId is null)
+            {
+                result = context.Events.Where(x => x.FieldId == new FieldId(fieldId.Value));
+                return result.AsEnumerable().Map();
+
+            }
+
+            if (userId is not null && fieldId is null)
+            {
+                result = context.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId));
+                return result.AsEnumerable().Map();
+            }
+
+            result = context.Events.Where(x =>
+                x.FieldId == new FieldId(fieldId.Value) && x.UsersToEvents.Any(x => x.UserId == userId));
+            return result.AsEnumerable().Map();
+        }
+
+        public async Task DeleteReservation(Guid eventId, string? userId)
+        {
+            var ev = context.Events.Include(@event => @event.Field).ThenInclude(field => field.Owner)
+                .FirstOrDefault(x => x.Id == new EventId(eventId));
+
+            if (ev != null)
+            {
+                if (ev.Field.Owner.UserId.ToString() == userId)
+                {
+                    context.Events.Remove(ev);
+                    await context.SaveChangesAsync();
+                }
+                else if (ev.CreatedBy == userId)
+                {
+                    context.Events.Remove(ev);
+                    await context.SaveChangesAsync();
+                }
+
+                throw new Exception("User is not owner of field or event - cannot delete");
+            }
+
+        }
+
+        public async Task EditReservation(EventModel model, string userId)
+        {
+            var ev = context.Events.Include(@event => @event.Field).ThenInclude(field => field.Owner).FirstOrDefault(x => x.Id == model.EventId);
+            if (ev != null)
+            {
+                if (ev.Field.Owner.UserId.ToString() == userId)
+                {
+                    ev.IsPublic = !model.isPrivate;
+                    ev.Description = model.Description;
+                    await context.SaveChangesAsync();
+                }
+                else if (ev.CreatedBy == userId)
+                {
+                    ev.IsPublic = !model.isPrivate;
+                    ev.Description = model.Description;
+                    await context.SaveChangesAsync();
+                }
+
+                throw new Exception("User is not owner of field or event - cannot delete");
+            }
+
         }
     }
 }

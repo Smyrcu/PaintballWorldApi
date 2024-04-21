@@ -9,10 +9,12 @@ namespace PaintballWorld.Core.Models
 {
     public class EventModel
     {
+        public EventId EventId { get; set; }
         public string UserId { get; set; }
-        public FieldScheduleId ScheduleId { get; set; }
-        public SetId SetId { get; set; }
+        public FieldScheduleId? ScheduleId { get; set; }
+        public SetId? SetId { get; set; }
         public bool isPrivate { get; set; } = false;
         public string? Description { get; set; }
+        public List<string> UsersInEvent { get; set; } = [];
     }
 }

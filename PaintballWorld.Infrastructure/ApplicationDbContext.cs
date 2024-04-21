@@ -250,6 +250,11 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .HasForeignKey(p => p.EventId)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasOne<Field>()
+                .WithMany()
+                .HasForeignKey(f => f.FieldId)
+                .IsRequired(true);  
         });
 
         modelBuilder.Entity<Field>(entity =>
@@ -286,6 +291,12 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .OnDelete(DeleteBehavior.Cascade);
 
             entity.HasMany(f => f.Photos)
+                .WithOne() 
+                .HasForeignKey(p => p.FieldId)
+                .IsRequired(false) 
+                .OnDelete(DeleteBehavior.NoAction); 
+            
+            entity.HasMany(f => f.Events)
                 .WithOne() 
                 .HasForeignKey(p => p.FieldId)
                 .IsRequired(false) 
