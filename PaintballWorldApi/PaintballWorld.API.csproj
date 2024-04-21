@@ -41,6 +41,8 @@
     <Folder Include="Areas\Event\Models\" />
     <Folder Include="Areas\Event\Views\" />
     <Folder Include="Areas\Field\Views\" />
+    <Folder Include="Areas\Owner\Data\" />
+    <Folder Include="Areas\Owner\Views\" />
     <Folder Include="Areas\Rating\Views\" />
     <Folder Include="Areas\Schedule\Views\" />
     <Folder Include="Areas\User\Views\" />

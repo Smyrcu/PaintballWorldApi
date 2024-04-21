@@ -24,5 +24,10 @@ namespace PaintballWorld.Core.Services
         {
             throw new NotImplementedException();
         }
+
+        public FieldId GetFieldId(OwnerId owner)
+        {
+            return _context.Fields.First(x => x.OwnerId == owner).Id;
+        }
     }
 }
