@@ -11,8 +11,8 @@ public readonly record struct EventId(Guid Value)
 public partial class Event
 {
     public EventId Id { get; init; }// = EventId.Empty;
-    public FieldTypeId FieldTypeId { get; set; }
-    public virtual FieldType FieldType { get; set; }
+/*    public FieldTypeId FieldTypeId { get; set; }
+    public virtual FieldType FieldType { get; set; }*/
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
     public string? Description { get; set; }

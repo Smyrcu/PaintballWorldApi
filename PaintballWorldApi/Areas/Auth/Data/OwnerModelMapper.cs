@@ -1,16 +1,15 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using NetTopologySuite.Geometries;
 using PaintballWorld.API.Areas.Auth.Models;
-using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Auth.Data
 {
     public static class OwnerModelMapper
     {
-        public static Owner Map(this OwnerDto ownerDto, IdentityUser user)
+        public static Infrastructure.Models.Owner Map(this OwnerDto ownerDto, IdentityUser user)
         {
-            return new Owner
+            return new Infrastructure.Models.Owner
             {
                 Id = OwnerId.NewOwnerId(),
                 UserId = Guid.Parse(user.Id),

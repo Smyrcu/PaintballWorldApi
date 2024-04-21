@@ -24,8 +24,8 @@ namespace PaintballWorld.Core.Services
 
             var ev = new Event
             {
-                FieldTypeId = fieldSchedule.Field.FieldTypeId,
-                FieldType = fieldSchedule.Field.FieldType,
+                //FieldTypeId = fieldSchedule.Field.FieldTypeId,
+                //FieldType = fieldSchedule.Field.FieldType,
                 Description = model.Description,
                 CreatedBy = model.UserId,
                 IsPublic = !model.isPrivate,
@@ -52,34 +52,45 @@ namespace PaintballWorld.Core.Services
             if(fieldId is null && userId is null)
                 throw new Exception("No data provided");
 
-            IQueryable<Event> result;
+            IList<Event> result;
 
             if (fieldId is not null && userId is null)
             {
-                result = context.Events.Where(x => x.FieldId == new FieldId(fieldId.Value));
-                return result.AsEnumerable().Map();
+                var field = context.Fields.Include(field => field.Events).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
+                if (field is not null)
+                {
+                    result = field.Events.ToList();
+                    return result.AsEnumerable().Map();
+                }
 
             }
 
             if (userId is not null && fieldId is null)
             {
-                result = context.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId));
+                result = context.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId)).ToList();
                 return result.AsEnumerable().Map();
             }
 
-            result = context.Events.Where(x =>
-                x.FieldId == new FieldId(fieldId.Value) && x.UsersToEvents.Any(x => x.UserId == userId));
-            return result.AsEnumerable().Map();
+
+            var fieldx = context.Fields.Include(field => field.Events).ThenInclude(@event => @event.UsersToEvents).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
+            if (fieldx is not null)
+            {
+                result = fieldx.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId)).ToList();
+                return result.AsEnumerable().Map();
+            }
+
+            return new List<EventModel>();
         }
 
         public async Task DeleteReservation(Guid eventId, string? userId)
         {
-            var ev = context.Events.Include(@event => @event.Field).ThenInclude(field => field.Owner)
-                .FirstOrDefault(x => x.Id == new EventId(eventId));
+            var ev = context.Events.FirstOrDefault(x => x.Id == new EventId(eventId));
 
             if (ev != null)
             {
-                if (ev.Field.Owner.UserId.ToString() == userId)
+                var field = context.Fields.Include(field => field.Owner).First(x => x.Events.Any(x => x.Id == ev.Id));
+
+                if (field.Owner.UserId.ToString() == userId)
                 {
                     context.Events.Remove(ev);
                     await context.SaveChangesAsync();
@@ -97,10 +108,12 @@ namespace PaintballWorld.Core.Services
 
         public async Task EditReservation(EventModel model, string userId)
         {
-            var ev = context.Events.Include(@event => @event.Field).ThenInclude(field => field.Owner).FirstOrDefault(x => x.Id == model.EventId);
+            var ev = context.Events.FirstOrDefault(x => x.Id == model.EventId);
             if (ev != null)
             {
-                if (ev.Field.Owner.UserId.ToString() == userId)
+                var field = context.Fields.Include(field => field.Owner).First(x => x.Events.Any(x => x.Id == ev.Id));
+
+                if (field.Owner.UserId.ToString() == userId)
                 {
                     ev.IsPublic = !model.isPrivate;
                     ev.Description = model.Description;

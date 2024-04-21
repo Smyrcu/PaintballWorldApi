@@ -233,13 +233,13 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.LastUpdatedUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
-            entity.Property(e => e.FieldTypeId)
+           /* entity.Property(e => e.FieldTypeId)
                 .HasConversion(
                     id => id.Value,
-                    value => new FieldTypeId(value));
+                    value => new FieldTypeId(value));*/
 
 
-        entity.HasOne<IdentityUser>()
+            entity.HasOne<IdentityUser>()
                 .WithMany() 
                 .HasForeignKey(e => e.CreatedBy)
                 .IsRequired(false) 
@@ -251,10 +251,11 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            entity.HasOne<Field>()
-                .WithMany()
-                .HasForeignKey(f => f.FieldId)
-                .IsRequired(true);  
+            entity.HasOne(e => e.Field)
+                .WithMany(f => f.Events)
+                .HasForeignKey(e => e.FieldId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.NoAction);
         });
 
         modelBuilder.Entity<Field>(entity =>
@@ -297,8 +298,8 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .OnDelete(DeleteBehavior.NoAction); 
             
             entity.HasMany(f => f.Events)
-                .WithOne() 
-                .HasForeignKey(p => p.FieldId)
+                .WithOne(e => e.Field) 
+                .HasForeignKey(f => f.FieldId)
                 .IsRequired(false) 
                 .OnDelete(DeleteBehavior.NoAction);
 
@@ -306,7 +307,7 @@ public partial class ApplicationDbContext : IdentityDbContext
 
             entity.HasOne(x => x.MainPhoto)
                 .WithOne()
-                .HasForeignKey<Field>()
+                .HasForeignKey<Field>(f => f.MainPhotoId)
                 .OnDelete(DeleteBehavior.Restrict)
                 .IsRequired(false);
         });

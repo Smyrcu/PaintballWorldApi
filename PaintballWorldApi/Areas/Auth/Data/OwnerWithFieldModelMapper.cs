@@ -9,9 +9,9 @@ namespace PaintballWorld.API.Areas.Auth.Data
 {
     public static class OwnerWithFieldModelMapper
     {
-        public static (Owner, Infrastructure.Models.Field) Map(this OwnerWithFieldDto ownerWithFieldDto, IdentityUser user, FieldTypeId FieldTypeId)
+        public static (Infrastructure.Models.Owner, Infrastructure.Models.Field) Map(this OwnerWithFieldDto ownerWithFieldDto, IdentityUser user, FieldTypeId FieldTypeId)
         {
-            var owner = new Owner
+            var owner = new Infrastructure.Models.Owner
             {
                 Id = OwnerId.NewOwnerId(),
                 UserId = Guid.Parse(user.Id),
