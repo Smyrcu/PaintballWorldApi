@@ -86,7 +86,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         /// <param name="dto"></param>
         /// <returns></returns>
         [HttpPut]
-        public async Task<IActionResult> UpgradeToOwner([FromBody] OwnerDto dto)
+        public async Task<IActionResult> UpgradeToOwner([FromBody] BecomeOwnerDto dto)
         {
             var userId = _authTokenService.GetUserId(User.Claims);
 
