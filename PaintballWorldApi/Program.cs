@@ -11,6 +11,7 @@ using Org.BouncyCastle.Asn1.X509;
 using PaintballWorld.API;
 using PaintballWorld.API.Filters;
 using PaintballWorld.API.Middleware;
+using System.Reflection;
 
 
 Directory.CreateDirectory("C:\\Files");
@@ -97,6 +98,9 @@ builder.Services.AddSwaggerGen(c =>
     c.SwaggerDoc("v1", new OpenApiInfo {Title = "PaintballWorldApi", Version = "v1" });
 
     c.SchemaFilter<GeoPointSchemaFilter>();
+    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+    c.IncludeXmlComments(xmlPath);
 });
 
 builder.Services.AddCors(options =>

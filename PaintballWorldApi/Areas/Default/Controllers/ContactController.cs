@@ -18,6 +18,11 @@ namespace PaintballWorld.API.Areas.Default.Controllers
             _contactService = contactService;
         }
 
+        /// <summary>
+        /// Zapisanie wiadomości "kontakt"
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Contact([FromBody] ContactDto dto)
         {

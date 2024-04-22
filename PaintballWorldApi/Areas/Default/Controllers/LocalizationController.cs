@@ -21,6 +21,11 @@ namespace PaintballWorld.API.Areas.Default.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Autocomplete
+        /// </summary>
+        /// <param name="city"></param>
+        /// <returns></returns>
         [HttpGet]
         [Route("{city}")]
         public IActionResult CityAutocomplete([FromRoute] string city)

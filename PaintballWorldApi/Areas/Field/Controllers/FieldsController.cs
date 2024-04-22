@@ -27,6 +27,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
     {
         private const int SRID = 4326;
 
+        /// <summary>
+        /// Utwórz pole
+        /// </summary>
+        /// <param name="fieldDto"></param>
+        /// <returns></returns>
         [HttpPost]
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> CreateField([FromForm] FieldDto fieldDto)
@@ -79,6 +84,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             }
         }
         
+        /// <summary>
+        /// pobierz dane pola
+        /// </summary>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpGet("{fieldId}")]
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> GetField([FromRoute]Guid fieldId)
@@ -99,6 +109,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// pobierz pola (filtrowanie)
+        /// </summary>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetFieldsFiltered([FromQuery] FieldFilters filter)
         {
@@ -107,6 +122,12 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// edytuj dane pola
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpPut("{fieldId}")]
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> ManageField([FromForm]FieldManagementDto dto, [FromRoute]Guid fieldId)
@@ -129,6 +150,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
         }
 
+        /// <summary>
+        /// usuń pole
+        /// </summary>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpDelete("{fieldId}")]
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> DeleteField([FromRoute] Guid fieldId)

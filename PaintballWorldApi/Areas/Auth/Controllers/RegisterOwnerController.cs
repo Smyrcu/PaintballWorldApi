@@ -35,7 +35,11 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
         private readonly IAuthTokenService _authTokenService = authTokenService;
         private readonly UserManager<IdentityUser> _userManager = userManager;
 
-
+        /// <summary>
+        /// Rejestracja nowego użytkownika jako ownera pola
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> RegisterOwner([FromBody] OwnerDto dto)
         {
@@ -76,6 +80,11 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         }
 
+        /// <summary>
+        /// Upgrade konta z usera do ownera
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> UpgradeToOwner([FromBody] OwnerDto dto)
         {
@@ -85,7 +94,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
             if (user is not null)
             {
-                profileService.FinishRegistration(user, dto.DateOfBirth, dto.FirstName, dto.LastName);
+                //profileService.FinishRegistration(user, dto.DateOfBirth, dto.FirstName, dto.LastName);
 
                 ownerRegistrationService.RegisterOwner(dto.Map(user));
 

@@ -15,6 +15,10 @@ namespace PaintballWorld.API.Areas.User.Controllers;
 public class UserController(IUserService userService, IAuthTokenService authTokenService)
     : Controller
 {
+    /// <summary>
+    /// Pobierz dane do profilu usera
+    /// </summary>
+    /// <returns></returns>
     [HttpGet("profile")]
     public IActionResult ShowProfile()
     {
@@ -39,6 +43,11 @@ public class UserController(IUserService userService, IAuthTokenService authToke
         }
     }
 
+    /// <summary>
+    /// Update profilu
+    /// </summary>
+    /// <param name="dto"></param>
+    /// <returns></returns>
     [HttpPut("profile")]
     public IActionResult UpdateProfile([FromBody] UserProfileDto dto)
     {

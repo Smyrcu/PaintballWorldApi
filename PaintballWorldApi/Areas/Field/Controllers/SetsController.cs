@@ -25,6 +25,12 @@ public class SetsController : Controller
         _context = context;
     }
 
+    /// <summary>
+    /// Dodaj sety do pola
+    /// </summary>
+    /// <param name="sets"></param>
+    /// <param name="fieldId"></param>
+    /// <returns></returns>
     [HttpPost("{fieldId}")]
     [Authorize(Roles = "Owner")]
     public async Task<IActionResult> AddSets([FromBody] IList<SetDto> sets, [FromRoute]Guid fieldId)
@@ -54,6 +60,11 @@ public class SetsController : Controller
 
     }
 
+    /// <summary>
+    /// pobierz sety dla pola
+    /// </summary>
+    /// <param name="fieldId"></param>
+    /// <returns></returns>
     [HttpGet("{fieldId}")]
     [Authorize(Roles = "Owner")]
     public async Task<IActionResult> GetSets([FromRoute] Guid fieldId)
@@ -74,6 +85,12 @@ public class SetsController : Controller
         return Ok(setDtos);
     }
     
+    /// <summary>
+    /// edytuj sety dla pola
+    /// </summary>
+    /// <param name="sets"></param>
+    /// <param name="fieldId"></param>
+    /// <returns></returns>
     [HttpPut("{fieldId}")]
     [Authorize(Roles = "Owner")]
     public async Task<IActionResult> ManageSets([FromBody] IList<SetDto> sets, [FromRoute] Guid fieldId)
@@ -107,6 +124,12 @@ public class SetsController : Controller
         return Ok("Sets updated successfully");
     }
 
+    /// <summary>
+    /// usuń set dla pola
+    /// </summary>
+    /// <param name="setId"></param>
+    /// <param name="fieldId"></param>
+    /// <returns></returns>
     [HttpDelete("{fieldId}/{setId}")]
     [Authorize(Roles = "Owner")]
     public async Task<IActionResult> DeleteSet([FromRoute] Guid setId, [FromRoute] Guid fieldId)

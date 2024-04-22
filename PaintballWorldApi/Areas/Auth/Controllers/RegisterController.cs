@@ -63,6 +63,11 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         #region Rejestracja
         
+        /// <summary>
+        /// Rejestracja użytkownika
+        /// </summary>
+        /// <param name="userDto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Register([FromBody] UserDto userDto)
         {
@@ -140,6 +145,10 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
         }*/
 
+/// <summary>
+/// test
+/// </summary>
+/// <returns></returns>
         [HttpGet]
         [Route("Test")]
         public IActionResult Test()
@@ -152,7 +161,12 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
 
 
         #region Potwierdzanie konta
-
+        /// <summary>
+        /// Potwierdzanie konta
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="code"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> ConfirmAccount([FromQuery] string userId, [FromQuery] string code)
         {

@@ -9,6 +9,10 @@ namespace PaintballWorld.API.Controllers
     [Route("/api/[controller]")]
     public class PingController : Controller
     {
+        /// <summary>
+        /// Do sprawdzania czy api żyje / czasem testuje tu coś xd
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("Ping")]
         public Task<IActionResult> Ping()

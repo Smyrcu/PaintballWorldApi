@@ -38,6 +38,12 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
         #region Photo
         
+        /// <summary>
+        /// Dodaj zdjęcia do pola
+        /// </summary>
+        /// <param name="photos"></param>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpPost("photos/{fieldId:guid}")]
         [RequestFormLimits(MultipartBodyLengthLimit = 104857600)]
         public async Task<IActionResult> AddPhotos([FromForm]IFormFileCollection photos, [FromRoute]Guid fieldId)
@@ -102,6 +108,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             return Ok(new { Message = message, Errors = errors});
         }
 
+        /// <summary>
+        /// usuń zdjęcie
+        /// </summary>
+        /// <param name="photoId"></param>
+        /// <returns></returns>
         [HttpDelete("photos/{photoId:guid}")]
         public async Task<IActionResult> DeletePhoto([FromRoute] Guid photoId)
         {
@@ -126,6 +137,11 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             return Ok("Photo deleted successfully");
         }
 
+        /// <summary>
+        /// pobierz zdjęcia dla pola
+        /// </summary>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpGet("photos/{fieldId:guid}")]
         public async Task<IActionResult> GetPhotos([FromRoute] Guid fieldId)
         {

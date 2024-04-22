@@ -11,25 +11,25 @@ namespace PaintballWorld.API.Areas.Auth.Data
         {
             return new Infrastructure.Models.Owner
             {
-                Id = OwnerId.NewOwnerId(),
                 UserId = Guid.Parse(user.Id),
                 IsApproved = false,
                 Company = new Company
                 {
-                    Id = CompanyId.NewCompanyId(),
                     TaxId = ownerDto.Company.TaxId,
                     CompanyName = ownerDto.Company.CompanyName,
                     Email = ownerDto.Company.Email,
                     Address = new Address
                     {
-                        Id = AddressId.NewAddressId(),
                         PhoneNo = ownerDto.Company.Address.PhoneNo,
                         Street = ownerDto.Company.Address.Street,
                         HouseNo = ownerDto.Company.Address.HouseNo,
                         City = ownerDto.Company.Address.City,
                         PostalNumber = ownerDto.Company.Address.PostalNumber,
                         Country = ownerDto.Company.Address.Country,
-                        Location = new Point(ownerDto.Company.Address.Location.Longitude, ownerDto.Company.Address.Location.Latitude) { SRID = 4326 }
+                        Location =
+                            ownerDto.Company.Address.Location is not null
+                                ? new Point(ownerDto.Company.Address.Location.Longitude, ownerDto.Company.Address.Location.Latitude) { SRID = 4326 }
+                                : null
                     }
                 }
             };

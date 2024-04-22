@@ -23,6 +23,12 @@ public class ScheduleController(
 {
    private readonly ILogger<ScheduleController> _logger = logger;
 
+   /// <summary>
+   /// Stwórz terminarz
+   /// </summary>
+   /// <param name="dto"></param>
+   /// <param name="fieldId"></param>
+   /// <returns></returns>
    [HttpPost("{fieldId}")]
    public async Task<IActionResult> CreateSchedules([FromBody] CreateSchedulesDto dto, [FromRoute]Guid fieldId)
    {
@@ -44,6 +50,11 @@ public class ScheduleController(
       return Ok();
    }
 
+   /// <summary>
+   /// pobierz terminarz dla pola
+   /// </summary>
+   /// <param name="fieldId"></param>
+   /// <returns></returns>
    [HttpGet("{fieldId}")]
    public async Task<IActionResult> GetSchedules([FromRoute] Guid fieldId)
    {
@@ -65,6 +76,12 @@ public class ScheduleController(
       return Ok(result);
    }
 
+   /// <summary>
+   /// usuń konkretną datę dla pola
+   /// </summary>
+   /// <param name="fieldId"></param>
+   /// <param name="scheduleId"></param>
+   /// <returns></returns>
    [HttpDelete("{fieldId}/{scheduleId}")]
    public async Task<IActionResult> DeleteSchedule([FromRoute] Guid fieldId, [FromRoute] Guid scheduleId)
    {

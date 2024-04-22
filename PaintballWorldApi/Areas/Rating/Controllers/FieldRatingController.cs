@@ -13,6 +13,11 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
     public class FieldRatingController(IRatingService ratingService, IAuthTokenService authTokenService)
         : ControllerBase
     {
+        /// <summary>
+        /// pobierz oceny pola
+        /// </summary>
+        /// <param name="fieldId"></param>
+        /// <returns></returns>
         [HttpGet]
         public async Task<IActionResult> GetFieldRatings([FromQuery] Guid fieldId)
         {
@@ -31,6 +36,11 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
             return Ok(result);
         }
 
+        /// <summary>
+        /// dodaj ocene pola
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> SubmitFieldRating([FromBody] FieldRatingDto dto)
         {
@@ -39,12 +49,23 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
             return Ok();
         }
 
+        /// <summary>
+        /// edytuj ocene pola (not implemented)
+        /// </summary>
+        /// <param name="dto"></param>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
         [HttpPut]
         public async Task<IActionResult> EditSubmittedRating([FromBody] FieldRatingDto dto)
         {
             throw new NotImplementedException();
         }
 
+        /// <summary>
+        /// usuń ocene pola
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [HttpDelete]
         public async Task<IActionResult> DeleteRating(FieldRatingId id)
         {

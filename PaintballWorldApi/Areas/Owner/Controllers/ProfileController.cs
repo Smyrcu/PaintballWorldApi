@@ -23,6 +23,10 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
             _authTokenService = authTokenService;
         }
 
+        /// <summary>
+        /// Pobierz Id pola dla aktualnie zalogowanego ownera
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetMyFieldId()
         {
