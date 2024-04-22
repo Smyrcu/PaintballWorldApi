@@ -5,6 +5,6 @@ namespace PaintballWorld.API.Areas.Owner.Models
 {
     public class MyFieldsResponseModel : ResponseBase
     {
-        public FieldId FieldId { get; set; }
+        public Guid? FieldId { get; set; }
     }
 }

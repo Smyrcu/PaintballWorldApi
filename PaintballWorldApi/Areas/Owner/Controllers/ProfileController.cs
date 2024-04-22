@@ -31,7 +31,7 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
         public IActionResult GetMyFieldId()
         {
             var userId = _authTokenService.GetUserId(User.Claims);
-            var fieldId = _ownerService.GetFieldId(new OwnerId(Guid.Parse(userId)));
+            var fieldId = _ownerService.GetFieldId(userId);
             return Ok(new MyFieldsResponseModel
             {
                 IsSuccess = true,

@@ -6,5 +6,5 @@ namespace PaintballWorld.Core.Interfaces;
 public interface IOwnerService
 {
     public void Approve();
-    FieldId GetFieldId(OwnerId owner);
+    Guid? GetFieldId(string userId);
 }

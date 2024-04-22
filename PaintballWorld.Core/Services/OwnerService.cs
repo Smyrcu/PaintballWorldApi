@@ -25,9 +25,17 @@ namespace PaintballWorld.Core.Services
             throw new NotImplementedException();
         }
 
-        public FieldId GetFieldId(OwnerId owner)
+        public Guid? GetFieldId(string userId)
         {
-            return _context.Fields.First(x => x.OwnerId == owner).Id;
+            var owner = _context.Owners.FirstOrDefault(x => x.UserId == Guid.Parse(userId));
+            if (owner == null)
+            {
+                return null;
+            }
+
+            var field = _context.Fields.FirstOrDefault(x => x.OwnerId == owner.Id);
+
+            return field?.Id.Value;
         }
     }
 }
