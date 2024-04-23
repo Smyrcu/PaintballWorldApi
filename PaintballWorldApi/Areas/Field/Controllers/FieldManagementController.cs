@@ -116,7 +116,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         [HttpDelete("photos/{photoId:guid}")]
         public async Task<IActionResult> DeletePhoto([FromRoute] Guid photoId)
         {
-            var photo = await _context.Photos.FirstOrDefaultAsync(x => x.Id.Value == photoId);
+            var photo = await _context.Photos.FirstOrDefaultAsync(x => x.Id == new PhotoId(photoId));
             if (photo?.FieldId == null)
             {
                 return BadRequest("Photo does not exist or it is not field photo.");

@@ -4,6 +4,7 @@ using PaintballWorld.API.Areas.Field.Data;
 using PaintballWorld.Core.Interfaces;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PaintballWorld.API.Areas.Field.Models;
 using PaintballWorld.API.BaseModels;
@@ -95,7 +96,8 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         {
             var id = new FieldId(fieldId);
 
-            var field = context.Fields.FirstOrDefault(x => x.Id == id);
+            var field = context.Fields.Include(x => x.Address)
+                .Include(x => x.Sets).Include(x => x.FieldType).FirstOrDefault(x => x.Id == id);
 
             if (field == null)
                 return BadRequest("Field not found");

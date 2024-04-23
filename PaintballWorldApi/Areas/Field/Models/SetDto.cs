@@ -12,6 +12,10 @@ namespace PaintballWorld.API.Areas.Field.Models
             Description = description;
         }
 
+        public SetDto()
+        {
+        }
+
         public Guid? Id { get; set; }
         public int Ammo { get; set; }
 

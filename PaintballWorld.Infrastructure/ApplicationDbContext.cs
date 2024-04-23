@@ -295,7 +295,7 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .WithOne() 
                 .HasForeignKey(p => p.FieldId)
                 .IsRequired(false) 
-                .OnDelete(DeleteBehavior.NoAction); 
+                .OnDelete(DeleteBehavior.Cascade); 
             
             entity.HasMany(f => f.Events)
                 .WithOne(e => e.Field) 

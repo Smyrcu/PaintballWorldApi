@@ -62,6 +62,7 @@ public class SetsController : Controller
 
     /// <summary>
     /// pobierz sety dla pola
+    /// do poprawy
     /// </summary>
     /// <param name="fieldId"></param>
     /// <returns></returns>
@@ -70,17 +71,21 @@ public class SetsController : Controller
     public async Task<IActionResult> GetSets([FromRoute] Guid fieldId)
     {
         var fieldIdModel = new FieldId(fieldId);
-        var isOwner = _authTokenService.IsUserOwnerOfField(User.Claims, fieldIdModel);
-        if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
+        try
+        {
+            _authTokenService.GetUserId(User.Claims);
+        }
+        catch (Exception ex)
         {
             return BadRequest(new AddSetsResponse
             {
-                Errors = [ isOwner.errors ],
+                Errors = [ex.Message],
                 IsSuccess = false,
-                Message = "Owner not found"
+                Message = "User not found"
             });
         }
-        var sets = await _context.Sets.Where(s => s.FieldId.Value == fieldId).ToListAsync();
+        
+        var sets = await _context.Sets.Where(s => s.FieldId == fieldIdModel).ToListAsync();
         var setDtos = sets.Map();
         return Ok(setDtos);
     }
@@ -145,7 +150,7 @@ public class SetsController : Controller
                 Message = "Owner not found"
             });
         }
-        var set = await _context.Sets.FindAsync(setId);
+        var set = _context.Sets.FirstOrDefault(x => x.Id == new SetId(setId));
         if (set == null)
         {
             return NotFound("Set not found");
