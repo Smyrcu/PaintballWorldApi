@@ -126,6 +126,13 @@ app.UseStaticFiles(new StaticFileOptions()
     FileProvider = new PhysicalFileProvider(Constants.BasePath),
     RequestPath = "/img"
 });
+
+app.UseStaticFiles(new StaticFileOptions()
+{
+    FileProvider = new PhysicalFileProvider(Constants.BasePath),
+    RequestPath = "/regulations"
+});
+
 app.UseCors("AllowAll");
 
 app.UseRouting();

@@ -133,7 +133,33 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 });
             }
             _context.Photos.Remove(photo);
+            Photo? photo2;
+            if(photo.Path.Contains(".300.jpg"))
+            {
+                 photo2 =
+                    await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".jpg", ".300.jpg"));
+            }
+            else
+            {
+                photo2 = await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".300.jpg", ".jpg"));
+            }
+
+            if (photo2 != null)
+            {
+                _context.Photos.Remove(photo2);
+            }
             await _context.SaveChangesAsync();
+
+            try
+            {
+                Directory.Delete(Path.Combine(Constants.BasePath, photo.Path));
+                Directory.Delete(Path.Combine(Constants.BasePath, photo2.Path));
+            }
+            catch (Exception ex)
+            {
+                // olać jak się nie udało
+            }
+
             return Ok("Photo deleted successfully");
         }
 

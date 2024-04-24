@@ -106,7 +106,9 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
                 return BadRequest(isOwner.errors);*/
 
-            var result = field.Map();
+            var urlPrefix = $"{Request.Scheme}://{Request.Host}/regulations";
+
+            var result = field.Map(urlPrefix);
 
             return Ok(result);
         }

@@ -40,7 +40,9 @@ namespace PaintballWorld.Core.Services
         {
             var filename = GetRegulationsFileName(fieldId);
             Directory.CreateDirectory(Constants.RegulationsPath); // TODO: Tworzyć te ścieżki przy starcie apki
-            return _fileService.SaveFile(Path.Combine(Constants.RegulationsPath, filename), stream);
+            var path = _fileService.SaveFile(Path.Combine(Constants.RegulationsPath, filename), stream);
+
+            return path.Replace(Constants.BasePath + "\\", "");
         }
 
         public string SavePhoto(Stream stream, FieldId fieldId)
@@ -77,7 +79,7 @@ namespace PaintballWorld.Core.Services
 
         public void SaveChanges(Field updRecord)
         {
-            var field = _context.Fields.FirstOrDefault(x => x.Id == updRecord.Id);
+            var field = _context.Fields.Include(field => field.Address).FirstOrDefault(x => x.Id == updRecord.Id);
             if (field == null)
                 throw new Exception("Field not found");
             

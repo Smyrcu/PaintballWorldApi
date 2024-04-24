@@ -47,7 +47,7 @@ namespace PaintballWorld.API.Areas.Field.Data
             return field;
         }
 
-        public static FieldManagementDto Map(this Infrastructure.Models.Field field)
+        public static FieldManagementDto Map(this Infrastructure.Models.Field field, string urlPrefix)
         {
             var result = new FieldManagementDto()
             {
@@ -56,7 +56,7 @@ namespace PaintballWorld.API.Areas.Field.Data
                 OwnerId = field.OwnerId,
                 Area = field.Area,
                 Name = field.Name ?? string.Empty,
-                Regulations = field.Regulations,
+                Regulations = $"{urlPrefix}/{field.Regulations}",
                 Description = field.Description,
                 MinPlayers = field.MinPlayers,
                 MaxPlayers = field.MaxPlayers,
