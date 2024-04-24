@@ -12,6 +12,7 @@ using PaintballWorld.API;
 using PaintballWorld.API.Filters;
 using PaintballWorld.API.Middleware;
 using System.Reflection;
+using NetTopologySuite.IO.Converters;
 
 
 Directory.CreateDirectory("C:\\Files");
@@ -44,7 +45,10 @@ builder.Services.AddIdentity<IdentityUser, IdentityRole>(options =>
 //DI
 builder.Services.Inject();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers().AddNewtonsoftJson(options =>
+{
+    options.SerializerSettings.Converters.Add(new NetTopologySuite.IO.Converters.GeometryConverter());
+});
 
 builder.Services.Configure<FormOptions>(x =>
 {
@@ -97,7 +101,7 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo {Title = "PaintballWorldApi", Version = "v1" });
 
-    c.SchemaFilter<GeoPointSchemaFilter>();
+    c.SchemaFilter<GeoPointSchemaFilter>(); 
     var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);

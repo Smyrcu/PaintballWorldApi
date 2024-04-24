@@ -121,7 +121,9 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         {
             var result = await fieldManagementService.GetFieldsFiltered(new OsmCityId(filter.Id), filter.Radius);
 
-            return Ok(result);
+            var model = result.Map().ToList();
+
+            return Ok(model);
         }
 
         /// <summary>

@@ -60,7 +60,7 @@ public class ScheduleController(
    {
       var fieldIdObj = new FieldId(fieldId);
       
-      var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
+     /* var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, fieldIdObj);
       if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
       {
          return BadRequest(new ResponseBase()
@@ -69,7 +69,7 @@ public class ScheduleController(
             IsSuccess = false,
             Message = "Owner not found or this user is not the owner"
          });
-      }
+      }*/
 
       var result = await scheduleService.GetSchedulesByField(fieldIdObj);
 

@@ -10,5 +10,16 @@ namespace PaintballWorld.Infrastructure.Models
     {
         public double Latitude { get; set; }
         public double Longitude { get; set; }
+
+        public GeoPoint(double longitude, double latitude)
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+
+        public GeoPoint()
+        {
+            
+        }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore.Migrations.Operations;
 using NetTopologySuite.Geometries;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.API.Areas.Field.Models;
+using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.API.Areas.Field.Data
@@ -23,7 +24,8 @@ namespace PaintballWorld.API.Areas.Field.Data
                     City = fieldDto.Address.City,
                     PostalNumber = fieldDto.Address.PostalNumber,
                     Country = fieldDto.Address.Country,
-                    Location = new Point(fieldDto.Address.Location.Longitude, fieldDto.Address.Location.Latitude) { SRID = 4326 }
+                    Location = new Point(fieldDto.Address.Location.Longitude, fieldDto.Address.Location.Latitude)
+                        { SRID = 4326 }
                 },
                 OwnerId = fieldDto.OwnerId.Value,
                 Area = fieldDto.Area,
@@ -40,7 +42,7 @@ namespace PaintballWorld.API.Areas.Field.Data
             {
                 field.Sets = fieldDto.Sets.Map(field.Id).ToList();
             }
-            
+
 
             return field;
         }
@@ -66,9 +68,9 @@ namespace PaintballWorld.API.Areas.Field.Data
             return result;
         }
 
-        public static IList<SetDto> Map(this ICollection<Set> sets) =>  
+        public static IList<SetDto> Map(this ICollection<Set> sets) =>
             sets.Select(set => new SetDto(set.Ammo, set.Price, set.Description, set.Id.Value)).ToList();
-        
+
 
         public static AddressDto Map(this Address address)
         {
@@ -80,7 +82,9 @@ namespace PaintballWorld.API.Areas.Field.Data
                 City = address.City,
                 PostalNumber = address.PostalNumber,
                 Country = address.Country,
-                Location = new GeoPoint { Latitude = address.Location.Y, Longitude = address.Location.X }
+                Location = address.Location is not null
+                    ? new GeoPoint(address.Location.X, address.Location.Y)
+                    : null
 
             };
             return result;
@@ -96,8 +100,10 @@ namespace PaintballWorld.API.Areas.Field.Data
                 City = address.City,
                 PostalNumber = address.PostalNumber,
                 Country = address.Country,
-                Location = new Point(address.Location.Longitude, address.Location.Latitude) { SRID = 4326 }
-        };
+                Location = address.Location is not null
+                    ? new Point(address.Location.Longitude, address.Location.Latitude) { SRID = 4326 }
+                    : null
+            };
             return result;
         }
 
@@ -119,5 +125,23 @@ namespace PaintballWorld.API.Areas.Field.Data
             return result;
         }
 
+        public static FilteredFieldDto Map(this FilteredField model)
+        {
+            return new FilteredFieldDto
+            {
+                FieldId = model.FieldId.Value,
+                FieldName = model.FieldName,
+                CityName = model.CityName,
+                GeoPoint = new Point(model.GeoPoint.X, model.GeoPoint.Y)
+            };
+
+        }
+
+        public static IEnumerable<FilteredFieldDto> Map(this IEnumerable<FilteredField> model)
+            => model.Select(x => x.Map());
+
+
     }
 }
+
+    
