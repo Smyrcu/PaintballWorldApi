@@ -8,6 +8,7 @@ namespace PaintballWorld.API.Areas.Field.Models
         public FieldId FieldId { get; init; }
         public AddressDto Address { get; set; }
         public OwnerId? OwnerId { get; set; }
+        public string? OwnerName { get; set; }
         public FieldTypeId FieldTypeId { get; set; }
         public double Area { get; set; }
         public string Name { get; set; }

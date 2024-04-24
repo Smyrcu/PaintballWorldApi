@@ -97,7 +97,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             var id = new FieldId(fieldId);
 
             var field = context.Fields.Include(x => x.Address)
-                .Include(x => x.Sets).Include(x => x.FieldType).FirstOrDefault(x => x.Id == id);
+                .Include(x => x.Sets).Include(x => x.FieldType).Include(x => x.Owner).ThenInclude(x => x.Company).FirstOrDefault(x => x.Id == id);
 
             if (field == null)
                 return BadRequest("Field not found");
@@ -109,6 +109,8 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             var urlPrefix = $"{Request.Scheme}://{Request.Host}/regulations";
 
             var result = field.Map(urlPrefix);
+
+            result.OwnerName = field.Owner.Company.CompanyName;
 
             return Ok(result);
         }
