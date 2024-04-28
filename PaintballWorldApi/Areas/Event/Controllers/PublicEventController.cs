@@ -1,13 +1,21 @@
-﻿using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using PaintballWorld.API.Areas.Event.Models;
+using PaintballWorld.Infrastructure;
+using PaintballWorld.Infrastructure.Interfaces;
+using PaintballWorld.Infrastructure.Models;
+using EventId = PaintballWorld.Infrastructure.Models.EventId;
+
 
 namespace PaintballWorld.API.Areas.Event.Controllers
 {
     [Route("api/[Area]/[controller]")]
     [Area("Event")]
     [ApiController]
-    public class PublicEventController : ControllerBase
+    public class PublicEventController(ApplicationDbContext context, IAuthTokenService authTokenService) : ControllerBase
     {
+        private readonly ApplicationDbContext _context = context;
+
         /// <summary>
         /// Pobierz publiczne eventy
         /// </summary>
@@ -16,30 +24,80 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPublicEvents()
         {
-            throw new NotImplementedException();
+            // nazwa, data, godzina, ilośćzapisana, ilośćmaksymalna
+            var result = _context.Events.Where(x => x.IsPublic && x.Date > DateOnly.FromDateTime(DateTime.UtcNow)).OrderBy(x => x.Date).Take(100)
+                .Select(x=> new PublicEvent
+                {
+                    Name = x.Name,
+                    EventId = x.Id,
+                    Date = new DateTime(x.Date, x.Time.Value),
+                    SignedPlayers = x.UsersToEvents.Count,
+                    MaxPlayers = x.MaxPlayers
+                }).ToList();
+
+            return Ok(result);
+
         }
 
         /// <summary>
-        /// Stwórz event
+        /// Zapisz się na event (rozgrywkę otwartą)
         /// </summary>
+        /// <param name="model"></param>
         /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
         [HttpPost]
-        public async Task<IActionResult> CreatePublicEvent()
+        public async Task<IActionResult> CreatePublicEvent(SignUpEventModel model)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var userId = authTokenService.GetUserId(User.Claims);
+                var ev = context.Events.Include(@event => @event.Field).ThenInclude(field => field.Sets)
+                    .FirstOrDefault(x => x.Id == new EventId(model.EventId));
+
+                if (ev is null)
+                    throw new Exception("Event not found");
+
+                if (ev.Field.Sets.All(x => x.Id != new SetId(model.SetId)))
+                    throw new Exception("Set not found for this field");
+                
+                ev.UsersToEvents.Add(new UsersToEvent
+                {
+                    EventId = ev.Id,
+                    SetId = new SetId(model.SetId),
+                    UserId = userId,
+                    JoinedOnUtc = DateTime.UtcNow
+                });
+
+                return Ok("User signed up for event");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
+
         }
 
-        /// <summary>
-        /// edytuj event
-        /// </summary>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        [HttpPut]
-        public async Task<IActionResult> EditPublicEvent()
-        {
-            throw new NotImplementedException();
-        }
+
+        /*        /// <summary>
+                /// Stwórz event
+                /// </summary>
+                /// <returns></returns>
+                /// <exception cref="NotImplementedException"></exception>
+                [HttpPost]
+                public async Task<IActionResult> CreatePublicEvent()
+                {
+                    throw new NotImplementedException();
+                }
+
+                /// <summary>
+                /// edytuj event
+                /// </summary>
+                /// <returns></returns>
+                /// <exception cref="NotImplementedException"></exception>
+                [HttpPut]
+                public async Task<IActionResult> EditPublicEvent()
+                {
+                    throw new NotImplementedException();
+                }*/
 
         /// <summary>
         /// usuń event
@@ -47,9 +105,19 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
         [HttpDelete]
-        public async Task<IActionResult> DeletePublicEvent()
+        public async Task<IActionResult> DeletePublicEvent([FromQuery] Guid eventId)
         {
-            throw new NotImplementedException();
+            var userId = authTokenService.GetUserId(User.Claims);
+
+            var ev  = _context.Events.FirstOrDefault(x => x.Id == new EventId(eventId) && (x.CreatedBy == userId || x.Field.Owner.UserId.ToString() == userId));
+
+            if (ev is not null)
+            {
+                _context.Events.Remove(ev);
+            }
+
+            return BadRequest("You cannot delete this event or event does not exist");
+
         }
     }
 }

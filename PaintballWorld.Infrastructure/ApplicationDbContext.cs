@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using NetTopologySuite.IO;
+using Org.BouncyCastle.Math.EC.Rfc7748;
 using PaintballWorld.Infrastructure.Models;
 
 namespace PaintballWorld.Infrastructure;
@@ -98,8 +99,6 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.ToTable("Address");
 
             entity.Property(e => e.City).HasMaxLength(255);
-            //entity.Property(e => e.Latitude).HasMaxLength(100);
-            //entity.Property(e => e.Longtitude).HasMaxLength(100);
             entity.Property(e => e.Country).HasMaxLength(100);
             entity.Property(e => e.HouseNo).HasMaxLength(30);
             entity.Property(e => e.PhoneNo).HasMaxLength(50);
@@ -132,19 +131,6 @@ public partial class ApplicationDbContext : IdentityDbContext
 
             entity.Property(e => e.EmailOutboxId).IsRequired(false);
             entity.Property(e => e.EmailInboxId).IsRequired(false);
-
-            // entity.HasOne(a => a.EmailInbox)
-            //     .WithMany(e => e.Attachments)
-            //     .HasForeignKey(a => a.EmailInboxId)
-            //     .IsRequired(false)
-            //     .OnDelete(DeleteBehavior.Cascade);
-            //
-            // entity.HasOne(a => a.EmailOutbox)
-            //     .WithMany(e => e.Attachments)
-            //     .HasForeignKey(a => a.EmailOutboxId)
-            //     .IsRequired(false)
-            //     .OnDelete(DeleteBehavior.Cascade);
-
             entity.ToTable("Attachments");
 
             entity.HasCheckConstraint("CK_Attachment_EmailInboxId_EmailOutboxId", "([EmailInboxId] IS NOT NULL AND [EmailOutboxId] IS NULL) OR ([EmailInboxId] IS NULL AND [EmailOutboxId] IS NOT NULL)");
@@ -233,16 +219,12 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.LastUpdatedUtc)
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
-           /* entity.Property(e => e.FieldTypeId)
-                .HasConversion(
-                    id => id.Value,
-                    value => new FieldTypeId(value));*/
+           entity.Property(x => x.Name).HasMaxLength(500);
 
-
-            entity.HasOne<IdentityUser>()
+            entity.HasOne<IdentityUser>(e => e.CreatedByUser)
                 .WithMany() 
                 .HasForeignKey(e => e.CreatedBy)
-                .IsRequired(false) 
+                .IsRequired(true) 
                 .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasMany(e => e.Photos)
@@ -275,7 +257,7 @@ public partial class ApplicationDbContext : IdentityDbContext
             entity.Property(e => e.Regulations).HasMaxLength(255);
 
             entity.HasOne(f => f.FieldType)
-                .WithMany() 
+                .WithMany(f => f.Fields) 
                 .HasForeignKey(f => f.FieldTypeId);
 
             entity.HasOne(f => f.Address)
@@ -427,16 +409,6 @@ public partial class ApplicationDbContext : IdentityDbContext
 
             entity.Property(p => p.FieldId).IsRequired(false);
             entity.Property(p => p.EventId).IsRequired(false);
-            //
-            // entity.Property(e => e.EntityTypeId)
-            //     .HasConversion(
-            //         id => id.Value,
-            //         value => new EntityTypeId(value));
-
-            // entity.ToTable(tb => tb.HasCheckConstraint(
-            //     "CK_Photo_FieldId_EventId",
-            //     "([FieldId] IS NOT NULL AND [EventId] IS NULL) OR ([FieldId] IS NULL AND [EventId] IS NOT NULL)"
-            // ));
         });
 
         modelBuilder.Entity<Set>(entity =>

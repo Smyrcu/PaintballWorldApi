@@ -15,4 +15,5 @@ public class CreateSchedulesDto
     public bool IsMultiple { get; set; }
     public bool IsWeekly { get; set; }
     public bool IsAutomatic { get; set; }
+    public int MaxPlayers { get; set; }
 }

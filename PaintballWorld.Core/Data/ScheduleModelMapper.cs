@@ -14,6 +14,7 @@ public static class ScheduleModelMapper
             Date = x.Date,
             StartTime = x.Date,
             EndTime = x.Date.Add(x.MaxPlaytime),
+            MaxPlayers = x.MaxPlayers
         });
         return result;
     }

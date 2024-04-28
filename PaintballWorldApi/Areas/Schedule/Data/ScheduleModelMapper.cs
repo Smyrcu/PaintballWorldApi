@@ -24,6 +24,7 @@ public static class ScheduleModelMapper
             IsMultiple = dto.IsMultiple,
             IsWeekly = dto.IsWeekly,
             IsAutomatic = dto.IsAutomatic,
+            MaxPlayers = dto.MaxPlayers
         };
         
         return result;

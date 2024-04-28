@@ -16,9 +16,10 @@ public partial class Event
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
     public string? Description { get; set; }
-    public string? CreatedBy { get; set; }
+    public string CreatedBy { get; set; }
+    public string Name { get; set; }
     public virtual IdentityUser? CreatedByUser { get; set; }
-
+    public int MaxPlayers { get; set; }
     public bool IsPublic { get; set; }
 
     public DateOnly Date { get; set; }
