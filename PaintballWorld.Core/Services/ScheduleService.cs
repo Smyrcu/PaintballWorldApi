@@ -50,7 +50,7 @@ public class ScheduleService : IScheduleService
             return;
         }
 
-        if (model is { IsMultiple: true, IsWeekly: true })
+        if (model is { IsMultiple: true, IsWeekly: true, IsAutomatic: false })
         {
             var today = DateTime.Today;
             do
@@ -98,7 +98,7 @@ public class ScheduleService : IScheduleService
 
             } while (model.IsWeekly && today < model.FinalDate);
         }
-        else if (model is {IsMultiple: false, IsWeekly: true}) //500
+        else if (model is {IsMultiple: false, IsWeekly: true, IsAutomatic: false}) //500
         {
             var today = DateTime.Today;
             do
@@ -138,9 +138,47 @@ public class ScheduleService : IScheduleService
 
             } while (today < model.FinalDate);
         }
-        else if (model is { IsMultiple: true })
+        else if (model is { IsMultiple: true, IsWeekly: false, IsAutomatic: false})
         {
-            // TODO
+            var today = DateTime.Today;
+            foreach (var selectedDay in model.SelectedDays)
+            {
+                var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                if (daysUntilNext == 0)
+                {
+                    daysUntilNext = 7;
+                }
+
+                var nextDate = today.AddDays(daysUntilNext);
+
+                if (model.StartTime is null)
+                    throw new Exception("StartTime needs to be set");
+                if (model.EndTime is null)
+                    throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                    model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                    model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                if (model.IsAutomatic && startDate < model.FinalDate)
+                {
+                    await CreateAutomaticSchedules(model.TimeValue, startDate, endDate, model.FieldId,
+                        field.MaxPlayers);
+                }
+                else
+                {
+                    var fieldSchedule = new FieldSchedule
+                    {
+                        FieldId = field.Id,
+                        Date = startDate,
+                        MaxPlayers = field.MaxPlayers,
+                        MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                    };
+                    _context.FieldSchedules.Add(fieldSchedule);
+                }
+            }
         }
         else if (model.IsAutomatic)
         {
