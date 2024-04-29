@@ -2,6 +2,7 @@
 using System.Transactions;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.EntityFrameworkCore.Migrations.Operations;
+using Microsoft.IdentityModel.Tokens;
 using NetTopologySuite.Geometries;
 using PaintballWorld.API.Areas.Auth.Models;
 using PaintballWorld.API.Areas.Field.Models;
@@ -56,7 +57,7 @@ namespace PaintballWorld.API.Areas.Field.Data
                 OwnerId = field.OwnerId,
                 Area = field.Area,
                 Name = field.Name ?? string.Empty,
-                Regulations = $"{urlPrefix}/{field.Regulations}",
+                Regulations = field.Regulations.IsNullOrEmpty() ? "" : $"{urlPrefix}/{field.Regulations}",
                 Description = field.Description,
                 MinPlayers = field.MinPlayers,
                 MaxPlayers = field.MaxPlayers,

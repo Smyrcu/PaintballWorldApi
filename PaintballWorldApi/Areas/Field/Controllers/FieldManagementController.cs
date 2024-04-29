@@ -5,9 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Infrastructure.Models;
 using System.Security.Claims;
-using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.IdentityModel.Tokens;
-using PaintballWorld.API.Areas.Field.Data;
 using PaintballWorld.API.Areas.Field.Models;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
@@ -136,12 +134,13 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             Photo? photo2;
             if(photo.Path.Contains(".300.jpg"))
             {
-                 photo2 =
-                    await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".jpg", ".300.jpg"));
+                photo2 = await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".300.jpg", ".jpg"));
+                
             }
             else
             {
-                photo2 = await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".300.jpg", ".jpg"));
+                photo2 =
+                    await _context.Photos.FirstOrDefaultAsync(x => x.Path == photo.Path.Replace(".jpg", ".300.jpg"));
             }
 
             if (photo2 != null)
@@ -152,8 +151,8 @@ namespace PaintballWorld.API.Areas.Field.Controllers
 
             try
             {
-                Directory.Delete(Path.Combine(Constants.BasePath, photo.Path));
-                Directory.Delete(Path.Combine(Constants.BasePath, photo2.Path));
+                System.IO.File.Delete(Path.Combine(Constants.BasePath, photo.Path));
+                System.IO.File.Delete(Path.Combine(Constants.BasePath, photo2.Path));
             }
             catch (Exception ex)
             {
