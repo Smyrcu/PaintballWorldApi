@@ -179,7 +179,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 });
             }
 
-            var field = await context.Fields.FindAsync(fieldIdModel);
+            var field = context.Fields.FirstOrDefault(x => x.Id == fieldIdModel);
             if (field == null)
             {
                 return BadRequest(new ResponseBase

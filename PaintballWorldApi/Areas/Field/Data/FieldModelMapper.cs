@@ -52,9 +52,9 @@ namespace PaintballWorld.API.Areas.Field.Data
         {
             var result = new FieldManagementDto()
             {
-                FieldId = field.Id,
+                FieldId = field.Id.Value,
                 Address = field.Address.Map(),
-                OwnerId = field.OwnerId,
+                OwnerId = field.OwnerId.Value,
                 Area = field.Area,
                 Name = field.Name ?? string.Empty,
                 Regulations = field.Regulations.IsNullOrEmpty() ? "" : $"{urlPrefix}/{field.Regulations}",
@@ -112,15 +112,15 @@ namespace PaintballWorld.API.Areas.Field.Data
         {
             var result = new Infrastructure.Models.Field
             {
-                Id = dto.FieldId,
-                FieldTypeId = dto.FieldTypeId,
+                Id = new FieldId(dto.FieldId),
+                FieldTypeId = new FieldTypeId(dto.FieldTypeId),
                 Address = dto.Address.Map(),
                 Area = dto.Area,
                 Name = dto.Name,
                 Description = dto.Description,
                 MinPlayers = dto.MinPlayers,
                 MaxPlayers = dto.MaxPlayers,
-                Sets = dto.Sets.Map(dto.FieldId).ToList(),
+                Sets = dto.Sets.Map(new FieldId(dto.FieldId)).ToList(),
                 MaxSimultaneousEvents = dto.MaxSimultaneousEvents
             };
             return result;
