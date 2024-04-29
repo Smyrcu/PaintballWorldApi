@@ -40,6 +40,30 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         }
 
         /// <summary>
+        /// Pobierz publiczne eventy
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="NotImplementedException"></exception>
+        [HttpGet("{fieldId:guid}")]
+        public async Task<IActionResult> GetPublicEventsByField([FromRoute] Guid fieldId)
+        {
+            // nazwa, data, godzina, ilośćzapisana, ilośćmaksymalna
+            var result = _context.Events.Where(x => x.IsPublic && x.FieldId == new FieldId(fieldId) && x.Date > DateOnly.FromDateTime(DateTime.UtcNow)).OrderBy(x => x.Date).Take(100)
+                .Select(x => new PublicEvent
+                {
+                    Name = x.Name,
+                    EventId = x.Id,
+                    Date = new DateTime(x.Date, x.Time.Value),
+                    SignedPlayers = x.UsersToEvents.Count,
+                    MaxPlayers = x.MaxPlayers
+                }).ToList();
+
+            return Ok(result);
+
+        }
+
+
+        /// <summary>
         /// Pobierz publiczne eventy po polach
         /// </summary>
         /// <returns></returns>

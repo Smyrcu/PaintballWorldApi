@@ -12,7 +12,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
 {
     [Route("api/[area]/[controller]")]
     [ApiController]
-    [Area("Schedule")]
+    [Area("Event")]
     [AllowAnonymous]
     public class ReservationController(IReservationService reservationService, IAuthTokenService authTokenService) : Controller
     {
