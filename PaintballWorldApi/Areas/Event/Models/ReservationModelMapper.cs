@@ -1,9 +1,8 @@
-﻿using Microsoft.Build.Framework;
-using PaintballWorld.API.Areas.Schedule.Models;
+﻿using PaintballWorld.API.Areas.Schedule.Models;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure.Models;
 
-namespace PaintballWorld.API.Areas.Schedule.Data
+namespace PaintballWorld.API.Areas.Event.Models
 {
     public static class ReservationModelMapper
     {

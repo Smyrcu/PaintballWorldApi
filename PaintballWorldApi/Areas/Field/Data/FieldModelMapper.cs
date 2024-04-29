@@ -58,7 +58,7 @@ namespace PaintballWorld.API.Areas.Field.Data
                 Area = field.Area,
                 Name = field.Name ?? string.Empty,
                 Regulations = field.Regulations.IsNullOrEmpty() ? "" : $"{urlPrefix}/{field.Regulations}",
-                Description = field.Description,
+                Description = field.Description ?? string.Empty,
                 MinPlayers = field.MinPlayers,
                 MaxPlayers = field.MaxPlayers,
                 MaxSimultaneousEvents = field.MaxSimultaneousEvents,
@@ -77,12 +77,12 @@ namespace PaintballWorld.API.Areas.Field.Data
         {
             var result = new AddressDto
             {
-                PhoneNo = address.PhoneNo,
-                Street = address.Street,
-                HouseNo = address.HouseNo,
-                City = address.City,
-                PostalNumber = address.PostalNumber,
-                Country = address.Country,
+                PhoneNo = address.PhoneNo ?? string.Empty,
+                Street = address.Street ?? string.Empty,
+                HouseNo = address.HouseNo ?? string.Empty,
+                City = address.City ?? string.Empty,
+                PostalNumber = address.PostalNumber ?? string.Empty,
+                Country = address.Country ?? string.Empty,
                 Location = address.Location is not null
                     ? new GeoPoint(address.Location.X, address.Location.Y)
                     : null

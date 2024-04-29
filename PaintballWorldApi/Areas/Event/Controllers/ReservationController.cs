@@ -1,15 +1,14 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using PaintballWorld.API.Areas.Event.Models;
 using PaintballWorld.API.Areas.Schedule.Data;
 using PaintballWorld.API.Areas.Schedule.Models;
 using PaintballWorld.API.BaseModels;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Models;
-using PaintballWorld.Core.Services;
-using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Interfaces;
 
-namespace PaintballWorld.API.Areas.Schedule.Controllers
+namespace PaintballWorld.API.Areas.Event.Controllers
 {
     [Route("api/[area]/[controller]")]
     [ApiController]

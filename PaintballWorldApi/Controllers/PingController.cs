@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
@@ -17,7 +18,11 @@ namespace PaintballWorld.API.Controllers
         [Route("Ping")]
         public Task<IActionResult> Ping()
         {
-            return Task.FromResult<IActionResult>(Ok("I'm alive!"));
+
+            var cultureInfo = CultureInfo.CurrentCulture;
+
+
+            return Task.FromResult<IActionResult>(Ok("I'm alive! " + cultureInfo.Name));
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace PaintballWorld.API.Areas.Schedule.Models
+﻿namespace PaintballWorld.API.Areas.Event.Models
 {
     public class CreateReservationDto
     {
