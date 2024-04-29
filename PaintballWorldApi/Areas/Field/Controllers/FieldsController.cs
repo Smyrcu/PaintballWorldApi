@@ -140,13 +140,13 @@ namespace PaintballWorld.API.Areas.Field.Controllers
         [Authorize(Roles = "Owner")]
         public async Task<IActionResult> ManageField([FromForm]FieldManagementDto dto, [FromRoute]Guid fieldId)
         {
-
+            
             var isOwner = authTokenService.IsUserOwnerOfField(User.Claims, new FieldId(fieldId));
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
                 return BadRequest(isOwner.errors);
             try
             {
-                fieldManagementService.SaveChanges(dto.Map());
+                fieldManagementService.SaveChanges(dto.Map(fieldId));
             }
             catch (Exception e)
             {

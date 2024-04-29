@@ -108,11 +108,11 @@ namespace PaintballWorld.API.Areas.Field.Data
             return result;
         }
 
-        public static Infrastructure.Models.Field Map(this FieldManagementDto dto)
+        public static Infrastructure.Models.Field Map(this FieldManagementDto dto, Guid fieldId)
         {
             var result = new Infrastructure.Models.Field
             {
-                Id = new FieldId(dto.FieldId),
+                Id = new FieldId(fieldId),
                 FieldTypeId = new FieldTypeId(dto.FieldTypeId),
                 Address = dto.Address.Map(),
                 Area = dto.Area,
