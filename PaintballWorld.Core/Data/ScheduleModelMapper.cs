@@ -12,8 +12,8 @@ public static class ScheduleModelMapper
             FieldId = x.FieldId,
             ScheduleId = x.Id,
             Date = x.Date,
-            StartTime = x.Date,
-            EndTime = x.Date.Add(x.MaxPlaytime),
+            StartTime = TimeOnly.FromDateTime(x.Date),
+            EndTime = TimeOnly.FromDateTime(x.Date).Add(x.MaxPlaytime),
             MaxPlayers = x.MaxPlayers
         });
         return result;

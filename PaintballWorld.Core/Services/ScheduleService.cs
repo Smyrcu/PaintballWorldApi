@@ -189,8 +189,8 @@ public class ScheduleService : IScheduleService
                         Name = model.Name,
                         MaxPlayers = model.MaxPlayers ?? field.MaxPlayers,
                         IsPublic = true,
-                        StartDate = model.StartTime.Value,
-                        EndDate = model.EndTime.Value,
+                        StartDate = new DateTime(DateOnly.FromDateTime(model.Date.Value), model.StartTime.Value),
+                        EndDate = new DateTime(DateOnly.FromDateTime(model.Date.Value), model.EndTime.Value),
                         CreatedOnUtc = DateTime.UtcNow,
                         UsersToEvents = [],
 
@@ -236,7 +236,7 @@ public class ScheduleService : IScheduleService
 
                         if (model.IsAutomatic && startDate <= model.FinalDate)
                         {
-                            await CreateAutomaticSchedules(model.TimeValue, startDate, endDate, model.FieldId,
+                            await CreateAutomaticSchedules(model.TimeValue, startDate, model.EndTime, model.FieldId,
                                 model.MaxPlayers ?? field.MaxPlayers);
                         }
                         else
@@ -246,7 +246,7 @@ public class ScheduleService : IScheduleService
                                 FieldId = field.Id,
                                 Date = startDate,
                                 MaxPlayers = model.MaxPlayers ?? field.MaxPlayers,
-                                MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                                MaxPlaytime = model.EndTime.Value - model.StartTime.Value,
                             };
                             _context.FieldSchedules.Add(fieldSchedule);
                         }
@@ -292,7 +292,7 @@ public class ScheduleService : IScheduleService
                             FieldId = field.Id,
                             Date = startDate,
                             MaxPlayers = model.MaxPlayers ?? field.MaxPlayers,
-                            MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                            MaxPlaytime = model.EndTime.Value - model.StartTime.Value,
                         };
                         _context.FieldSchedules.Add(fieldSchedule);
                     }
@@ -332,7 +332,7 @@ public class ScheduleService : IScheduleService
 
                     if (model.IsAutomatic && startDate <= model.FinalDate)
                     {
-                        await CreateAutomaticSchedules(model.TimeValue, startDate, endDate, model.FieldId,
+                        await CreateAutomaticSchedules(model.TimeValue, startDate, model.EndTime, model.FieldId,
                             model.MaxPlayers ?? field.MaxPlayers);
                     }
                     else
@@ -342,7 +342,7 @@ public class ScheduleService : IScheduleService
                             FieldId = field.Id,
                             Date = startDate,
                             MaxPlayers = model.MaxPlayers ?? field.MaxPlayers,
-                            MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                            MaxPlaytime = model.EndTime.Value - model.StartTime.Value,
                         };
                         _context.FieldSchedules.Add(fieldSchedule);
                     }
@@ -357,16 +357,16 @@ public class ScheduleService : IScheduleService
                     switch (model)
                     {
                         case { IsWeekly: false, IsMultiple: false }:
-                            await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId, model.MaxPlayers ?? field.MaxPlayers);
+                            await CreateAutomaticSchedules(model.TimeValue, model.Date, model.EndTime, model.FieldId, model.MaxPlayers ?? field.MaxPlayers);
                             break;
                         case { IsWeekly: true, StartTime: not null, IsMultiple: false}:
                         {
                             do
                             {
-                                await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId,
+                                await CreateAutomaticSchedules(model.TimeValue, model.Date, model.EndTime, model.FieldId,
                                     model.MaxPlayers ?? model.MaxPlayers ?? field.MaxPlayers);
-                                model.StartTime.Value.AddDays(7);
-                            } while (model.StartTime < model.FinalDate);
+                                model.Date.Value.AddDays(7);
+                            } while (model.Date < model.FinalDate);
 
                             break;
                         }
@@ -408,11 +408,14 @@ public class ScheduleService : IScheduleService
 
                                     var nextDate = today.AddDays(daysUntilNext);
 
+                                    if(nextDate > model.FinalDate)
+                                        break;
+
                                     await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
                                         model.MaxPlayers ?? field.MaxPlayers);
-
+                                    today += TimeSpan.FromDays(7);
                                 }
-                            } while (model.StartTime < model.FinalDate);
+                            } while (today < model.FinalDate);
 
                             break;
                         }
@@ -420,11 +423,11 @@ public class ScheduleService : IScheduleService
                 }
                 else
                 {
-                    var time = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value);
+                    var time = model.EndTime.Value - model.StartTime.Value;
                     var fieldSchedule = new FieldSchedule
                     {
                         FieldId = field.Id,
-                        Date = new DateTime(DateOnly.FromDateTime(model.Date.Value), TimeOnly.FromDateTime(model.StartTime.Value)),
+                        Date = new DateTime(DateOnly.FromDateTime(model.Date.Value), model.StartTime.Value),
                         MaxPlayers = model.MaxPlayers ?? field.MaxPlayers,
                         MaxPlaytime = time,
                     };
@@ -438,7 +441,7 @@ public class ScheduleService : IScheduleService
         await _context.SaveChangesAsync();
     }
 
-    private async Task CreateAutomaticSchedules(int? TimeValue, DateTime? StartTime, DateTime? EndTime, FieldId FieldId, int maxPlayers)
+    private async Task CreateAutomaticSchedules(int? TimeValue, DateTime? StartTime, TimeOnly? EndTime, FieldId FieldId, int maxPlayers)
     {
 
         if (TimeValue is null)
@@ -450,7 +453,7 @@ public class ScheduleService : IScheduleService
 
         var startTime = StartTime.Value;
 
-        while (TimeOnly.FromDateTime(startTime).Add(TimeSpan.FromHours((double)TimeValue)) < TimeOnly.FromDateTime(EndTime.Value))
+        while (TimeOnly.FromDateTime(startTime).Add(TimeSpan.FromHours((double)TimeValue)) < EndTime.Value)
         {
             var fieldSchedule = new FieldSchedule
             {

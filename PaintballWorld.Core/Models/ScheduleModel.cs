@@ -11,8 +11,8 @@ public class ScheduleModel
     public DateTime? FinalDate { get; set; } // jak się powtarza to do kiedy
     public string? Name { get; set; } // 
     public DateTime? Date { get; set; } // data skedżulera
-    public DateTime? StartTime { get; set; } // 
-    public DateTime? EndTime { get; set; }//
+    public TimeOnly? StartTime { get; set; } // 
+    public TimeOnly? EndTime { get; set; }//
     public string? Description { get; set; } //opis
     public int? TimeValue { get; set; }
     public bool IsMultiple { get; set; } // czy to jest kilka dni w tygodniu
