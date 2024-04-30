@@ -25,12 +25,12 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         public async Task<IActionResult> GetPublicEvents()
         {
             // nazwa, data, godzina, ilośćzapisana, ilośćmaksymalna
-            var result = _context.Events.Where(x => x.IsPublic && x.Date > DateOnly.FromDateTime(DateTime.UtcNow)).OrderBy(x => x.Date).Take(100)
+            var result = _context.Events.Where(x => x.IsPublic && x.StartDate > DateTime.UtcNow).OrderBy(x => x.StartDate).Take(100)
                 .Select(x=> new PublicEvent
                 {
                     Name = x.Name,
                     EventId = x.Id,
-                    Date = new DateTime(x.Date, x.Time.Value),
+                    Date = x.StartDate,
                     SignedPlayers = x.UsersToEvents.Count,
                     MaxPlayers = x.MaxPlayers
                 }).ToList();
@@ -49,12 +49,12 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         {
             var obj = new FieldId(fieldId);
             // nazwa, data, godzina, ilośćzapisana, ilośćmaksymalna
-            var result = _context.Events.Where(x => x.IsPublic && x.FieldId == obj && x.Date > DateOnly.FromDateTime(DateTime.UtcNow)).OrderBy(x => x.Date).Take(100)
+            var result = _context.Events.Where(x => x.IsPublic && x.FieldId == obj && x.StartDate > DateTime.UtcNow).OrderBy(x => x.StartDate).Take(100)
                 .Select(x => new PublicEvent
                 {
                     Name = x.Name,
                     EventId = x.Id,
-                    Date = new DateTime(x.Date, x.Time.Value),
+                    Date = x.StartDate,
                     SignedPlayers = x.UsersToEvents.Count,
                     MaxPlayers = x.MaxPlayers
                 }).ToList();

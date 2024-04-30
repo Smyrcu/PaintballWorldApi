@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿/*using Microsoft.AspNetCore.Mvc;
 using PaintballWorld.API.Areas.Rating.Models;
 using PaintballWorld.Infrastructure.Models;
 
@@ -57,3 +57,4 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
         }
     }
 }
+*/

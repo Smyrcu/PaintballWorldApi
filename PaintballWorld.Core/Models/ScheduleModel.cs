@@ -18,6 +18,6 @@ public class ScheduleModel
     public bool IsMultiple { get; set; } // czy to jest kilka dni w tygodniu
     public bool IsWeekly { get; set; } // czy się powtarza co tydz
     public bool IsAutomatic { get; set; } // czy ma tworzyć na podstawie godzin otwarcia / timevalue
-    public int MaxPlayers { get; set; }
+    public int? MaxPlayers { get; set; }
 
 }

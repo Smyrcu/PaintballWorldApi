@@ -24,13 +24,11 @@ namespace PaintballWorld.Core.Services
 
             var ev = new Event
             {
-                //FieldTypeId = fieldSchedule.Field.FieldTypeId,
-                //FieldType = fieldSchedule.Field.FieldType,
                 Description = model.Description,
                 CreatedBy = model.UserId,
                 IsPublic = !model.isPrivate,
-                Date = DateOnly.FromDateTime(fieldSchedule.Date),
-                Time = TimeOnly.FromDateTime(fieldSchedule.Date),
+                StartDate = fieldSchedule.Date,
+                EndDate = fieldSchedule.Date.Add(fieldSchedule.MaxPlaytime),
                 CreatedOnUtc = DateTime.UtcNow,
                 UsersToEvents = new List<UsersToEvent>
                 {
