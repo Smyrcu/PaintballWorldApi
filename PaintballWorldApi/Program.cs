@@ -48,6 +48,7 @@ builder.Services.Inject();
 builder.Services.AddControllers().AddNewtonsoftJson(options =>
 {
     options.SerializerSettings.Converters.Add(new NetTopologySuite.IO.Converters.GeometryConverter());
+    options.SerializerSettings.Converters.Add(new TimeOnlyJsonConverter());
 });
 
 builder.Services.Configure<FormOptions>(x =>

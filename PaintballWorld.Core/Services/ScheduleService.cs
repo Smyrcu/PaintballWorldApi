@@ -236,6 +236,7 @@ public class ScheduleService : IScheduleService
 
                         if (model.IsAutomatic && startDate <= model.FinalDate)
                         {
+                            
                             await CreateAutomaticSchedules(model.TimeValue, startDate, model.EndTime, model.FieldId,
                                 model.MaxPlayers ?? field.MaxPlayers);
                         }
@@ -384,7 +385,7 @@ public class ScheduleService : IScheduleService
 
                                 var nextDate = today.AddDays(daysUntilNext);
 
-                                await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
+                                await CreateAutomaticSchedules(model.TimeValue, nextDate + model.StartTime.Value.ToTimeSpan(), model.EndTime, model.FieldId,
                                     model.MaxPlayers ?? field.MaxPlayers);
 
                             }
@@ -411,10 +412,11 @@ public class ScheduleService : IScheduleService
                                     if(nextDate > model.FinalDate)
                                         break;
 
-                                    await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
+                                    await CreateAutomaticSchedules(model.TimeValue, nextDate + model.StartTime.Value.ToTimeSpan(), model.EndTime, model.FieldId,
                                         model.MaxPlayers ?? field.MaxPlayers);
-                                    today += TimeSpan.FromDays(7);
+                                    
                                 }
+                                today += TimeSpan.FromDays(7);
                             } while (today < model.FinalDate);
 
                             break;
@@ -453,7 +455,7 @@ public class ScheduleService : IScheduleService
 
         var startTime = StartTime.Value;
 
-        while (TimeOnly.FromDateTime(startTime).Add(TimeSpan.FromHours((double)TimeValue)) < EndTime.Value)
+        while (TimeOnly.FromDateTime(startTime).Add(TimeSpan.FromHours((double)TimeValue)) <= EndTime.Value)
         {
             var fieldSchedule = new FieldSchedule
             {
