@@ -4,6 +4,7 @@ using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Models;
+using System.Linq;
 
 namespace PaintballWorld.Core.Services
 {
@@ -13,12 +14,12 @@ namespace PaintballWorld.Core.Services
         public async Task Create(EventModel model)
         {
             var fieldSchedule = context.FieldSchedules.Include(fieldSchedule => fieldSchedule.Field)
-                .ThenInclude(field => field.FieldType).FirstOrDefault(x => x.Id == model.ScheduleId);
+                .ThenInclude(field => field.FieldType).FirstOrDefault(x => x.Id == new FieldScheduleId(model.ScheduleId.Value));
 
             if (fieldSchedule is null)
                 throw new Exception("Field Schedule not found");
 
-            if (!context.Sets.Any(x => x.Id == model.SetId && x.FieldId == fieldSchedule.FieldId))
+            if (!context.Sets.Any(x => x.Id == new SetId(model.SetId.Value) && x.FieldId == fieldSchedule.FieldId))
                 throw new Exception("Set with this SetId not found for selected Field");
 
 
@@ -34,7 +35,7 @@ namespace PaintballWorld.Core.Services
                 {
                     new()
                     {
-                        SetId = model.SetId,
+                        SetId = new SetId(model.SetId.Value),
                         UserId = model.UserId,
                         JoinedOnUtc = DateTime.UtcNow
                     }
@@ -45,7 +46,7 @@ namespace PaintballWorld.Core.Services
             await context.SaveChangesAsync();
         }
 
-        public IEnumerable<EventModel> GetFieldReservations(Guid? fieldId, string? userId)
+        public IList<EventModel> GetFieldReservations(Guid? fieldId, string? userId)
         {
             if(fieldId is null && userId is null)
                 throw new Exception("No data provided");
@@ -54,11 +55,11 @@ namespace PaintballWorld.Core.Services
 
             if (fieldId is not null && userId is null)
             {
-                var field = context.Fields.Include(field => field.Events).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
+                var field = context.Fields.Include(field => field.Events).ThenInclude(x => x.UsersToEvents).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
                 if (field is not null)
                 {
                     result = field.Events.ToList();
-                    return result.AsEnumerable().Map();
+                    return result.Map().ToList();
                 }
 
             }
@@ -66,7 +67,7 @@ namespace PaintballWorld.Core.Services
             if (userId is not null && fieldId is null)
             {
                 result = context.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId)).ToList();
-                return result.AsEnumerable().Map();
+                return result.Map().ToList();
             }
 
 
@@ -74,7 +75,7 @@ namespace PaintballWorld.Core.Services
             if (fieldx is not null)
             {
                 result = fieldx.Events.Where(x => x.UsersToEvents.Any(x => x.UserId == userId)).ToList();
-                return result.AsEnumerable().Map();
+                return result.Map().ToList();
             }
 
             return new List<EventModel>();
@@ -106,7 +107,7 @@ namespace PaintballWorld.Core.Services
 
         public async Task EditReservation(EventModel model, string userId)
         {
-            var ev = context.Events.FirstOrDefault(x => x.Id == model.EventId);
+            var ev = context.Events.FirstOrDefault(x => x.Id == new EventId(model.EventId));
             if (ev != null)
             {
                 var field = context.Fields.Include(field => field.Owner).First(x => x.Events.Any(x => x.Id == ev.Id));

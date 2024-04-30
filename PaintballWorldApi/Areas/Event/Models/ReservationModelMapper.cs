@@ -11,8 +11,8 @@ namespace PaintballWorld.API.Areas.Event.Models
             return new EventModel
             {
                 UserId = dto.UserId,
-                ScheduleId = new FieldScheduleId(dto.ScheduleId),
-                SetId = new SetId(dto.SetId),
+                ScheduleId = dto.ScheduleId,
+                SetId = dto.SetId,
                 isPrivate = dto.isPrivate,
                 Description = dto.Description,
 

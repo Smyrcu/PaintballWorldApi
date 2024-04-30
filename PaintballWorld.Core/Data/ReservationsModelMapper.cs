@@ -10,17 +10,16 @@ namespace PaintballWorld.Core.Data
 {
     public static class ReservationsModelMapper
     {
-        public static IEnumerable<EventModel> Map(this IEnumerable<Event> model)
-        {
-            return model.Select(x => new EventModel
+        public static IList<EventModel> Map(this IList<Event> model) 
+            => model.Select(x => new EventModel
             {
+                EventId = x.Id.Value,
                 UserId = x.CreatedBy,
                 ScheduleId = null,
-                SetId = default,
+                SetId = null,
                 isPrivate = !x.IsPublic,
-                Description = x.Description,
-                UsersInEvent = x.UsersToEvents.Select(x => x.UserId).ToList()
-            });
-        }
+                Description = x.Description ?? "",
+                UsersInEvent = x != null && x.UsersToEvents.Any() ? x.UsersToEvents.Select(x => x.UserId).ToList() : []
+            }).ToList();
     }
 }
