@@ -22,9 +22,9 @@ public partial class Event
     public int MaxPlayers { get; set; }
     public bool IsPublic { get; set; }
 
-    public DateOnly Date { get; set; }
+    public DateTime StartDate { get; set; }
 
-    public TimeOnly? Time { get; set; }
+    public DateTime EndDate { get; set; }
 
     public DateTime LastUpdatedUtc { get; set; }
 

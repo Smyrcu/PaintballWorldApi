@@ -30,32 +30,265 @@ public class ScheduleService : IScheduleService
         if (field == null)
             throw new Exception("Field not found");
 
+        if (model.EventType is null)
+            throw new Exception("Event type cannot be null");
+
         if (model.EventType.ToLower().Equals("open"))
         {
-            // isMultiple i isWeekly
-            // dodać godzinę zakończenia (endtime)
-            var ev = new Event
+            switch (model)
             {
-                FieldId = field.Id,
-                Description = model.Description,
-                CreatedBy = field.Owner.UserId.ToString(),
-                IsPublic = true,
-                Date = DateOnly.FromDateTime(model.Date.Value),
-                Time = TimeOnly.FromDateTime(model.StartTime.Value),
-                CreatedOnUtc = DateTime.UtcNow,
-                UsersToEvents = []
-            };
-            _context.Events.Add(ev);
+                case { IsMultiple: true, IsWeekly: true }:
+                {
+                    var today = DateTime.Today;
+                    do
+                    {
+                        foreach (var selectedDay in model.SelectedDays)
+                        {
+                            var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                            var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                            if (daysUntilNext == 0)
+                            {
+                                daysUntilNext = 7;
+                            }
+
+                            var nextDate = today.AddDays(daysUntilNext);
+
+                            if (model.StartTime is null)
+                                throw new Exception("StartTime needs to be set");
+                            if (model.EndTime is null)
+                                throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                            DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                                model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                            DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                                model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                            if (startDate > model.FinalDate)
+                                break;
+
+                            var ev = new Event
+                            {
+                                FieldId = field.Id,
+                                Description = model.Description,
+                                CreatedBy = field.Owner.UserId.ToString(),
+                                IsPublic = true,
+                                StartDate = startDate,
+                                EndDate = endDate,
+                                CreatedOnUtc = DateTime.UtcNow,
+                                UsersToEvents = []
+                            };
+                            _context.Events.Add(ev);
+                        }
+                        today += TimeSpan.FromDays(7);
+
+                    } while (model.IsWeekly && today < model.FinalDate);
+
+                    break;
+                }
+                case { IsMultiple: true, IsWeekly: false }:
+                {
+                    var today = DateTime.Today;
+                    foreach (var selectedDay in model.SelectedDays)
+                    {
+                        var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                        var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                        if (daysUntilNext == 0)
+                        {
+                            daysUntilNext = 7;
+                        }
+
+                        var nextDate = today.AddDays(daysUntilNext);
+
+                        if (model.StartTime is null)
+                            throw new Exception("StartTime needs to be set");
+                        if (model.EndTime is null)
+                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                        DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                        DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                        var ev = new Event
+                        {
+                            FieldId = field.Id,
+                            Description = model.Description,
+                            CreatedBy = field.Owner.UserId.ToString(),
+                            IsPublic = true,
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            CreatedOnUtc = DateTime.UtcNow,
+                            UsersToEvents = []
+                        };
+                        _context.Events.Add(ev);
+                    }
+
+                    break;
+                }
+                case { IsMultiple: false, IsWeekly: true }:
+                {
+                    var today = DateTime.Today;
+                    do
+                    {
+                        var dayOfWeek = model.Date.Value.DayOfWeek;
+                        var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                        if (daysUntilNext == 0)
+                        {
+                            daysUntilNext = 7;
+                        }
+
+                        var nextDate = today.AddDays(daysUntilNext);
+
+                        if (model.StartTime is null)
+                            throw new Exception("StartTime needs to be set");
+                        if (model.EndTime is null)
+                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                        DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                        DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                        if(startDate > model.FinalDate)
+                            break;
+
+                        var ev = new Event
+                        {
+                            FieldId = field.Id,
+                            Description = model.Description,
+                            CreatedBy = field.Owner.UserId.ToString(),
+                            IsPublic = true,
+                            StartDate = startDate,
+                            EndDate = endDate,
+                            CreatedOnUtc = DateTime.UtcNow,
+                            UsersToEvents = []
+                        };
+                        _context.Events.Add(ev);
+
+                        today += TimeSpan.FromDays(7);
+
+                    } while (today < model.FinalDate);
+
+                    break;
+                }
+                default:
+                {
+                    var ev = new Event
+                    {
+                        FieldId = field.Id,
+                        Description = model.Description,
+                        CreatedBy = field.Owner.UserId.ToString(),
+                        IsPublic = true,
+                        StartDate = model.StartTime.Value,
+                        EndDate = model.EndTime.Value,
+                        CreatedOnUtc = DateTime.UtcNow,
+                        UsersToEvents = []
+                    };
+                    break;
+                }
+            }
             await _context.SaveChangesAsync();
             return;
         }
 
-        if (model is { IsMultiple: true, IsWeekly: true, IsAutomatic: false })
+        switch (model)
         {
-            var today = DateTime.Today;
-            do
+            case { IsMultiple: true, IsWeekly: true, IsAutomatic: false }:
             {
-                foreach (var selectedDay in model.SelectedDays) 
+                var today = DateTime.Today;
+                do
+                {
+                    foreach (var selectedDay in model.SelectedDays) 
+                    {
+                        var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                        var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                        if (daysUntilNext == 0)
+                        {
+                            daysUntilNext = 7;
+                        }
+
+                        var nextDate = today.AddDays(daysUntilNext);
+
+                        if (model.StartTime is null)
+                            throw new Exception("StartTime needs to be set");
+                        if (model.EndTime is null)
+                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                        DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                        DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                            model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                        if (model.IsAutomatic && startDate < model.FinalDate)
+                        {
+                            await CreateAutomaticSchedules(model.TimeValue, startDate, endDate, model.FieldId,
+                                field.MaxPlayers);
+                        }
+                        else
+                        {
+                            var fieldSchedule = new FieldSchedule
+                            {
+                                FieldId = field.Id,
+                                Date = startDate,
+                                MaxPlayers = field.MaxPlayers,
+                                MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                            };
+                            _context.FieldSchedules.Add(fieldSchedule);
+                        }
+                    }
+
+                    today += TimeSpan.FromDays(7);
+
+                } while (model.IsWeekly && today < model.FinalDate);
+
+                break;
+            }
+            case {IsMultiple: false, IsWeekly: true, IsAutomatic: false}:
+            {
+                var today = DateTime.Today;
+                do
+                {
+                    var dayOfWeek = model.Date.Value.DayOfWeek;
+                    var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                    if (daysUntilNext == 0)
+                    {
+                        daysUntilNext = 7;
+                    }
+
+                    var nextDate = today.AddDays(daysUntilNext);
+
+                    if (model.StartTime is null)
+                        throw new Exception("StartTime needs to be set");
+                    if (model.EndTime is null)
+                        throw new Exception("EndTime needs to be set if IsAutomatic is true");
+
+                    DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                        model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
+                    DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
+                        model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+
+                    if(startDate < model.FinalDate)
+                    {
+                        var fieldSchedule = new FieldSchedule
+                        {
+                            FieldId = field.Id,
+                            Date = startDate,
+                            MaxPlayers = field.MaxPlayers,
+                            MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                        };
+                        _context.FieldSchedules.Add(fieldSchedule);
+                    }
+
+                    today += TimeSpan.FromDays(7);
+
+                } while (today < model.FinalDate);
+
+                break;
+            }
+            case { IsMultiple: true, IsWeekly: false, IsAutomatic: false}:
+            {
+                var today = DateTime.Today;
+                foreach (var selectedDay in model.SelectedDays)
                 {
                     var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
                     var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
@@ -94,169 +327,91 @@ public class ScheduleService : IScheduleService
                     }
                 }
 
-                today += TimeSpan.FromDays(7);
-
-            } while (model.IsWeekly && today < model.FinalDate);
-        }
-        else if (model is {IsMultiple: false, IsWeekly: true, IsAutomatic: false}) //500
-        {
-            var today = DateTime.Today;
-            do
+                break;
+            }
+            default:
             {
-                var dayOfWeek = model.Date.Value.DayOfWeek;
-                var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
-                if (daysUntilNext == 0)
+                if (model.IsAutomatic)
                 {
-                    daysUntilNext = 7;
-                }
-
-                var nextDate = today.AddDays(daysUntilNext);
-
-                if (model.StartTime is null)
-                    throw new Exception("StartTime needs to be set");
-                if (model.EndTime is null)
-                    throw new Exception("EndTime needs to be set if IsAutomatic is true");
-
-                DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
-                    model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
-                DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
-                    model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
-
-                if(startDate < model.FinalDate)
-                {
-                    var fieldSchedule = new FieldSchedule
+                    switch (model)
                     {
-                        FieldId = field.Id,
-                        Date = startDate,
-                        MaxPlayers = field.MaxPlayers,
-                        MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
-                    };
-                    _context.FieldSchedules.Add(fieldSchedule);
-                }
+                        case { IsWeekly: false, IsMultiple: false }:
+                            await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId, field.MaxPlayers);
+                            break;
+                        case { IsWeekly: true, StartTime: not null, IsMultiple: false}:
+                        {
+                            do
+                            {
+                                await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId,
+                                    field.MaxPlayers);
+                                model.StartTime.Value.AddDays(7);
+                            } while (model.StartTime < model.FinalDate);
 
-                today += TimeSpan.FromDays(7);
+                            break;
+                        }
+                        case { IsMultiple: true, IsWeekly: false }:
+                        {
+                            var today = DateTime.Today;
+                            foreach (var selectedDay in model.SelectedDays)
+                            {
+                                var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                                var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                                if (daysUntilNext == 0)
+                                {
+                                    daysUntilNext = 7;
+                                }
 
-            } while (today < model.FinalDate);
-        }
-        else if (model is { IsMultiple: true, IsWeekly: false, IsAutomatic: false})
-        {
-            var today = DateTime.Today;
-            foreach (var selectedDay in model.SelectedDays)
-            {
-                var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
-                var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
-                if (daysUntilNext == 0)
-                {
-                    daysUntilNext = 7;
-                }
+                                var nextDate = today.AddDays(daysUntilNext);
 
-                var nextDate = today.AddDays(daysUntilNext);
+                                await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
+                                    field.MaxPlayers);
 
-                if (model.StartTime is null)
-                    throw new Exception("StartTime needs to be set");
-                if (model.EndTime is null)
-                    throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                            }
 
-                DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
-                    model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
-                DateTime endDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
-                    model.EndTime.Value.Hour, model.EndTime.Value.Minute, model.EndTime.Value.Second);
+                            break;
+                        }
+                        case { IsMultiple: true, IsWeekly: true }:
+                        {
+                            var today = DateTime.Today;
 
-                if (model.IsAutomatic && startDate < model.FinalDate)
-                {
-                    await CreateAutomaticSchedules(model.TimeValue, startDate, endDate, model.FieldId,
-                        field.MaxPlayers);
+                            do
+                            {
+                                foreach (var selectedDay in model.SelectedDays)
+                                {
+                                    var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
+                                    var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
+                                    if (daysUntilNext == 0)
+                                    {
+                                        daysUntilNext = 7;
+                                    }
+
+                                    var nextDate = today.AddDays(daysUntilNext);
+
+                                    await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
+                                        field.MaxPlayers);
+
+                                }
+                            } while (model.StartTime < model.FinalDate);
+
+                            break;
+                        }
+                    }
                 }
                 else
                 {
+                    var time = TimeOnly.FromDateTime(model.StartTime.Value) - TimeOnly.FromDateTime(model.EndTime.Value);
                     var fieldSchedule = new FieldSchedule
                     {
                         FieldId = field.Id,
-                        Date = startDate,
+                        Date = new DateTime(DateOnly.FromDateTime(model.Date.Value), TimeOnly.FromDateTime(model.StartTime.Value)),
                         MaxPlayers = field.MaxPlayers,
-                        MaxPlaytime = TimeOnly.FromDateTime(model.EndTime.Value) - TimeOnly.FromDateTime(model.StartTime.Value),
+                        MaxPlaytime = time,
                     };
                     _context.FieldSchedules.Add(fieldSchedule);
                 }
+
+                break;
             }
-        }
-        else if (model.IsAutomatic)
-        {
-            switch (model)
-            {
-                case { IsWeekly: false, IsMultiple: false }:
-                    await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId, field.MaxPlayers);
-                    break;
-                case { IsWeekly: true, StartTime: not null, IsMultiple: false}:
-                {
-                    do
-                    {
-                        await CreateAutomaticSchedules(model.TimeValue, model.StartTime, model.EndTime, model.FieldId,
-                            field.MaxPlayers);
-                        model.StartTime.Value.AddDays(7);
-                    } while (model.StartTime < model.FinalDate);
-
-                    break;
-                }
-                case { IsMultiple: true, IsWeekly: false }:
-                {
-                    var today = DateTime.Today;
-                    foreach (var selectedDay in model.SelectedDays)
-                    {
-                        var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
-                        var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
-                        if (daysUntilNext == 0)
-                        {
-                            daysUntilNext = 7;
-                        }
-
-                        var nextDate = today.AddDays(daysUntilNext);
-
-                        await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
-                            field.MaxPlayers);
-
-                    }
-
-                    break;
-                }
-                case { IsMultiple: true, IsWeekly: true }:
-                {
-                    var today = DateTime.Today;
-
-                    do
-                    {
-                        foreach (var selectedDay in model.SelectedDays)
-                        {
-                            var dayOfWeek = Enum.Parse<DayOfWeek>(selectedDay);
-                            var daysUntilNext = ((int)dayOfWeek - (int)today.DayOfWeek + 7) % 7;
-                            if (daysUntilNext == 0)
-                            {
-                                daysUntilNext = 7;
-                            }
-
-                            var nextDate = today.AddDays(daysUntilNext);
-
-                            await CreateAutomaticSchedules(model.TimeValue, nextDate, model.EndTime, model.FieldId,
-                                field.MaxPlayers);
-
-                        }
-                    } while (model.StartTime < model.FinalDate);
-
-                    break;
-                }
-            }
-        }
-        else
-        {
-            var time = TimeOnly.FromDateTime(model.StartTime.Value) - TimeOnly.FromDateTime(model.EndTime.Value);
-            var fieldSchedule = new FieldSchedule
-            {
-                FieldId = field.Id,
-                Date = new DateTime(DateOnly.FromDateTime(model.Date.Value), TimeOnly.FromDateTime(model.StartTime.Value)), // dlaczego od 11 do 17 jest 18h
-                MaxPlayers = field.MaxPlayers,
-                MaxPlaytime = time,
-            };
-            _context.FieldSchedules.Add(fieldSchedule);
         }
 
         await _context.SaveChangesAsync();
