@@ -30,6 +30,6 @@ public partial class Event
 
     public DateTime? CreatedOnUtc { get; set; }
 
-    public virtual ICollection<Photo> Photos { get; set; }
-    public ICollection<UsersToEvent> UsersToEvents { get; set; }
+    public virtual ICollection<Photo> Photos { get; set; } = [];
+    public ICollection<UsersToEvent> UsersToEvents { get; set; } = [];
 }

@@ -82,7 +82,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
 
                 if (ev.Field.Sets.All(x => x.Id != new SetId(model.SetId)))
                     throw new Exception("Set not found for this field");
-                
+
                 ev.UsersToEvents.Add(new UsersToEvent
                 {
                     EventId = ev.Id,
@@ -90,6 +90,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
                     UserId = userId,
                     JoinedOnUtc = DateTime.UtcNow
                 });
+                await context.SaveChangesAsync();
 
                 return Ok("User signed up for event");
             }
@@ -141,6 +142,38 @@ namespace PaintballWorld.API.Areas.Event.Controllers
             }
 
             return BadRequest("You cannot delete this event or event does not exist");
+
+        }
+
+        /// <summary>
+        /// Wypisz się z eventu
+        /// </summary>
+        /// <param name="eventId"></param>
+        /// <returns></returns>
+        [HttpPatch]
+        public async Task<IActionResult> SingOutFromEvent([FromQuery] Guid eventId)
+        {
+            try
+            {
+                var userId = authTokenService.GetUserId(User.Claims);
+                var ev = context.Events.Include(x => x.UsersToEvents).FirstOrDefault(x => x.Id == new EventId(eventId));
+                if (ev is null)
+                    throw new Exception("Event not found");
+
+                var ute = ev.UsersToEvents.FirstOrDefault(x => x.UserId == userId);
+
+                if (ute is null)
+                    throw new Exception("User was not signed to this event");
+
+                ev.UsersToEvents.Remove(ute);
+                await context.SaveChangesAsync();
+
+                return Ok("User signed up for event");
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
 
         }
     }
