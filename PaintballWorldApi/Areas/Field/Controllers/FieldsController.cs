@@ -68,6 +68,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 {
                     using var stream = new MemoryStream();
                     await fieldDto.Regulations.CopyToAsync(stream);
+                    stream.Position = 0;
                     mapped.Regulations = fieldManagementService.SaveRegulationsFile(stream, mapped.Id);
                 }
 
@@ -106,7 +107,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             if (!isOwner.success || !isOwner.errors.IsNullOrEmpty())
                 return BadRequest(isOwner.errors);*/
 
-            var urlPrefix = $"{Request.Scheme}://{Request.Host}";
+            var urlPrefix = $"{Request.Scheme}://{Request.Host}/regulations";
 
             var result = field.Map(urlPrefix);
 
@@ -151,6 +152,7 @@ namespace PaintballWorld.API.Areas.Field.Controllers
                 {
                     using var stream = new MemoryStream();
                     await dto.RegulationsFile.CopyToAsync(stream);
+                    stream.Position = 0;
                     var path = fieldManagementService.SaveRegulationsFile(stream, new FieldId(fieldId));
 
                     var field = context.Fields.First(x => x.Id == new FieldId(fieldId));

@@ -21,6 +21,7 @@ namespace PaintballWorld.API.Middleware
                 new("/swagger"),
                 new("/api/Auth/Register/ConfirmAccount"),
                 new("/img"),
+                new("/regulations"),
             };
 
             if (excludedPaths.Any(path => context.Request.Path.StartsWithSegments(new PathString(path))))

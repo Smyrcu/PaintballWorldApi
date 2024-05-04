@@ -34,7 +34,7 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
         /// </summary>
         /// <param name="eventId"></param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpGet("{eventId:guid}")]
         public async Task<IActionResult> GetMyEventDetails([FromRoute]Guid eventId)
         {
             try
@@ -52,14 +52,14 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
                 var model = new MyEventModel
                 {
                     EventId = ev.Id.Value,
-                    CreatedBy = ev.CreatedBy,
-                    ContactEmail = ev.CreatedByUser?.Email,
+                    ReservedBy = ev.CreatedBy,
+                    ReservedByContactEmail = ev.CreatedByUser?.Email,
                     isPublic = ev.IsPublic,
                 };
 
                 var createdBy = context.UserInfos.First(x => x.UserId == ev.CreatedBy);
 
-                model.CreatedbyName = createdBy.FirstName + " " + createdBy.LastName;
+                model.ReservedByName = createdBy.FirstName + " " + createdBy.LastName;
                 model.ParticipantsCount = ev.UsersToEvents.Count;
 
                 if (ev.IsPublic)
@@ -67,7 +67,8 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
                     model.Participants = ev.UsersToEvents.Select(x => new Participant
                     {
                         SetId = x.SetId?.Value,
-                        Name = context.UserInfos.Where(y => y.UserId == x.UserId).Select(z => z.FirstName + " " + z.LastName).First()
+                        Name = context.UserInfos.Where(y => y.UserId == x.UserId).Select(z => z.FirstName + " " + z.LastName).First(),
+                        Email = context.Users.First(y => y.Id == x.UserId).Email,
                     }).ToList();
 
                     model.EstimatedPrice = 0;
@@ -78,12 +79,10 @@ namespace PaintballWorld.API.Areas.Owner.Controllers
                             continue;
 
                         var set = context.Sets.First(x => x.Id == new SetId(participant.SetId.Value));
-
-
                         model.EstimatedPrice += set.Price ?? 0;
                     }
                 }
-                else if (!ev.IsPublic) // prywartne
+                else if (!ev.IsPublic) // prywatne
                 {
                     model.Participants = null;
 

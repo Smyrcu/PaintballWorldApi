@@ -1,13 +1,14 @@
-﻿using Org.BouncyCastle.Crypto.Agreement.JPake;
+﻿using System.Security.Policy;
+using Org.BouncyCastle.Crypto.Agreement.JPake;
 
 namespace PaintballWorld.API.Areas.Owner.Models
 {
     public class MyEventModel
     {
         public Guid EventId { get; set; }
-        public string CreatedBy { get; set; }
-        public string? ContactEmail { get; set; }
-        public string CreatedbyName { get; set; }
+        public string ReservedBy { get; set; }
+        public string? ReservedByContactEmail { get; set; }
+        public string ReservedByName { get; set; }
         public bool isPublic { get; set; }
         public decimal EstimatedPrice { get; set; }
         public int ParticipantsCount { get; set; }
@@ -19,5 +20,7 @@ namespace PaintballWorld.API.Areas.Owner.Models
     {
         public Guid? SetId { get; set; }
         public string Name { get; set; }
+        public string? Email { get; set; }
+
     }
 }
