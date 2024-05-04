@@ -147,6 +147,17 @@ namespace PaintballWorld.API.Areas.Field.Controllers
             try
             {
                 fieldManagementService.SaveChanges(dto.Map(fieldId));
+                if (dto.RegulationsFile is not null)
+                {
+                    using var stream = new MemoryStream();
+                    await dto.RegulationsFile.CopyToAsync(stream);
+                    var path = fieldManagementService.SaveRegulationsFile(stream, new FieldId(fieldId));
+
+                    var field = context.Fields.First(x => x.Id == new FieldId(fieldId));
+                    field.Regulations = path;
+                    context.Update(field);
+                    await context.SaveChangesAsync();
+                }
             }
             catch (Exception e)
             {

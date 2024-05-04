@@ -13,6 +13,7 @@ namespace PaintballWorld.API.Areas.Field.Models
         public double Area { get; set; }
         public string Name { get; set; }
         public string? Regulations { get; set; }
+        public IFormFile? RegulationsFile { get; set; }
         public string? Description { get; set; }
         public int MinPlayers { get; set; }
         public int MaxPlayers { get; set; }

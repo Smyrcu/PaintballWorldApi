@@ -24,7 +24,6 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPublicEvents()
         {
-            // nazwa, data, godzina, ilośćzapisana, ilośćmaksymalna
             var result = _context.Events.Where(x => x.IsPublic && x.StartDate > DateTime.UtcNow).OrderBy(x => x.StartDate).Take(100)
                 .Select(x=> new PublicEvent
                 {
@@ -100,29 +99,6 @@ namespace PaintballWorld.API.Areas.Event.Controllers
             }
 
         }
-
-
-        /*        /// <summary>
-                /// Stwórz event
-                /// </summary>
-                /// <returns></returns>
-                /// <exception cref="NotImplementedException"></exception>
-                [HttpPost]
-                public async Task<IActionResult> CreatePublicEvent()
-                {
-                    throw new NotImplementedException();
-                }
-
-                /// <summary>
-                /// edytuj event
-                /// </summary>
-                /// <returns></returns>
-                /// <exception cref="NotImplementedException"></exception>
-                [HttpPut]
-                public async Task<IActionResult> EditPublicEvent()
-                {
-                    throw new NotImplementedException();
-                }*/
 
         /// <summary>
         /// usuń event
