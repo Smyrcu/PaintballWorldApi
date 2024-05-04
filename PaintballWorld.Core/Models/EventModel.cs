@@ -16,5 +16,6 @@ namespace PaintballWorld.Core.Models
         public bool isPrivate { get; set; } = false;
         public string? Description { get; set; }
         public List<string> UsersInEvent { get; set; } = [];
+        public int? PlayersCount { get; set; }
     }
 }
