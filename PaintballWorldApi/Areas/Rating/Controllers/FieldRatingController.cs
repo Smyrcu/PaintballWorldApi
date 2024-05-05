@@ -22,13 +22,24 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
         public async Task<IActionResult> GetFieldRatings([FromQuery] Guid fieldId)
         {
             var result = ratingService.GetFieldRatings(new FieldId(fieldId)).ToList();
+            
+            if (!result.Any())
+                return Ok(new RatingResponseBase
+                {
+                    IsSuccess = true,
+                    Errors = [],
+                    Message = "",
+                    Id = fieldId,
+                    AverageRating = null,
+                    Ratings = []
+                });
 
             var response = new RatingResponseBase
             {
                 IsSuccess = true,
                 Errors = [],
                 Message = "",
-                Id = default,
+                Id = fieldId,
                 AverageRating = result.Average(x => x.Rating),
                 Ratings = result.Select(x => x.Map())
             };
