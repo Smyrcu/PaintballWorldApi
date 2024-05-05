@@ -21,5 +21,7 @@ namespace PaintballWorld.Core.Data
                 Description = x.Description ?? "",
                 UsersInEvent = x != null && x.UsersToEvents.Any() ? x.UsersToEvents.Select(x => x.UserId).ToList() : []
             }).ToList();
+
+        public static I
     }
 }

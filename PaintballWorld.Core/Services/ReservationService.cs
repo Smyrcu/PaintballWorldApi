@@ -70,10 +70,16 @@ namespace PaintballWorld.Core.Services
 
             if (fieldId is not null && userId is null)
             {
+                var data = context.Fields.Include(x => x.FieldSchedules).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
                 var field = context.Fields.Include(field => field.Events).ThenInclude(x => x.UsersToEvents).FirstOrDefault(x => x.Id == new FieldId(fieldId.Value));
                 if (field is not null)
                 {
-                    result = field.Events.ToList();
+                    return data.FieldSchedules.Select(x => new EventModel
+                    {
+                        ScheduleId = x.Id.Value,
+                        isPrivate = true,
+                    }).ToList();
+                    // result = field.Events.ToList();
                     return result.Map().ToList();
                 }
 
