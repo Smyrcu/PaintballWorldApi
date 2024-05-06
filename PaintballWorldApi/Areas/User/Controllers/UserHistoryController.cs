@@ -28,7 +28,8 @@ namespace PaintballWorld.API.Areas.User.Controllers
                     Field = new Models.Field
                     {
                         FieldId = x.Event.Field.Id.Value,
-                        FieldName = x.Event.Field.Name
+                        FieldName = x.Event.Field.Name,
+                        City = x.Event.Field.Address.City
                     },
                     Event = new Models.Event
                     {

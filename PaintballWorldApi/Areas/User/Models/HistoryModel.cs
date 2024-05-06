@@ -17,6 +17,7 @@
     {
         public Guid FieldId { get; set; }
         public string? FieldName { get; set; }
+        public string? City { get; set; }
     }
 
     public class Event

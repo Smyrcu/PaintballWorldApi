@@ -36,7 +36,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         /// </summary>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-    /*    [HttpPost]
+        [HttpPost]
         public async Task<IActionResult> CreateReservation([FromBody] CreateReservationDto dto)
         {
             try
@@ -56,7 +56,7 @@ namespace PaintballWorld.API.Areas.Event.Controllers
 
             
         }
-*/
+
         /// <summary>
         /// Edit Reservation
         /// </summary>

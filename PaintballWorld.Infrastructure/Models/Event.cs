@@ -18,6 +18,8 @@ public partial class Event
     public string? Description { get; set; }
     public string CreatedBy { get; set; }
     public string Name { get; set; }
+    public FieldScheduleId? FieldScheduleId { get; set; }
+    public virtual FieldSchedule? FieldSchedule { get; set; }
     public virtual IdentityUser? CreatedByUser { get; set; }
     public int MaxPlayers { get; set; }
     public bool IsPublic { get; set; }

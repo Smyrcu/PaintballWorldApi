@@ -221,10 +221,22 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .HasColumnType("datetime");
            entity.Property(x => x.Name).HasMaxLength(500);
 
+           entity.Property(e => e.FieldScheduleId).IsRequired(false);
+             /*  .HasConversion(
+                   id => id.Value,
+                   value => new FieldScheduleId(value.Value))
+               .IsRequired(false);*/
+
             entity.HasOne<IdentityUser>(e => e.CreatedByUser)
                 .WithMany() 
                 .HasForeignKey(e => e.CreatedBy)
                 .IsRequired(true) 
+                .OnDelete(DeleteBehavior.SetNull);
+
+            entity.HasOne(e => e.FieldSchedule)
+                .WithOne(f => f.Event)
+                .IsRequired(false)
+                .HasForeignKey<FieldSchedule>(e => e.EventId)
                 .OnDelete(DeleteBehavior.SetNull);
 
             entity.HasMany(e => e.Photos)
@@ -324,12 +336,25 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnType("datetime");
 
+            entity.Property(e => e.EventId)
+                .HasConversion(
+                    id => id.Value,
+                    value => new EventId(value))
+                .HasColumnType("uniqueidentifier");
+
             entity.Property(x => x.MaxPlayers);
             entity.Property(x => x.MaxPlaytime);
 
             entity.HasOne(fs => fs.Field) 
                 .WithMany(f => f.FieldSchedules)
                 .HasForeignKey(fs => fs.FieldId);
+
+            entity.HasOne(e => e.Event)
+                .WithOne(f => f.FieldSchedule)
+                .HasForeignKey<Event>(e => e.FieldScheduleId)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
+
         });
 
         modelBuilder.Entity<FieldType>(entity =>
