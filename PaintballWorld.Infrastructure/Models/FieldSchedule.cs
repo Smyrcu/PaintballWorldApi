@@ -8,17 +8,13 @@ public readonly record struct FieldScheduleId(Guid Value)
 
 public partial class FieldSchedule
 {
-    public FieldScheduleId Id { get; init; }// = FieldScheduleId.Empty;
+    public FieldScheduleId Id { get; init; }
     public FieldId FieldId { get; set; }
     public virtual Field Field { get; set; }
-    public EventId EventId { get; set; }
-    public virtual Event Event { get; set; }
+    public EventId? EventId { get; set; }
+    public virtual Event? Event { get; set; }
     
     public DateTime Date { get; set; }
-    
-    // public DateOnly Date { get; set; }
-
-    // public TimeOnly? Time { get; set; }
 
     public bool IsRecurrent { get; set; }
 

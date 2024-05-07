@@ -75,7 +75,7 @@ public partial class ApplicationDbContext : IdentityDbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
      => optionsBuilder.UseSqlServer(
          //"Server=127.0.0.1,9210;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
-                     "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
+                   "Server=192.168.1.191,1433;User Id=sa;Password=JakiesLosoweHaslo123;Database=PaintballWorldApp2;Trusted_Connection=False;MultipleActiveResultSets=true;Encrypt=false",
          providerOptions =>
          {
              providerOptions.EnableRetryOnFailure(
@@ -338,9 +338,9 @@ public partial class ApplicationDbContext : IdentityDbContext
 
             entity.Property(e => e.EventId)
                 .HasConversion(
-                    id => id.Value,
-                    value => new EventId(value))
-                .HasColumnType("uniqueidentifier");
+                    v => v.HasValue ? v.Value.Value : (Guid?)null,
+                    v => v.HasValue ? new EventId(v.Value) : null)
+                .IsRequired(false);
 
             entity.Property(x => x.MaxPlayers);
             entity.Property(x => x.MaxPlaytime);

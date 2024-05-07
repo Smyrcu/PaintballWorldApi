@@ -115,6 +115,8 @@ namespace PaintballWorld.API.Areas.Event.Controllers
             if (ev is not null)
             {
                 _context.Events.Remove(ev);
+                await context.SaveChangesAsync(); 
+                return Ok("Event has been deleted");
             }
 
             return BadRequest("You cannot delete this event or event does not exist");
