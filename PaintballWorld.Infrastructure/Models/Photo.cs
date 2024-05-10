@@ -13,8 +13,8 @@ public partial class Photo
 
     public string Path { get; set; }
 
-    // public EntityTypeId EntityTypeId { get; set; }
-    // public virtual EntityType EntityType { get; set; }
+    // public EntityTypeId EntityTypeId { get; Set; }
+    // public virtual EntityType EntityType { get; Set; }
     public FieldId? FieldId { get; set; }
     public EventId? EventId { get; set; }
     public DateTime? CreatedOnUtc { get; set; }

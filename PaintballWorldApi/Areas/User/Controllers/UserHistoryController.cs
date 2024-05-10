@@ -34,8 +34,8 @@ namespace PaintballWorld.API.Areas.User.Controllers
                     Event = new Models.Event
                     {
                         EventId = x.Event.Id.Value,
-                        Ammo = x.set.Ammo,
-                        Price = x.set.Price,
+                        Ammo = x.Set.Ammo,
+                        Price = x.Set.Price,
                         Date = x.Event.StartDate
                     }
                 })

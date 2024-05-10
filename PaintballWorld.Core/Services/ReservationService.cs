@@ -31,6 +31,7 @@ namespace PaintballWorld.Core.Services
                 StartDate = fieldSchedule.Date,
                 EndDate = fieldSchedule.Date.Add(fieldSchedule.MaxPlaytime),
                 CreatedOnUtc = DateTime.UtcNow,
+                FieldScheduleId = fieldSchedule.Id,
                 UsersToEvents = new List<UsersToEvent>
                 {
                     new()
@@ -59,6 +60,7 @@ namespace PaintballWorld.Core.Services
 
             context.Events.Add(ev);
             await context.SaveChangesAsync();
+
         }
 
         public IList<EventModel> GetFieldReservations(Guid? fieldId, string? userId)

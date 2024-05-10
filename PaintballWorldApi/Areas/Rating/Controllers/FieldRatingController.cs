@@ -55,8 +55,15 @@ namespace PaintballWorld.API.Areas.Rating.Controllers
         [HttpPost]
         public async Task<IActionResult> SubmitFieldRating([FromBody] FieldRatingDto dto)
         {
-            var userId = authTokenService.GetUserId(User.Claims);
-            await ratingService.SubmitFieldRating(dto.Map(userId));
+            try
+            {
+                var userId = authTokenService.GetUserId(User.Claims);
+                await ratingService.SubmitFieldRating(dto.Map(userId));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(ex.Message);
+            }
             return Ok();
         }
 

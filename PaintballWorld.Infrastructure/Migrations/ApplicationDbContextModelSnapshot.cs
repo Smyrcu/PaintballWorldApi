@@ -1214,7 +1214,7 @@ namespace PaintballWorld.Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PaintballWorld.Infrastructure.Models.Set", "set")
+                    b.HasOne("PaintballWorld.Infrastructure.Models.Set", "Set")
                         .WithMany("UsersToEvents")
                         .HasForeignKey("SetId");
 
@@ -1228,7 +1228,7 @@ namespace PaintballWorld.Infrastructure.Migrations
 
                     b.Navigation("User");
 
-                    b.Navigation("set");
+                    b.Navigation("Set");
                 });
 
             modelBuilder.Entity("PaintballWorld.Infrastructure.Models.EmailInbox", b =>

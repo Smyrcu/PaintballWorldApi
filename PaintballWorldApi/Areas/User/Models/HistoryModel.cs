@@ -11,6 +11,7 @@
     {
         public Field Field { get; set; }
         public Event Event { get; set; }
+        public bool IsPublic { get; set; }
     }
 
     public class Field

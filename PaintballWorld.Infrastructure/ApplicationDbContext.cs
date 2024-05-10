@@ -503,7 +503,7 @@ public partial class ApplicationDbContext : IdentityDbContext
                 .HasForeignKey(ute => ute.EventId)
                 .IsRequired();
 
-            entity.HasOne(ute => ute.set)
+            entity.HasOne(ute => ute.Set)
                     .WithMany(s => s.UsersToEvents) 
                     .HasForeignKey(ute => ute.SetId)
                     .IsRequired(false);

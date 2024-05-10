@@ -16,7 +16,7 @@ public partial class UsersToEvent
     public virtual Event Event { get; set; }
 
     public SetId? SetId { get; set; }
-    public virtual Set? set { get; set; }
+    public virtual Set? Set { get; set; }
 
     public string UserId { get; set; }
     public virtual IdentityUser User { get; set; }

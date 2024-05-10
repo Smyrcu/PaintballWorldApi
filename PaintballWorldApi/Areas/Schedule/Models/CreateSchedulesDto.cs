@@ -2,7 +2,7 @@
 
 public class CreateSchedulesDto
 {
-    //public List<ScheduleTime> ScheduleDates { get; set; } = [];
+    //public List<ScheduleTime> ScheduleDates { get; Set; } = [];
     public string? EventType { get; set; } // open/private
     public List<string> SelectedDays { get; set; } = [];
     public DateTime? FinalDate { get; set; }

@@ -43,7 +43,7 @@ namespace PaintballWorld.API.Areas.Schedule.Controllers
         public async Task<IActionResult> GetOpenPrivateEvents([FromRoute] Guid fieldGuid)
         {
             var result = context.FieldSchedules.Include(x => x.Event)
-                .Where(x => x.FieldId == new FieldId(fieldGuid) && x.EventId == null ).OrderBy(x => x.Date).Take(100)
+                .Where(x => x.FieldId == new FieldId(fieldGuid) && x.Event == null && x.Date > DateTime.UtcNow).OrderBy(x => x.Date).Take(100)
                 .Select(x => new PrivateEvent()
                 {
                     Date = x.Date,

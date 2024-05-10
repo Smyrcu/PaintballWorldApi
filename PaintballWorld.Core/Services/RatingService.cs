@@ -1,4 +1,5 @@
-﻿using PaintballWorld.Core.Data;
+﻿using Microsoft.EntityFrameworkCore.Design;
+using PaintballWorld.Core.Data;
 using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure;
@@ -38,15 +39,28 @@ namespace PaintballWorld.Core.Services
 
         public async Task SubmitFieldRating(FieldRatingModel model)
         {
-            FieldRating fr = new()
+            var rating = _context.FieldRatings.FirstOrDefault(x =>
+                x.CreatedBy == model.CreatorId && x.FieldId == new FieldId(model.FieldId));
+
+            if (rating == null)
             {
-                FieldId = new FieldId(model.FieldId),
-                Rating = model.Rating,
-                Content = model.Content,
-                CreatedBy = model.CreatorId,
-                CreatedOnUtc = DateTime.UtcNow
-            };
-            _context.FieldRatings.Add(fr);
+                FieldRating fr = new()
+                {
+                    FieldId = new FieldId(model.FieldId),
+                    Rating = model.Rating,
+                    Content = model.Content,
+                    CreatedBy = model.CreatorId,
+                    CreatedOnUtc = DateTime.UtcNow
+                };
+                _context.FieldRatings.Add(fr);
+                
+            }
+            else
+            {
+                rating.Rating = model.Rating;
+                rating.Content = model.Content;
+            }
+
             await _context.SaveChangesAsync();
         }
 

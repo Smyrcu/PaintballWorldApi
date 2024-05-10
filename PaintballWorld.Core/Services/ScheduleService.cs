@@ -54,9 +54,9 @@ public class ScheduleService : IScheduleService
                             var nextDate = today.AddDays(daysUntilNext);
 
                             if (model.StartTime is null)
-                                throw new Exception("StartTime needs to be set");
+                                throw new Exception("StartTime needs to be Set");
                             if (model.EndTime is null)
-                                throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                                throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                             DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                                 model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -102,9 +102,9 @@ public class ScheduleService : IScheduleService
                         var nextDate = today.AddDays(daysUntilNext);
 
                         if (model.StartTime is null)
-                            throw new Exception("StartTime needs to be set");
+                            throw new Exception("StartTime needs to be Set");
                         if (model.EndTime is null)
-                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                            throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                         DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                             model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -146,9 +146,9 @@ public class ScheduleService : IScheduleService
 
 
                         if (model.StartTime is null)
-                            throw new Exception("StartTime needs to be set");
+                            throw new Exception("StartTime needs to be Set");
                         if (model.EndTime is null)
-                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                            throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                         DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                             model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -225,9 +225,9 @@ public class ScheduleService : IScheduleService
                             break;
 
                         if (model.StartTime is null)
-                            throw new Exception("StartTime needs to be set");
+                            throw new Exception("StartTime needs to be Set");
                         if (model.EndTime is null)
-                            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                            throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                         DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                             model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -277,9 +277,9 @@ public class ScheduleService : IScheduleService
                         break;
 
                     if (model.StartTime is null)
-                        throw new Exception("StartTime needs to be set");
+                        throw new Exception("StartTime needs to be Set");
                     if (model.EndTime is null)
-                        throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                        throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                     DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                         model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -322,9 +322,9 @@ public class ScheduleService : IScheduleService
                         break;
 
                     if (model.StartTime is null)
-                        throw new Exception("StartTime needs to be set");
+                        throw new Exception("StartTime needs to be Set");
                     if (model.EndTime is null)
-                        throw new Exception("EndTime needs to be set if IsAutomatic is true");
+                        throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
                     DateTime startDate = new(nextDate.Year, nextDate.Month, nextDate.Day,
                         model.StartTime.Value.Hour, model.StartTime.Value.Minute, model.StartTime.Value.Second);
@@ -447,11 +447,11 @@ public class ScheduleService : IScheduleService
     {
 
         if (TimeValue is null)
-            throw new Exception("TimeValue needs to be set if IsAutomatic is true");
+            throw new Exception("TimeValue needs to be Set if IsAutomatic is true");
         if (StartTime is null)
-            throw new Exception("StartTime needs to be set if IsAutomatic is true");
+            throw new Exception("StartTime needs to be Set if IsAutomatic is true");
         if (EndTime is null)
-            throw new Exception("EndTime needs to be set if IsAutomatic is true");
+            throw new Exception("EndTime needs to be Set if IsAutomatic is true");
 
         var startTime = StartTime.Value;
 

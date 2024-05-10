@@ -130,7 +130,7 @@ public class SetsController : Controller
     }
 
     /// <summary>
-    /// usuń set dla pola
+    /// usuń Set dla pola
     /// </summary>
     /// <param name="setId"></param>
     /// <param name="fieldId"></param>

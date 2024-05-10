@@ -5,20 +5,20 @@ namespace PaintballWorld.API.Areas.Field.Data
 {
     public static class SetModelMapper
     {
-        // public static Set Map(this SetDto set, FieldId fieldId)
+        // public static Set Map(this SetDto Set, FieldId fieldId)
         // {
         //     return new Set
         //     {
-        //         FieldId = set.FieldId,
-        //         Ammo = set.Ammo,
-        //         Price = set.Price,
-        //         Description = set.Description,
+        //         FieldId = Set.FieldId,
+        //         Ammo = Set.Ammo,
+        //         Price = Set.Price,
+        //         Description = Set.Description,
         //         FieldId = fieldId,
         //     };
         // }
         //
-        // public static IEnumerable<Set> Map(this IList<SetDto> set, FieldId fieldId) => 
-        //     set.Select(setDto => new Set
+        // public static IEnumerable<Set> Map(this IList<SetDto> Set, FieldId fieldId) => 
+        //     Set.Select(setDto => new Set
         //         {
         //             FieldId = setDto.FieldId,
         //             Ammo = setDto.Ammo,

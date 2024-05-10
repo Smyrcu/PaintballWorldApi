@@ -61,7 +61,7 @@ namespace PaintballWorld.API.Areas.Auth.Controllers
             {
                 IsSuccess = true,
                 Errors = [],
-                Message = "New password has been set"
+                Message = "New password has been Set"
             });
         }
 
