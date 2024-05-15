@@ -41,7 +41,9 @@ namespace PaintballWorld.API.Areas.Event.Controllers
         {
             try
             {
-                await reservationService.Create(dto.Map());
+                var userId = authTokenService.GetUserId(User.Claims);
+
+                await reservationService.Create(dto.Map(userId));
                 return Ok();
             }
             catch (Exception ex)

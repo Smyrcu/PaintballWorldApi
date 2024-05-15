@@ -6,7 +6,7 @@ namespace PaintballWorld.API.Areas.Event.Models
 {
     public static class ReservationModelMapper
     {
-        public static EventModel Map(this CreateReservationDto dto)
+        public static EventModel Map(this CreateReservationDto dto, string userId)
         {
             return new EventModel
             {
@@ -14,7 +14,8 @@ namespace PaintballWorld.API.Areas.Event.Models
                 SetId = dto.SetId,
                 isPrivate = dto.isPrivate,
                 Description = dto.Description,
-                PlayersCount = dto.PlayersCount
+                PlayersCount = dto.PlayersCount,
+                UserId = userId
 
             };
         }

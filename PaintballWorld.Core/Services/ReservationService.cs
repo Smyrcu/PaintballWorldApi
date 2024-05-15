@@ -4,7 +4,6 @@ using PaintballWorld.Core.Interfaces;
 using PaintballWorld.Core.Models;
 using PaintballWorld.Infrastructure;
 using PaintballWorld.Infrastructure.Models;
-using System.Linq;
 
 namespace PaintballWorld.Core.Services
 {
@@ -32,6 +31,8 @@ namespace PaintballWorld.Core.Services
                 EndDate = fieldSchedule.Date.Add(fieldSchedule.MaxPlaytime),
                 CreatedOnUtc = DateTime.UtcNow,
                 FieldScheduleId = fieldSchedule.Id,
+                FieldId = fieldSchedule.FieldId,
+                Name = "Private Event",
                 UsersToEvents = new List<UsersToEvent>
                 {
                     new()

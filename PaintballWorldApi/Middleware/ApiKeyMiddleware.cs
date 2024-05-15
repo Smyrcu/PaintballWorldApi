@@ -24,7 +24,7 @@ namespace PaintballWorld.API.Middleware
                 new("/regulations"),
             };
 
-            if (excludedPaths.Any(path => context.Request.Path.StartsWithSegments(new PathString(path))))
+            //if (excludedPaths.Any(path => context.Request.Path.StartsWithSegments(new PathString(path))))
             {
                 await _next(context);
                 return;
