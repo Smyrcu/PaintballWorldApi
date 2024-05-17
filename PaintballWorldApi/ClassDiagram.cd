@@ -1,0 +1,293 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="NameAndType">
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.AddressDto">
+    <Position X="9.5" Y="22" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAAAAAAAAAIAAIAgAAAABIQAAAAAAIAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\AddressDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.BecomeOwnerDto">
+    <Position X="0.5" Y="19" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAg=</HashCode>
+      <FileName>Areas\Auth\Models\BecomeOwnerDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.ChangePasswordDto">
+    <Position X="10.5" Y="19" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAEAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\ChangePasswordDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.CompanyDto">
+    <Position X="23" Y="19" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAQAAAACAAAAAAAAAAgAAAAAAAAAACAAAAAAAAAAE=</HashCode>
+      <FileName>Areas\Auth\Models\CompanyDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.DeleteUserDto">
+    <Position X="23.5" Y="22.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\DeleteUserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.LoginDto">
+    <Position X="14.75" Y="14" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAQAAgAAAAAAAAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\LoginDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.OwnerDto">
+    <Position X="0.75" Y="7" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAAAAAAAAAAgAAAAAAAAAAAAAAABAAAAAg=</HashCode>
+      <FileName>Areas\Auth\Models\OwnerDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.OwnerWithFieldDto">
+    <Position X="0.75" Y="10" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Areas\Auth\Models\OwnerWithFieldDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.ResetPasswordDto">
+    <Position X="22.25" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAABAAgAAAAAAAAAAAAAAAAAABAAA=</HashCode>
+      <FileName>Areas\Auth\Models\ResetPasswordDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.ResetPasswordRequestDto">
+    <Position X="3.25" Y="19" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\ResetPasswordRequestDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.ResetPasswordResponse">
+    <Position X="6.75" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\ResetPasswordResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Auth.Models.UserDto">
+    <Position X="0.75" Y="4" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAQAAgAAAAAAQAAACAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Auth\Models\UserDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Default.Models.AutocompleteResponse">
+    <Position X="11.75" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Default\Models\AutocompleteResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Default.Models.ContactDto">
+    <Position X="0.5" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAiAAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Default\Models\ContactDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Event.Models.PublicEvent">
+    <Position X="5" Y="14" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAAAAAAAAAQAQAAAAAAAABAAAAAAAACAA=</HashCode>
+      <FileName>Areas\Event\Models\PublicEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Event.Models.ReservationModelMapper">
+    <Position X="19.75" Y="14" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAABAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Event\Models\ReservationModelMapper.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Event.Models.SignUpEventModel">
+    <Position X="7.5" Y="14" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAgAAAAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Event\Models\SignUpEventModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Event.Models.CreateReservationDto">
+    <Position X="17.25" Y="14" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AABAAACAAAAgIABAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Schedule\Models\CreateReservationDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.AddSetsResponse">
+    <Position X="9.5" Y="6.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Field\Models\AddSetsResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.DeletePhotosResponse">
+    <Position X="14.5" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Field\Models\DeletePhotosResponse.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.FieldFilters">
+    <Position X="2.75" Y="14" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAKAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Field\Models\FieldFilters.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.FieldManagementDto">
+    <Position X="6" Y="22.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAAAABICAAgAAAASAAACAQAAgAAAAACAAggAQAACAA=</HashCode>
+      <FileName>Areas\Field\Models\FieldManagementDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.FilteredFieldDto">
+    <Position X="13" Y="19" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAKAAAAAAAAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Field\Models\FilteredFieldDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Field.Models.SetDto">
+    <Position X="0.5" Y="22.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>ACACAAAAAQAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Field\Models\SetDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Owner.Models.MyEventModel">
+    <Position X="15.75" Y="22.5" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>ABAAAAAgABAAAAAAAAAABAAAAAAAAAAgACAAACAAAAA=</HashCode>
+      <FileName>Areas\Owner\Models\MyEventModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Owner.Models.Participant">
+    <Position X="6" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Owner\Models\MyEventModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Owner.Models.MyFieldsResponseModel">
+    <Position X="17.25" Y="6.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Owner\Models\MyFieldsResponseModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Rating.Models.FieldRatingDto" BaseTypeListCollapsed="true">
+    <Position X="19" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACgAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Rating\Models\FieldRatingDto.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Rating.Models.RatingResponseBase">
+    <Position X="3.5" Y="6.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAACAAAAAAAAAAAAAgAAAAAAAAAAAAAAACAAAAAAAAA=</HashCode>
+      <FileName>Areas\Rating\Models\RatingResponseBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Rating.Models.UserRatingDto" BaseTypeListCollapsed="true">
+    <Position X="20" Y="4" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAIAAAAAAAAAAgAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Rating\Models\UserRatingDto.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Schedule.Models.CreateSchedulesDto">
+    <Position X="12.75" Y="22.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>AAAIAIgCAAAgAAAAgAAAAAwEIAAgAAABAAAAAAAACAA=</HashCode>
+      <FileName>Areas\Schedule\Models\CreateSchedulesDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Schedule.Models.PrivateEvent">
+    <Position X="3.25" Y="22.5" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAACAAIAAAAAAAAABAAAAAAAACAA=</HashCode>
+      <FileName>Areas\Schedule\Models\PrivateEvent.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.Schedule.Models.ScheduleTime">
+    <Position X="15.5" Y="19" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AACAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAgACAA=</HashCode>
+      <FileName>Areas\Schedule\Models\ScheduleTime.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.HistoryModel">
+    <Position X="10" Y="14" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAUAAAAA=</HashCode>
+      <FileName>Areas\User\Models\HistoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.Game">
+    <Position X="18.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAiAAAAAAAAAAAAAAgAA=</HashCode>
+      <FileName>Areas\User\Models\HistoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.Field">
+    <Position X="20.5" Y="19" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAACAAAAAAIAAAAAAAAAACAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\User\Models\HistoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.Event">
+    <Position X="8.25" Y="19" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACAAAAAgAQAAAAAAAAAAAAAAAAAAAAABAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\User\Models\HistoryModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.OwnerDto">
+    <Position X="21.25" Y="22.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\User\Models\OwnerDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.Areas.User.Models.UserProfileDto">
+    <Position X="22.5" Y="14" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAEAAAAAgAAAAAAAAAAAAAAAQAAAAAAAAAAAAAAg=</HashCode>
+      <FileName>Areas\User\Models\UserProfileDto.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PaintballWorld.API.BaseModels.ResponseBase">
+    <Position X="10.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAABAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAIAAAAAA=</HashCode>
+      <FileName>BaseModels\ResponseBase.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="PaintballWorld.API.Areas.Rating.Models.IRating" Collapsed="true">
+    <Position X="14" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAgAIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAA=</HashCode>
+      <FileName>Areas\Rating\Models\IRating.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
